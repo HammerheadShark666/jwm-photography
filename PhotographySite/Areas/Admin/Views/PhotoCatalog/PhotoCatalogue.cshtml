@@ -1,0 +1,31 @@
+﻿@model PhotographySite.Areas.Admin.Models.LookupsDto
+
+@{
+    ViewData["Title"] = "Photos Catalogue";
+}
+
+<h5>Photo Catalogue</h5>
+
+<div class="row">
+    <div class="col-12">
+        <div id="photo-catalogue-alert" class="alert alert-warning" role="alert"></div>
+    </div>
+</div>
+
+<div id="photosGridContainer" class="row">
+    <div class="col">     
+        <div id="catalogPhotosGrid"></div>      
+        <div class="pagination-holder black clearfix">
+            <ul id="photo-catalogue-results-pagination" class="pagination dark-theme simple-pagination text-center justify-content-center"></ul>
+        </div>         
+    </div>
+</div>
+
+<input type="hidden" id="selected-photo-id" value="2" /> 
+
+@section Scripts {
+    <script type="module" src="@Url.Content("~/lib/simplePagination/simplePagination.js")"></script> 
+    <script type="module" src="@Url.Content("~/js/admin/photos-catalogue.js")"></script> 
+}
+
+@await Html.PartialAsync("../Shared/PhotoModal")

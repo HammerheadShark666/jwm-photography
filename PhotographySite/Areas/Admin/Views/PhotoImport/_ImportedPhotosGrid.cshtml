@@ -1,0 +1,30 @@
+﻿@model PhotographySite.Areas.Admin.Models.SavedPhotosDto
+
+<div class="card p-3 shadow import-results-container">	
+	<nav>
+		<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+			<button class="nav-link active" id="nav-saved-photos-tab" data-bs-toggle="tab" data-bs-target="#nav-saved-photos" type="button" role="tab" aria-controls="nav-saved-photos" aria-selected="true">Imported Photos</button>
+			<button class="nav-link" id="nav-existing-photos-tab" data-bs-toggle="tab" data-bs-target="#nav-existing-photos" type="button" role="tab" aria-controls="nav-existing-photos" aria-selected="false">Failed to Import (Existing Photos)</button>
+		</div>
+	</nav>
+	<div class="tab-content p-3 border bg-light" id="nav-tabContent">
+		<div class="tab-pane fade active show" id="nav-saved-photos" role="tabpanel" aria-labelledby="nav-saved-photos-tab">
+			 <div id="importPhotosGrid"></div>
+		</div>
+		<div class="tab-pane fade" id="nav-existing-photos" role="tabpanel" aria-labelledby="nav-existing-photos-tab">
+			<div id="failedToImportPhotosGrid"></div>
+		</div>
+
+	</div>
+</div>
+ 
+@await Html.PartialAsync("../Shared/PhotoModal") 
+
+<script>
+    var savedPhotos = @Html.Raw(Json.Serialize(Model.SavedPhotos));
+    var existingPhotos = @Html.Raw(Json.Serialize(Model.ExistingPhotos));
+    var countries = @Html.Raw(Json.Serialize(Model.Countries));
+    var categories = @Html.Raw(Json.Serialize(Model.Categories));  
+	var palettes = @Html.Raw(Json.Serialize(Model.Palettes));
+</script>
+

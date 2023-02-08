@@ -1,0 +1,83 @@
+﻿@model PhotographySite.Areas.Admin.Models.GalleryDto
+@{
+    ViewData["Title"] = "Gallery (" + @Model.Name + ")";
+}
+ 
+<div>
+    <h3 class="page-title">Gallery (@Model.Name)</h3>     
+</div>
+
+
+@*<div class="gallery-container">*@
+
+
+  @*  <img class="lightboxed" rel="group1" src="https://www.jqueryscript.net/dummy/1.jpg" data-link="https://www.jqueryscript.net/dummy/1.jpg" alt="Image Alt" data-caption="Image Caption" />
+	<img class="lightboxed" rel="group1" src="https://www.jqueryscript.net/dummy/2.jpg" data-link="https://www.jqueryscript.net/dummy/2.jpg" alt="Image Alt" data-caption="Image Caption" />
+	<img class="lightboxed" rel="group1" src="https://www.jqueryscript.net/dummy/3.jpg" data-link="https://www.jqueryscript.net/dummy/3.jpg" alt="Image Alt" data-caption="Image Caption" />
+	<img class="lightboxed" rel="group1" src="https://www.jqueryscript.net/dummy/4.jpg" data-link="https://www.jqueryscript.net/dummy/4.jpg" alt="Image Alt" data-caption="Image Caption" />
+	<img class="lightboxed" rel="group1" src="https://www.jqueryscript.net/dummy/5.jpg" data-link="https://www.youtube.com/embed/Rix_3b9ThLI?list=PL8zglt-LDl-iwBHEl3Pw1IhWGp9cfgMrc" data-width="560" data-height="315" />
+	*@
+
+    <div id="gallery-images">
+
+    @{
+        var photos = Model.Photos.OrderBy(p => p.Order);
+    }   
+
+    @foreach (var photo in photos)
+    {
+        <img class="lightboxed gallery-photo" rel="group1" src="/photos/@photo.FileName" data-caption="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
+    }
+
+    </div>
+
+    @*<img class="lightboxed" rel="group1" id="55" src="/photos/CRW_5594.jpg" title="Pigs Sleeping - England" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="478" src="/photos/Tripe_Fungi_Insect.jpg" title="Fungi &amp; Insect - Egypt" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="827" src="/photos/10 (2).jpg" title="Malaysian River Boat  - Malaysia" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="876" src="/photos/CRW_0718.jpg" title="Orangutan - Borneo" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="190" src="/photos/IMG_1120.jpg" title="Oyster Catcher - Scotland" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="274" src="/photos/IMG_5025.jpg" title="" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="44" src="/photos/CRW_3270.jpg" title="Sheep Afterbirth - England" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="586" src="/photos/108_5382.jpg" title="Coral Reef - Indonesia" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="147" src="/photos/IMG_0116.jpg" title="Isle of Harris - Scotland" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="791" src="/photos/IMG_0308.jpg" title="Cuttlefish - Indonesia" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="786" src="/photos/IMG_0124.jpg" title="Moray Eel &amp; Cleaner Shrimp - Indonesia" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="1136" src="/photos/05.jpg" title="River Nene Sunset - England" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="643" src="/photos/IMG_9564.jpg" title="Anemone &amp; Cardinal Fish - Indonesia" data-toggle="tooltip" data-html="true">
+    <img class="lightboxed" rel="group1" id="233" src="/photos/IMG_4067.jpg" title="Valley of the Moon - Chile" data-toggle="tooltip" data-html="true">
+*@
+@*</div>
+*@
+
+
+@*<div class="draggable-main">
+    <div class="row">
+        @{
+            int index = 0;
+        }
+
+        @foreach (var column in Model.MontageImagesColumns)
+        {
+            <div id="image-list-container" class="column">
+                <ul class="image-list ">
+                    @foreach (var image in column)
+                    {
+                        <li>
+                            <img id="@image.PhotoId" src="@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true">
+                        </li>
+                        index++;
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>*@
+
+@section Scripts
+{
+    <script type="module" src="@Url.Content("~/lib/lightboxed/lightboxed.js")"></script>
+   @* <script type="module" src="@Url.Content("~/js/fadein/jquery.random-fade-in.min.js")"></script>*@
+    <script type="module" src="@Url.Content("~/js/site/gallery.js")"></script>
+}
+ 
+ 

@@ -1,0 +1,41 @@
+﻿@model List<PhotographySite.Areas.Admin.Models.GalleryDto>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+	<div class="container">
+		<a class="navbar-brand" href="/">
+			<img src="/images/logo.jpg" alt="..." height="45">
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav ms-auto">
+				<li class="nav-item">
+					<a class="nav-link active" aria-current="page" href="/">Home</a>
+				</li>				
+				<li class="nav-item dropdown dropstart">
+					<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Galleries </a>
+					<div class="dropdown-menu dropdown-large">
+						<div class="row g-2">
+							<div class="col-12">
+								<div class="container">
+									<div class="row text-center">
+										@foreach (var gallery in Model)
+										{
+											<div class="gallery-item col-xl-3 col-sm-6 mb-5 col-6">
+												<a href="/gallery/@gallery.Id">
+													<div class="bg-white shadow-sm py-5 px-3">
+														<img src="~/photos/@gallery.RandomPhoto" alt="" width="100" class="img-fluid mb-3 img-thumbnail shadow-sm">
+														<h6 class="mb-0">@gallery.Name</h6>
+													</div>
+												</a>
+											</div>										}
+									</div>
+								</div>
+							</div>
+						</div> 
+					</div> 
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>

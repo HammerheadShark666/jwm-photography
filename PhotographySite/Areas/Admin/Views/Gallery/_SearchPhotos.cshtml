@@ -1,0 +1,57 @@
+﻿@model PhotographySite.Areas.Admin.Models.LookupsDto
+
+<div class="collapse" id="collapseGalleryPhotoSearch">
+    <div class="card card-body">
+        <div class="row">
+
+            <div class="col-md-6 col-sm-12">
+                <div class="input-group input-group-sm mb-3 search-control-input">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Title</span>
+                    </div>
+                    <input id="gallery-search-title" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-12">
+                <div class="form-group">
+                    <select class="form-control search-control-select" id="search-country-select">
+                        @foreach (var country in Model.Countries)
+                        {
+                            <option value="@country.Id">@country.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-12">
+                <div class="form-group">
+                    <select class="form-control search-control-select" id="search-category-select">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-12">
+                <div class="form-group">
+                    <select class="form-control search-control-select" id="search-palette-select">
+                        @foreach (var palette in Model.Palettes)
+                        {
+                            <option value="@palette.Id">@palette.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="row clearfix button-row">
+                <div class="col">
+                    <button type="button" class="btn btn-primary gallery-search-photos-search-button float-right">Search</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

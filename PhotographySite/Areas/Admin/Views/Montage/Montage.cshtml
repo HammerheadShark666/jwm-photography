@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Monatage Manager";
+}
+
+@model PhotographySite.Models.Dto.MontagesDto
+
+<div class="row">     
+    <h5">Monatage Manager</h5>      
+</div> 
+
+<div class="draggable-main row container">
+
+    @{
+        int index = 1;
+    }
+
+    @foreach (var column in Model.MontageImagesColumns)
+    {
+        var id = "monatageColumn" + @index;
+        var ulId = "monatageColumn" + @index + "List";
+
+        <div id="@id" data-column="@index" class="column">
+            <ul id="@ulId" class="connected-sortable draggable-left">
+                @await Html.PartialAsync("_MontageList", Model.MontageImagesColumns[index-1])
+            </ul>
+        </div>
+
+        index++;
+    }    
+</div>
+ 
+<div id="contextMenu" class="context-menu" style="display: none">
+    <ul class="menu">
+        <li data-id="0"><a href="#">Landscape</a></li>
+        <li data-id="1"><a href="#">Portrait</a></li>
+        <li data-id="2"><a href="#">Square</a></li>
+    </ul>
+</div>
+
+<input type="hidden" id="selected-montage-id" value="1" />
+
+@section Scripts
+{  
+    <script type="module" src="@Url.Content("~/js/admin/montage-manager.js")"></script>     
+}

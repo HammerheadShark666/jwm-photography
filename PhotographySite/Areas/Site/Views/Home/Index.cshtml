@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model PhotographySite.Models.Dto.MontagesDto
+ 
+<div class="draggable-main">
+    <div class="row">
+        @{
+            int index = 0;
+        }
+
+        @foreach (var column in Model.MontageImagesColumns)
+        {         
+            <div id="image-list-container" class="column">
+                <ul class="image-list ">
+                    @foreach (var image in column)
+                    {
+                        <li>
+                            <img id="@image.PhotoId" src="@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true"> 
+                        </li>
+                        index++;
+                    }
+                </ul>
+            </div>
+        }       
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="module" src="@Url.Content("~/js/fadein/jquery.random-fade-in.min.js")"></script>
+    <script type="module" src="@Url.Content("~/js/site/home.js")"></script>      
+}

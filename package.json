@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jquery-ajax-unobtrusive": "^3.2.6",
+    "photoviewer": "^3.6.6"
+  }
+}

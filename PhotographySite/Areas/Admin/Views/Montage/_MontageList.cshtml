@@ -1,0 +1,11 @@
+﻿@model IEnumerable<PhotographySite.Models.Dto.MontageDto>
+
+@foreach (var image in Model)
+{
+    <li data-column="@image.Column" data-order="@image.Order" data-id="@image.Id">
+        <div class="image-container">
+            <img class="child" src="@image.Path">
+            <div class="delete-template"><i class="bi bi-trash3"></i></div>
+        </div>
+    </li>
+}

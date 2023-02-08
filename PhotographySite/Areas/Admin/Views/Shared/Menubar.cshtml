@@ -1,0 +1,35 @@
+﻿@model List<PhotographySite.Areas.Admin.Models.GalleryDto>
+<nav class="sidebar show">
+    <div class="text">
+        <a class="menu-title" href="/admin">PhotographySite.com</a>
+    </div>
+    <ul class="main_side menu">
+        <li class="active"><a href="/admin">Home</a></li>
+        <li>
+            <a href="#" id="1">
+                Photos
+                <span class="fas fa-caret-down"></span>
+            </a>
+            <ul class="item-show-1">
+                <li data-photo-menu-id="1"><a href="/admin/photo/import">Import</a></li>
+                <li data-photo-menu-id="2"><a href="/admin/photo/catalog">Catalogue</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" id="2">
+                Galleries
+                <span class="fas fa-caret-down"></span>
+            </a>
+            <ul class="item-show-2 menu-galleries-list">
+                <li data-gallary-menu-id="0"><a id="new-gallery" href="#">New Gallery...</a></li>
+                @foreach (var gallery in Model)
+                {
+                    <li data-gallary-menu-id="@gallery.Id"><a href="/admin/gallery/@gallery.Id">@gallery.Name</a></li>
+                }
+            </ul>
+        </li>
+        <li data-montage-menu-id="1"><a href="/admin/montage">Montage</a></li>
+    </ul>
+</nav>
+
+@await Html.PartialAsync("../Gallery/_NewGalleryModal")

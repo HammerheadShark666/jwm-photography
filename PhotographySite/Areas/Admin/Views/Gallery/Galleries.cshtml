@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Galleries";
+}
+
+@model PhotographySite.Areas.Admin.Models.GalleriesDto
+
+<h5>Galleries</h5>   
+
+<div class="row">    
+    <div class="col-xl-12 col-12 col-md-9 col-sm-12" id="gallery-work-area">  
+        <div class="row search-row">
+            <div class="card">                 
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>
+                                <span id="galley-name-title">Gallery (@Model.SelectedGallery.Name)</span>
+                                <img src="/images/icons8-pencil-24.png" class="edit-gallery-name" />
+                                <img src="/images/icons8-delete-24.png" class="delete-gallery" /> 
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body gallery-photos">                     
+                    <ul id="galleryDestination" class="list">
+                        @{
+                            var galleryPhotoIndex = 1;
+                        }
+
+                        @foreach (var photo in Model.SelectGalleryPhotos)
+                        {
+                            <li><img data-photo-id='@photo.Id' data-photo-order='@galleryPhotoIndex' data-title='@photo.Title' class='draggable-img gallery-thumbnail' src='/photos/@photo.FileName' /></li>
+                            galleryPhotoIndex++;
+                        }
+                    </ul>
+                </div>
+            </div>             
+        </div>        
+        
+        <div class="row">
+            <div class="col-12">
+                <div id="gallery-alert" class="alert alert-warning" role="alert"></div>
+            </div>
+        </div>
+
+        <div class="row search-row" id="gallery-search-photos-results">
+            <div class="card">                
+                <div class="card-header"> 
+                    <div class="row">
+                        <div class="col-11">
+                            <h5>Select Photos For Gallery</h5>
+                        </div>
+                        <div class="col-1">
+                            <button class="gallery-search-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGalleryPhotoSearch" aria-expanded="false" aria-controls="collapseExample">
+                                Search...
+                            </button>                            
+                        </div>
+                    </div>
+                </div>
+
+               @* <input type="hidden" id="gallery-page-index" value="1" />
+                <input type="hidden" id="gallery-page-size" value="20" />
+                <input type="hidden" id="gallery-number-of-pages" value="0" />*@
+                                  
+                <div class="card-body card-body-photos">    
+                    @await Html.PartialAsync("_SearchPhotos", Model.LookupsDto)  
+                    <div id="search-results-photos">
+                        <ul id="gallerySource" class="list"></ul>        
+                    </div>
+                </div>
+            </div>            
+        </div>        
+        <div class="pagination-holder black clearfix">
+            <ul id="gallery-search-photos-results-pagination" class="pagination dark-theme simple-pagination text-center justify-content-center"></ul>
+        </div>
+    </div>        
+</div>  
+
+<input type="hidden" id="selected-gallery-id" value="@Model.SelectedGallery.Id" />
+
+@await Html.PartialAsync("../Shared/PhotoModal")
+@await Html.PartialAsync("_EditGalleryNameModal")
+@await Html.PartialAsync("_DeleteGalleryModal")
+
+@section Scripts
+{
+    <script type="module" src="@Url.Content("~/lib/simplePagination/simplePagination.js")"></script>
+    <script type="module" src="@Url.Content("~/js/admin/galleries.js")"></script>     
+}

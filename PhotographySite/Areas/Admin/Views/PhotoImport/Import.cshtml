@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Import Photos";
+}
+
+<h5>Import Photos</h5>
+  
+<div class="row">
+    <form id="import-photos" method="post" enctype="multipart/form-data">   
+        @Html.AntiForgeryToken()
+        <div class="input-group">
+            <input type="file" class="form-control" name="files" id="photos-import-upload" aria-label="Upload" multiple>
+            <button class="btn btn-outline-secondary" type="submit" id="import-photos-btn">Import</button>
+        </div>
+    </form>
+</div>
+
+<div id="import-alert" class="alert alert-warning" role="alert">
+</div>
+ 
+<div id="photosGridContainer">
+</div>
+
+<input type="hidden" id="selected-photo-id" value="1" />
+  
+@section Scripts
+{
+    <script type="module" src="@Url.Content("~/js/admin/photos-import.js")"></script>
+}
