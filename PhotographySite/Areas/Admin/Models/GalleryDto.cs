@@ -11,4 +11,6 @@ public class GalleryDto : BaseDto
     public string RandomPhoto { get; set; }
     
     public List<GalleryPhotoDto> Photos { get; set; }
+
+	public string AzureStoragePath { get; set; }
 }

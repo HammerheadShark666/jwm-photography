@@ -11,4 +11,6 @@ public class GalleriesDto
     public GalleryDto SelectedGallery { get; set; }
 
     public List<PhotoDto> SelectGalleryPhotos { get; set; }
+
+	public string AzureStoragePhotosContainerUrl { get; set; }
 }

@@ -2,6 +2,7 @@
 using PhotographySite.Areas.Admin.Models;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
+using PhotographySite.Helpers;
 using PhotographySite.Models;
 using PhotographySite.Models.Dto;
 
@@ -32,7 +33,8 @@ public class PhotoCatalogService : IPhotoCatalogService
     {         
         return new PhotosPageDto() {
             Data = _mapper.Map<List<PhotoDto>>(await _unitOfWork.Photos.ByPagingAsync(photoFilterDto)),
-            ItemsCount = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterDto)
+            ItemsCount = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterDto),
+            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(),
         };       
     }
   

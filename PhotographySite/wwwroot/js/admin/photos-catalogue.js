@@ -10,7 +10,8 @@ let categories = [];
 let palettes = [];
 
 let pageSize = 10;
- 
+let azureStoragePhotosContainerUrl = "";
+
 $(document).ready(function () {
     setPhotoMenuItem();
     loadLookUps().then(function () {
@@ -120,6 +121,8 @@ function intialisePhotoCatalogGrid() {
                         $('#photo-catalogue-results-pagination').pagination('drawPage', pageIndex); 
                     }
 
+                    azureStoragePhotosContainerUrl = response.azureStoragePhotosContainerUrl
+
                     return response;
 
                 }).catch((response) => {
@@ -147,9 +150,9 @@ function intialisePhotoCatalogGrid() {
                 width: 83,
                 title: "",
                 itemTemplate: function (val, item) {
-                    return $("<img>").attr("src", "/photos/" + item.fileName).css({ 'width': '100%' }).on("click", function () {   //css({ width: 150 }).
+                    return $("<img>").attr("src", azureStoragePhotosContainerUrl + item.fileName).css({ 'width': '100%' }).on("click", function () {   //css({ width: 150 }).
                         $("#photoModalLabel").text(item.fileName);
-                        $("#imagePreview").attr("src", "/photos/" + item.fileName);
+                        $("#imagePreview").attr("src", azureStoragePhotosContainerUrl + item.fileName);
                         $('#photoModal').modal('show');
                     });
                 }

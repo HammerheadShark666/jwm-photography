@@ -3,6 +3,7 @@ using FluentValidation;
 using PhotographySite.Areas.Admin.Models;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
+using PhotographySite.Helpers;
 using PhotographySite.Models;
 
 namespace PhotographySite.Areas.Site.Services;
@@ -22,9 +23,10 @@ public class GalleryService : IGalleryService
 
     public async Task<GalleryDto> GetGalleryAsync(long id)
     {
-        return _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(id));
-       // return _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.ByIdAsync(id));
-    }
+		GalleryDto galleryDto = _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(id));
+        galleryDto.AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl();
+        return galleryDto;
+	}
 
     public async Task<List<GalleryDto>> GetGalleriesAsync()
     {

@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using PhotographySite.Areas.Admin.Models;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
+using PhotographySite.Helpers;
 using PhotographySite.Models;
 
 namespace PhotographySite.Areas.Admin.Services;
@@ -47,22 +48,19 @@ public class GalleryService : IGalleryService
         int numberOfPhotos = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterDto);
         int numberOfPages = GetNumberOfPages(numberOfPhotos, photoFilterDto.PageSize);
 
-
         return new SearchPhotosResultsDto()
         {
             NumberOfPhotos = numberOfPhotos,
             PageIndex = searchPhotosDto.PageIndex + 1,
             PageSize = searchPhotosDto.PageSize,
             NumberOfPages = numberOfPages,
-            Photos = photos 
+            Photos = photos,
+            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl()
         };  
     }
 
     private int GetNumberOfPages(int numberOfPhotos, int pageSize)
-    {
-        //int numberOfPhotos = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterDto);
-       // return (numberOfPhotos / photoFilterDto.PageSize) + ((numberOfPhotos % photoFilterDto.PageSize > 0) ? 1 : 0);
-
+    { 
         return (numberOfPhotos / pageSize) + ((numberOfPhotos % pageSize > 0) ? 1 : 0);
     }     
 

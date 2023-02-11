@@ -38,7 +38,8 @@ public class MontageService : IMontageService
 
         return new MontagesDto()
         {
-            MontageImagesColumns = montageImagesColumns  
+            MontageImagesColumns = montageImagesColumns,
+            AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl()
         };
     }
 
