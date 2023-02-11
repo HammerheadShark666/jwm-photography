@@ -7,5 +7,5 @@ public class SearchPhotosResultsDto
     public int NumberOfPages { get; set; }
     public List<PhotoDto> Photos { get; set; }
     public int NumberOfPhotos { get; set; }
-
+    public string AzureStoragePhotosContainerUrl { get; set; }
 }

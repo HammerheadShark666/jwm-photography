@@ -17,7 +17,7 @@
                     @foreach (var image in column)
                     {
                         <li>
-                            <img id="@image.PhotoId" src="@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true"> 
+                            <img id="@image.PhotoId" src="@Model.AzureStoragePath@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true"> 
                         </li>
                         index++;
                     }

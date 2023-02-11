@@ -29,7 +29,7 @@
 
                         @foreach (var photo in Model.SelectGalleryPhotos)
                         {
-                            <li><img data-photo-id='@photo.Id' data-photo-order='@galleryPhotoIndex' data-title='@photo.Title' class='draggable-img gallery-thumbnail' src='/photos/@photo.FileName' /></li>
+                            <li><img data-photo-id='@photo.Id' data-photo-order='@galleryPhotoIndex' data-title='@photo.Title' class='draggable-img gallery-thumbnail' src='@Model.AzureStoragePhotosContainerUrl@photo.FileName' /></li>
                             galleryPhotoIndex++;
                         }
                     </ul>
@@ -57,11 +57,7 @@
                         </div>
                     </div>
                 </div>
-
-               @* <input type="hidden" id="gallery-page-index" value="1" />
-                <input type="hidden" id="gallery-page-size" value="20" />
-                <input type="hidden" id="gallery-number-of-pages" value="0" />*@
-                                  
+                 
                 <div class="card-body card-body-photos">    
                     @await Html.PartialAsync("_SearchPhotos", Model.LookupsDto)  
                     <div id="search-results-photos">

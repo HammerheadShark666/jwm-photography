@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Admin.Models;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Helpers;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
@@ -24,7 +25,8 @@ public class GalleryController : Controller
     {       
         GalleriesDto galleriesDto = new()
         {
-            SelectedGallery = await _galleryService.GetGalleryAsync(id),
+			AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(),
+			SelectedGallery = await _galleryService.GetGalleryAsync(id),
             SelectGalleryPhotos = await _galleryPhotoService.GetGalleryPhotosAsync(id),
             LookupsDto = await _photoCatalogService.GetLookupsAsync(),
             GalleryListDto = await _galleryService.GetGalleriesAsync(),

@@ -4,6 +4,7 @@ import * as main from '../main.js'
 const gallery = new Gallery();
 
 let pageSize = 20;
+let azureStoragePhotosContainerUrl = "";
  
 $(document).ready(function () {   
     $('#search-country-select').prepend("<option value='0' selected='selected'>Select Country...</option>");        
@@ -63,10 +64,7 @@ $(document).on('click', '#save-gallery-name', function () {
     }
 });
 
-$(document).on('click', '.gallery-search-photos-search-button', function () {
-
-   // $("#gallery-page-index").val(1);
-   // $("#gallery-number-of-pages").val(0);
+$(document).on('click', '.gallery-search-photos-search-button', function () {     
     $('#gallery-search-photos-results-pagination').hide();
     searchPhotosForGallery(1);
 });
@@ -122,7 +120,8 @@ function searchPhotosForGallery(pageNumber) {
     let paletteId = parseInt($("#search-palette-select").val());
     let title = $("#gallery-search-title").val();     
 
-    gallery.searchPhotos(title, countryId, categoryId, paletteId, pageNumber, pageSize).then(function (response) {         
+    gallery.searchPhotos(title, countryId, categoryId, paletteId, pageNumber, pageSize).then(function (response) {    
+        azureStoragePhotosContainerUrl = response.azureStoragePhotosContainerUrl;
         $("#gallerySource").append(getPhotoElements(response.photos)); 
         initialiseGallerySearchPhotosResultsPagination(response.numberOfPhotos, true); 
         $('#gallery-search-photos-results-pagination').pagination('drawPage', pageNumber); 
@@ -226,7 +225,7 @@ function updateOrderOfPhotos(liElement) {
 }
 
 function getLiImageElement(photo) {      
-    return "<li><img data-photo-id='" + photo.id + "' data-title='" + photo.title + "' class='draggable-img gallery-thumbnail' src='/photos/" + photo.fileName + "' /></li>";
+    return "<li><img data-photo-id='" + photo.id + "' data-title='" + photo.title + "' class='draggable-img gallery-thumbnail' src='" + azureStoragePhotosContainerUrl + photo.fileName + "' /></li>";
 }
 
 function setGallaryMenuItem() {

@@ -5,8 +5,7 @@ namespace PhotographySite.Helpers;
 
 public class MontageHelper
 {
-    const string templatePath = "/images/";
-    const string photoPath = "/photos/";
+    const string templatePath = "/images/"; 
     const string portraitTemplate = "PortraitTemplate.jpg";
     const string squareTemplate = "SquareTemplate.jpg";
     const string landscapeTemplate = "LandscapeTemplate.jpg";
@@ -66,8 +65,8 @@ public class MontageHelper
 
     private static void UpdateMontageDto(MontageDto montageDto, Photo photo)
     {
-        montageDto.Path = photoPath + photo.FileName;
-        montageDto.PhotoId = photo.Id;
+        montageDto.Path = photo.FileName;
+		montageDto.PhotoId = photo.Id;
         montageDto.Title = photo.Title + (photo.Country != null ? " - " + photo.Country.Name : "");
     }
 
