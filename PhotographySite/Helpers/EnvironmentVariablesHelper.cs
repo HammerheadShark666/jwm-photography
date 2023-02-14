@@ -6,4 +6,9 @@ public class EnvironmentVariablesHelper
 	{
 		return Environment.GetEnvironmentVariable(Constants.AzureStorageContainerUrl) + "/photos/"; 
 	}
+
+    public static string AzureStorageConnectionString()
+    {
+        return Environment.GetEnvironmentVariable(Constants.AzureStorageConnectionString);
+    }
 }

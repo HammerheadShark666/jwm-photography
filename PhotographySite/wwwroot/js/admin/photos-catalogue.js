@@ -169,7 +169,19 @@ function intialisePhotoCatalogGrid() {
             { name: "focalLength", title: "Focal Length", type: "text", width: 60, editing: false },
             { name: "exposureTime", title: "Exposure", type: "text", width: 70, editing: false },
             { name: "aperturValue", title: "Aperture", type: "text", width: 60, editing: false },
-            { name: "iso", title: "ISO", type: "number", width: 70, editing: false },
+            {
+                name: "iso",
+                title: "ISO",
+                type: "number",
+                width: 70,
+                editing: false,
+                itemTemplate: function (val, item) {
+                    if (val === 0)
+                        return "";
+                    else
+                        return val;
+                }
+            },
             { name: "dateTaken", title: "Date Taken", type: "text", width: 80, editing: false,
                 itemTemplate: function (val, item) {
                     if(val != null)
