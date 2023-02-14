@@ -15,7 +15,8 @@
       "launchUrl": "https://localhost:7166/admin",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "AZURE_STORAGE_URL": "https://swansongstorageuat.blob.core.windows.net"
+        "AZURE_STORAGE_URL": "https://jwmphotographyuat.blob.core.windows.net",
+        "JWM_PHOTOGRAPHY_AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=jwmphotographyuat;AccountKey=vIrhphlODOr7swK3CyJOFyLcXFzv+61zVD0b7sC5HSPaSjMVsPq0CWMOUsP1UTIpUiwpsStWuibp+ASt/Z2Q2g==;EndpointSuffix=core.windows.net"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7166;http://localhost:5255"

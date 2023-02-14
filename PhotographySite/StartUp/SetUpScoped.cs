@@ -2,6 +2,8 @@
 using PhotographySite.Data.UnitOfWork;
 using PhotographySite.Areas.Admin.Services;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Helpers.Interface;
+using SwanSong.Helper;
 
 namespace PhotographySite.StartUp;
 
@@ -9,6 +11,7 @@ public class SetUpScoped
 {
     public static void Setup(WebApplicationBuilder builder)
     {
+        builder.Services.AddScoped<IAzureStorageBlobHelper, AzureStorageBlobHelper>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IMontageService, MontageService > ();
         builder.Services.AddScoped<IPhotoCatalogService, PhotoCatalogService>();

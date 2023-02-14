@@ -22,7 +22,7 @@
             processData: false,
             contentType: false,
             async: true,
-            success: function (response, status) {
+            success: function (response, status) { 
                 $("#photosGridContainer").html('');              
                 $("#photosGridContainer").append(response);
                 intialiseImportedPhotosGrid();
@@ -100,9 +100,9 @@ function intialiseImportedPhotosGrid() {
                 title: "",
                 width: 90,
                 itemTemplate: function (val, item) {
-                    return $("<img>").attr("src", "/photos/" + item.fileName).css({ 'width': '100%' }).on("click", function () {   //css({ width: 150 }).
+                    return $("<img>").attr("src", azureStoragePhotosContainerUrl + item.fileName).css({ 'width': '100%' }).on("click", function () {   //css({ width: 150 }).
                         $("#photoModalLabel").text(item.fileName);
-                        $("#imagePreview").attr("src", "/photos/" + item.fileName);
+                        $("#imagePreview").attr("src", azureStoragePhotosContainerUrl + item.fileName);
                         $('#photoModal').modal('show');
                     });
                 }
@@ -148,9 +148,9 @@ function intialiseFailedImportPhotosGrid() {
                 title: "",
                 width: 30,
                 itemTemplate: function (val, item) {
-                    return $("<img>").attr("src", "/photos/" + item.fileName).css({ 'width': '100%' }).on("click", function () {   //css({ width: 150 }).
+                    return $("<img>").attr("src", azureStoragePhotosContainerUrl + item.fileName).css({ 'width': '100%' }).on("click", function () {   //css({ width: 150 }).
                         $("#photoModalLabel").text(item.fileName);
-                        $("#imagePreview").attr("src", "/photos/" + item.fileName);
+                        $("#imagePreview").attr("src", azureStoragePhotosContainerUrl + + item.fileName);
                         $('#photoModal').modal('show');
 
                     });

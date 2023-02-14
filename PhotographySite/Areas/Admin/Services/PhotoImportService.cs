@@ -3,6 +3,7 @@ using PhotographySite.Areas.Admin.Models;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helpers;
+using PhotographySite.Helpers.Interface;
 using PhotographySite.Models;
 using PhotographySite.Models.Dto;
 
@@ -13,20 +14,24 @@ public class PhotoImportService : IPhotoImportService
     private readonly IConfiguration _configuration;
     private IUnitOfWork _unitOfWork;
     private IMapper _mapper;
+    private IAzureStorageBlobHelper _azureStorageBlobHelper;
 
-    public PhotoImportService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper)
+    public PhotoImportService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper, IAzureStorageBlobHelper azureStorageBlobHelper)
     {
         _unitOfWork = unitOfWork;
         _configuration = configuration;
         _mapper = mapper;
+        _azureStorageBlobHelper = azureStorageBlobHelper;
     }
 
     public async Task<SavedPhotosDto> ImportAsync(List<IFormFile> photos)
     {
         string directoryPath = _configuration.GetValue<string>("Photos:Directory");
          
-        var (existingPhotos, newPhotos) = await GetExistingNewPhotoListAsync(photos);
+        var (existingPhotos, newPhotos) = await GetExistingNewPhotoListAsync(photos); 
 
+        await _azureStorageBlobHelper.SaveBlobsToAzureStorageContainerAsync(newPhotos, Constants.AzureStorageContainerName);
+        
         List<string> fileNames = await FileHelper.SaveFilesToDirectoryAsync(newPhotos, directoryPath);
         List<Photo> photosWithDetails = GetPhotoDetails(fileNames, directoryPath);
         List<Photo> savedPhotos = SavePhotos(photosWithDetails);
@@ -38,7 +43,10 @@ public class PhotoImportService : IPhotoImportService
             Categories = _mapper.Map<List<CategoryDto>>(await _unitOfWork.Categories.AllSortedAsync()),
             Countries = _mapper.Map<List<CountryDto>>(await _unitOfWork.Countries.AllSortedAsync()),
             Palettes = _mapper.Map<List<PaletteDto>>(await _unitOfWork.Palettes.AllSortedAsync()),
+            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl()
         };
+
+        FileHelper.DeleteAllFilesInDirectory(directoryPath);
 
         return savedPhotosDto;
     }
