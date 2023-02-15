@@ -38,6 +38,8 @@ public class GalleryService : IGalleryService
 
             if(randomPhoto != null)
 			    gallery.RandomPhoto = randomPhoto.FileName;	
+
+            gallery.AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl();
 		}
 
         return galleries;

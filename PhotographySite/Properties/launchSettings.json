@@ -16,7 +16,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "AZURE_STORAGE_URL": "https://jwmphotographyuat.blob.core.windows.net",
-        "JWM_PHOTOGRAPHY_AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=jwmphotographyuat;AccountKey=vIrhphlODOr7swK3CyJOFyLcXFzv+61zVD0b7sC5HSPaSjMVsPq0CWMOUsP1UTIpUiwpsStWuibp+ASt/Z2Q2g==;EndpointSuffix=core.windows.net"
+        "JWM_PHOTOGRAPHY_AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=jwmphotographyuat;AccountKey=vIrhphlODOr7swK3CyJOFyLcXFzv+61zVD0b7sC5HSPaSjMVsPq0CWMOUsP1UTIpUiwpsStWuibp+ASt/Z2Q2g==;EndpointSuffix=core.windows.net",
+        //"SQLAZURECONNSTR_JWM_PHOTOGRAPHY": "Server=LAPTOP-QG1GTJV1\\SQLEXPRESS;Database=PhotographySite;Integrated Security=true;Encrypt=False",
+        "SQLAZURECONNSTR_JWM_PHOTOGRAPHY": "Server=tcp:jwm-photography-db-server.database.windows.net,1433;Initial Catalog=jwm-photography-db;Persist Security Info=False;User ID=JwmPhotographyAdmin;Password=AntiqueRoadtrip66#3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7166;http://localhost:5255"

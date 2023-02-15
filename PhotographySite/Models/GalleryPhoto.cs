@@ -13,7 +13,7 @@ public class GalleryPhoto
     [Column(TypeName = "int")]
     public long GalleryId { get; set; }
 
-    [Column(TypeName = "int")]
+    [Column(TypeName = "bigint")]
     public long PhotoId { get; set; }
 
     [Column(TypeName = "tinyint")]

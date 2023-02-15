@@ -2,14 +2,31 @@
 using PhotographySite.Data.Context;
 using PhotographySite.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PhotographySite.Helpers;
 
 namespace PhotographySite.Data.Contexts;
 public class PhotographySiteDbContext : DbContext
 {
+
+    //UNCOMMENT OUT WHEN RUNNING FOR MIGRATIONS
+    //public PhotographySiteDbContext()
+    //{
+
+    //}
+
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    //optionsBuilder.UseSqlServer(EnvironmentVariablesHelper.DatabaseConnectionString());
+    //    optionsBuilder.UseSqlServer("Server=tcp:jwm-photography-db-server.database.windows.net,1433;Initial Catalog=jwm-photography-db;Persist Security Info=False;User ID=JwmPhotographyAdmin;Password=AntiqueRoadtrip66#3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+    //    // optionsBuilder.UseSqlServer("Initial Catalog=SwanSongDB; Data Source=localhost, 1440; Persist Security Info=True;User ID=SA;Password=Rcu9OP443mc#3xx;");
+    //}
+
+
     public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options)
     {
+        var b = 1;
     }
-    
+
     public DbSet<Category> Category { get; set; }
     public DbSet<Country> Country { get; set; }
     public DbSet<Gallery> Gallery { get; set; }
@@ -45,3 +62,9 @@ public class PhotographySiteDbContext : DbContext
 
 //EntityFrameworkCore\Add-Migration create-db
 //EntityFrameworkCore\update-database   
+
+
+
+//dotnet ef migrations add description-column-to-gallery --project PhotographySite
+//dotnet ef database update --project PhotographySite
+

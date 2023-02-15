@@ -45,7 +45,8 @@ namespace PhotographySite.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(150)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(150)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -123,27 +124,6 @@ namespace PhotographySite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GalleryPhoto",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GalleryId = table.Column<int>(type: "int", nullable: false),
-                    PhotoId = table.Column<int>(type: "int", nullable: false),
-                    Order = table.Column<byte>(type: "tinyint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GalleryPhoto", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GalleryPhoto_Gallery_GalleryId",
-                        column: x => x.GalleryId,
-                        principalTable: "Gallery",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Photo",
                 columns: table => new
                 {
@@ -187,6 +167,33 @@ namespace PhotographySite.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "GalleryPhoto",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GalleryId = table.Column<int>(type: "int", nullable: false),
+                    PhotoId = table.Column<long>(type: "bigint", nullable: false),
+                    Order = table.Column<byte>(type: "tinyint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GalleryPhoto", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GalleryPhoto_Gallery_GalleryId",
+                        column: x => x.GalleryId,
+                        principalTable: "Gallery",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GalleryPhoto_Photo_PhotoId",
+                        column: x => x.PhotoId,
+                        principalTable: "Photo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Category",
                 columns: new[] { "Id", "Name" },
@@ -197,7 +204,8 @@ namespace PhotographySite.Migrations
                     { 3, "Wildlife" },
                     { 4, "Underwater" },
                     { 5, "Portrait" },
-                    { 6, "Macro" }
+                    { 6, "Macro" },
+                    { 7, "Miscellaneous" }
                 });
 
             migrationBuilder.InsertData(
@@ -226,24 +234,25 @@ namespace PhotographySite.Migrations
                     { 20, "Chile" },
                     { 21, "Argentina" },
                     { 22, "Germany" },
-                    { 23, "Spain" }
+                    { 23, "Spain" },
+                    { 24, "Myanmar" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Gallery",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Landscape" },
-                    { 2, "Travel" },
-                    { 3, "Wildlife" },
-                    { 4, "Underwater" },
-                    { 5, "Portraits" },
-                    { 6, "Black & White" },
-                    { 7, "Macro" }
-                });
+			migrationBuilder.InsertData(
+				table: "Gallery",
+				columns: new[] { "Id", "Description", "Name" },
+				values: new object[,]
+				{
+					{ 3, null, "Wildlife" },
+					{ 4, null, "Underwater 1" },
+					{ 6, null, "Black & White" },
+					{ 7, null, "Macro" },
+					{ 9, null, "Landscape" },
+					{ 10, null, "Travel" },
+					{ 29, null, "Underwater 2" }
+				});
 
-            migrationBuilder.InsertData(
+			migrationBuilder.InsertData(
                 table: "Montage",
                 columns: new[] { "Id", "Column", "Order", "Orientation" },
                 values: new object[,]
@@ -302,6 +311,11 @@ namespace PhotographySite.Migrations
                 column: "GalleryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GalleryPhoto_PhotoId",
+                table: "GalleryPhoto",
+                column: "PhotoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Photo_CategoryId",
                 table: "Photo",
                 column: "CategoryId");
@@ -330,9 +344,6 @@ namespace PhotographySite.Migrations
                 name: "Orientation");
 
             migrationBuilder.DropTable(
-                name: "Photo");
-
-            migrationBuilder.DropTable(
                 name: "Showcase");
 
             migrationBuilder.DropTable(
@@ -340,6 +351,9 @@ namespace PhotographySite.Migrations
 
             migrationBuilder.DropTable(
                 name: "Gallery");
+
+            migrationBuilder.DropTable(
+                name: "Photo");
 
             migrationBuilder.DropTable(
                 name: "Category");
