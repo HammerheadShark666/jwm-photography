@@ -24,8 +24,7 @@ public class GalleryController : Controller
     public async Task<IActionResult> Gallery(long id)
     {       
         GalleriesDto galleriesDto = new()
-        {
-			AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(),
+        {			
 			SelectedGallery = await _galleryService.GetGalleryAsync(id),
             SelectGalleryPhotos = await _galleryPhotoService.GetGalleryPhotosAsync(id),
             LookupsDto = await _photoCatalogService.GetLookupsAsync(),

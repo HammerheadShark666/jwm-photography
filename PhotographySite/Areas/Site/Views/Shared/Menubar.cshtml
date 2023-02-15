@@ -1,4 +1,4 @@
-﻿@model List<PhotographySite.Areas.Admin.Models.GalleryDto>
+﻿@model PhotographySite.Areas.Admin.Models.GalleriesDto
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
 	<div class="container">
 		<a class="navbar-brand" href="/">
@@ -19,12 +19,12 @@
 							<div class="col-12">
 								<div class="container">
 									<div class="row text-center">
-										@foreach (var gallery in Model)
+										@foreach (var gallery in Model.GalleryListDto)
 										{
 											<div class="gallery-item col-xl-3 col-sm-6 mb-5 col-6">
 												<a href="/gallery/@gallery.Id">
 													<div class="bg-white shadow-sm py-5 px-3">
-														<img src="@gallery.AzureStoragePath@gallery.RandomPhoto" alt="" width="100" class="img-fluid mb-3 img-thumbnail shadow-sm">
+														<img src="@Model.AzureStoragePhotosContainerUrl@gallery.RandomPhoto" alt="" width="100" class="img-fluid mb-3 img-thumbnail shadow-sm">
 														<h6 class="mb-0">@gallery.Name</h6>
 													</div>
 												</a>

@@ -1,13 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhotographySite.Data.Context;
 using PhotographySite.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PhotographySite.Helpers;
 
 namespace PhotographySite.Data.Contexts;
 public class PhotographySiteDbContext : DbContext
 {
-
     //UNCOMMENT OUT WHEN RUNNING FOR MIGRATIONS
     //public PhotographySiteDbContext()
     //{
@@ -21,11 +18,7 @@ public class PhotographySiteDbContext : DbContext
     //    // optionsBuilder.UseSqlServer("Initial Catalog=SwanSongDB; Data Source=localhost, 1440; Persist Security Info=True;User ID=SA;Password=Rcu9OP443mc#3xx;");
     //}
 
-
-    public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options)
-    {
-        var b = 1;
-    }
+    public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options) {}
 
     public DbSet<Category> Category { get; set; }
     public DbSet<Country> Country { get; set; }
@@ -44,26 +37,16 @@ public class PhotographySiteDbContext : DbContext
 
         modelBuilder.Entity<Category>().HasData(DefaultData.GetCategoryDefaultData());
         modelBuilder.Entity<Country>().HasData(DefaultData.GetCountryDefaultData());
-
         modelBuilder.Entity<Gallery>().HasData(DefaultData.GetGalleryDefaultData());
-        //modelBuilder.Entity<GalleryPhoto>().HasData(DefaultData.GetGalleryPhotoDefaultData());
-
         modelBuilder.Entity<Montage>().HasData(DefaultData.GetMontageDefaultData());
-
         modelBuilder.Entity<Orientation>().HasData(DefaultData.GetOrientationDefaultData());
-        modelBuilder.Entity<Palette>().HasData(DefaultData.GetPaletteDefaultData());
-
-       // modelBuilder.Entity<Photo>().HasData(DefaultData.GetPhotoDefaultData());
-        modelBuilder.Entity<Showcase>().HasData(DefaultData.GetShowcaseDefaultData());
-       //modelBuilder.Entity<ShowcasePhoto>().HasData(DefaultData.GetShowcasePhotoDefaultData());        
+        modelBuilder.Entity<Palette>().HasData(DefaultData.GetPaletteDefaultData());         
+        modelBuilder.Entity<Showcase>().HasData(DefaultData.GetShowcaseDefaultData());     
     }
 }
 
-
 //EntityFrameworkCore\Add-Migration create-db
 //EntityFrameworkCore\update-database   
-
-
 
 //dotnet ef migrations add description-column-to-gallery --project PhotographySite
 //dotnet ef database update --project PhotographySite

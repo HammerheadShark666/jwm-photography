@@ -1,4 +1,6 @@
-﻿namespace PhotographySite.Areas.Admin.Models;
+﻿using PhotographySite.Helpers;
+
+namespace PhotographySite.Areas.Admin.Models;
 
 public class GalleriesDto
 {
@@ -12,5 +14,5 @@ public class GalleriesDto
 
     public List<PhotoDto> SelectGalleryPhotos { get; set; }
 
-	public string AzureStoragePhotosContainerUrl { get; set; }
+	public string AzureStoragePhotosContainerUrl { get { return EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(); } }
 }

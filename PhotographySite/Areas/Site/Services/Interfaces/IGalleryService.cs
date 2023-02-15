@@ -6,6 +6,6 @@ public interface IGalleryService
 {
     Task<GalleryDto> GetGalleryAsync(long id);
 
-    Task<List<GalleryDto>> GetGalleriesAsync();
+    Task<GalleriesDto> GetGalleriesAsync();
  
 }
