@@ -17,7 +17,7 @@ namespace PhotographySite.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -68,6 +68,11 @@ namespace PhotographySite.Migrations
                         {
                             Id = 6,
                             Name = "Macro"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Miscellaneous"
                         });
                 });
 
@@ -197,6 +202,11 @@ namespace PhotographySite.Migrations
                         {
                             Id = 23,
                             Name = "Spain"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "Myanmar"
                         });
                 });
 
@@ -207,6 +217,9 @@ namespace PhotographySite.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -268,12 +281,14 @@ namespace PhotographySite.Migrations
                     b.Property<byte>("Order")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("PhotoId")
-                        .HasColumnType("int");
+                    b.Property<long>("PhotoId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GalleryId");
+
+                    b.HasIndex("PhotoId");
 
                     b.ToTable("GalleryPhoto");
                 });
@@ -622,6 +637,14 @@ namespace PhotographySite.Migrations
                         .HasForeignKey("GalleryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("PhotographySite.Models.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Photo");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Photo", b =>

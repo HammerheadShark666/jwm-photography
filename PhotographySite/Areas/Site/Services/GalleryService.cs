@@ -28,7 +28,7 @@ public class GalleryService : IGalleryService
         return galleryDto;
 	}
 
-    public async Task<List<GalleryDto>> GetGalleriesAsync()
+    public async Task<GalleriesDto> GetGalleriesAsync()
     {
 		List<GalleryDto> galleries = _mapper.Map<List<GalleryDto>>(await _unitOfWork.Galleries.AllSortedAsync());
 
@@ -37,9 +37,14 @@ public class GalleryService : IGalleryService
             Photo randomPhoto = (await _unitOfWork.GalleryPhotos.GetRandomGalleryPhotoAsync(gallery.Id));
 
             if(randomPhoto != null)
-			    gallery.RandomPhoto = randomPhoto.FileName;	
+			    gallery.RandomPhoto = randomPhoto.FileName;	 
 		}
 
-        return galleries;
+        GalleriesDto galleriesDto = new GalleriesDto()
+        {
+            GalleryListDto = galleries 
+        };
+
+        return galleriesDto;
     } 
 }
