@@ -1,20 +1,12 @@
-using Newtonsoft.Json.Serialization;
 using PhotographySite.Middleware;
 using PhotographySite.SetUp;
 using PhotographySite.StartUp;
 
 var builder = WebApplication.CreateBuilder(args);
- 
+
 SetUpDatabaseContext.Setup(builder);
- 
-builder.Services.AddMvc(options => options.EnableEndpointRouting = false);
-
-builder.Services.AddControllers()
-    .AddNewtonsoftJson(options =>
-    {
-        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();        
-    });
-
+SetUpMvc.Setup(builder);
+SetUpController.Setup(builder); 
 SetUpScoped.Setup(builder); 
 SetUpAutoMapper.Setup(builder); 
 SetUpFluentValidation.Setup(builder);
@@ -31,10 +23,8 @@ var app = builder.Build();
 
 //app.UseExceptionHandler(err => err.UseCustomErrors(app.Environment));
 
-app.UseGlobalExceptionHandler(app.Logger
-                                    , errorPagePath: "/error"
-                                    , respondWithJsonErrorDetails: true);
-
+app.Logger.LogInformation("Log some information #1");
+app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true);
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

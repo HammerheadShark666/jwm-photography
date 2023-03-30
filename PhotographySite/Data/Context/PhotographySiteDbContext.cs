@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhotographySite.Data.Context;
+using PhotographySite.Helpers;
 using PhotographySite.Models;
 
 namespace PhotographySite.Data.Contexts;
@@ -13,13 +14,13 @@ public class PhotographySiteDbContext : DbContext
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
-    //    //optionsBuilder.UseSqlServer(EnvironmentVariablesHelper.DatabaseConnectionString());
-    //    optionsBuilder.UseSqlServer("Server=tcp:jwm-photography-db-server.database.windows.net,1433;Initial Catalog=jwm-photography-db;Persist Security Info=False;User ID=JwmPhotographyAdmin;Password=AntiqueRoadtrip66#3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-    //    // optionsBuilder.UseSqlServer("Initial Catalog=SwanSongDB; Data Source=localhost, 1440; Persist Security Info=True;User ID=SA;Password=Rcu9OP443mc#3xx;");
+    //    // optionsBuilder.UseSqlServer(EnvironmentVariablesHelper.DatabaseConnectionString());
+    //     optionsBuilder.UseSqlServer("Server=tcp:jwm-photography-db-server.database.windows.net,1433;Initial Catalog=jwm-photography-db;Persist Security Info=False;User ID=JwmPhotographyAdmin;Password=AntiqueRoadtrip66#3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+    //   // optionsBuilder.UseSqlServer("Server=LAPTOP-QG1GTJV1\\SQLEXPRESS;Database=PhotographySite;Integrated Security=true;Encrypt=False");
     //}
 
-    public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options) {}
-
+    public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options) { }
+ 
     public DbSet<Category> Category { get; set; }
     public DbSet<Country> Country { get; set; }
     public DbSet<Gallery> Gallery { get; set; }
@@ -29,7 +30,7 @@ public class PhotographySiteDbContext : DbContext
     public DbSet<Palette> Palette { get; set; }
     public DbSet<Photo> Photo { get; set; }
     public DbSet<Showcase> Showcase { get; set; }
-    public DbSet<ShowcasePhoto> ShowcasePhoto { get; set; }
+    public DbSet<ShowcasePhoto> ShowcasePhoto { get; set; } 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,12 +42,15 @@ public class PhotographySiteDbContext : DbContext
         modelBuilder.Entity<Montage>().HasData(DefaultData.GetMontageDefaultData());
         modelBuilder.Entity<Orientation>().HasData(DefaultData.GetOrientationDefaultData());
         modelBuilder.Entity<Palette>().HasData(DefaultData.GetPaletteDefaultData());         
-        modelBuilder.Entity<Showcase>().HasData(DefaultData.GetShowcaseDefaultData());     
+        modelBuilder.Entity<Showcase>().HasData(DefaultData.GetShowcaseDefaultData()); 
     }
 }
 
 //EntityFrameworkCore\Add-Migration create-db
 //EntityFrameworkCore\update-database   
+
+//EntityFramework6\Add-Migration
+//EntityFramework6\update-database
 
 //dotnet ef migrations add description-column-to-gallery --project PhotographySite
 //dotnet ef database update --project PhotographySite

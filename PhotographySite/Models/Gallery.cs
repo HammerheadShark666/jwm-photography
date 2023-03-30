@@ -17,5 +17,5 @@ public class Gallery
 	public ICollection<GalleryPhoto> Photos { get; set; }
 
 	[Column(TypeName = "nvarchar(1000)")]
-	public string Description { get; set; }
+	public string Description { get; set; } 
 }

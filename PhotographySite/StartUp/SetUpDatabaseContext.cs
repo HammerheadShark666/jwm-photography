@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhotographySite.Data.Contexts;
 using PhotographySite.Helpers;
-using System.Configuration;
 
 namespace PhotographySite.SetUp;
 
-public class SetUpDatabaseContext
+public static class SetUpDatabaseContext
 {
     public static void Setup(WebApplicationBuilder builder)
-    { 
-		builder.Services.AddDbContext<PhotographySiteDbContext>(o => o.UseSqlServer(EnvironmentVariablesHelper.DatabaseConnectionString()));
-	}
+    {          
+        builder.Services.AddDbContext<PhotographySiteDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString(Constants.DatabaseConnectionString),
+            options => options.EnableRetryOnFailure()));
+    }
 }
