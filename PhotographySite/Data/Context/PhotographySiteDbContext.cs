@@ -5,20 +5,7 @@ using PhotographySite.Models;
 
 namespace PhotographySite.Data.Contexts;
 public class PhotographySiteDbContext : DbContext
-{
-    //UNCOMMENT OUT WHEN RUNNING FOR MIGRATIONS
-    //public PhotographySiteDbContext()
-    //{
-
-    //}
-
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    // optionsBuilder.UseSqlServer(EnvironmentVariablesHelper.DatabaseConnectionString());
-    //     optionsBuilder.UseSqlServer("Server=tcp:jwm-photography-db-server.database.windows.net,1433;Initial Catalog=jwm-photography-db;Persist Security Info=False;User ID=JwmPhotographyAdmin;Password=AntiqueRoadtrip66#3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-    //   // optionsBuilder.UseSqlServer("Server=LAPTOP-QG1GTJV1\\SQLEXPRESS;Database=PhotographySite;Integrated Security=true;Encrypt=False");
-    //}
-
+{ 
     public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options) { }
  
     public DbSet<Category> Category { get; set; }
@@ -55,3 +42,4 @@ public class PhotographySiteDbContext : DbContext
 //dotnet ef migrations add description-column-to-gallery --project PhotographySite
 //dotnet ef database update --project PhotographySite
 
+//azurite --silent --location c:\azurite --debug c:\azurite\debug.log
