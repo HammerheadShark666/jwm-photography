@@ -1,0 +1,43 @@
+{
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5255"
+    },
+    "https": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://localhost:7166/admin",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_STORAGE_URL": "https://jwmphotographyuat.blob.core.windows.net",
+        "JWM_PHOTOGRAPHY_AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=jwmphotographyuat;AccountKey=vIrhphlODOr7swK3CyJOFyLcXFzv+61zVD0b7sC5HSPaSjMVsPq0CWMOUsP1UTIpUiwpsStWuibp+ASt/Z2Q2g==;EndpointSuffix=core.windows.net",
+       // "AZURE_SQL_CONNECTIONSTRING": "Server=LAPTOP-QG1GTJV1\\SQLEXPRESS;Database=jwm-photography-db;Integrated Security=true;Encrypt=False"
+        //"AZURE_SQL_CONNECTIONSTRING": "Server=tcp:jwm-photography-db-server.database.windows.net,1433;Initial Catalog=jwm-photography-db;Persist Security Info=False;User ID=JwmPhotographyAdmin;Password=AntiqueRoadtrip66#3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7166;http://localhost:5255"
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AZURE_STORAGE_URL": "https://swansongstorageuat.blob.core.windows.net"
+      }
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:55679",
+      "sslPort": 44373
+    }
+  }
+}
