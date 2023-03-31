@@ -10,5 +10,10 @@ public class EnvironmentVariablesHelper
     public static string AzureStorageConnectionString()
     {
         return Environment.GetEnvironmentVariable(Constants.AzureStorageConnectionString);
-    } 
+    }
+
+    public static string TempPhotoDirectoryPath()
+    {
+        return Environment.GetEnvironmentVariable(Constants.TempPhotoDirectoryPath);
+    }
 }
