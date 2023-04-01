@@ -1,3 +1,0 @@
-MigrationId,ProductVersion
-20230115164923_create-db,7.0.1
-20230203105714_InitialMigration,7.0.2
