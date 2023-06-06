@@ -3,7 +3,7 @@ using PhotographySite.SetUp;
 using PhotographySite.StartUp;
 
 var builder = WebApplication.CreateBuilder(args);
-
+ 
 builder.Services.AddControllersWithViews();
 
 SetUpDatabaseContext.Setup(builder);
@@ -13,31 +13,25 @@ SetUpScoped.Setup(builder);
 SetUpAutoMapper.Setup(builder); 
 SetUpFluentValidation.Setup(builder);
 SetUpIdentity.Setup(builder);
-
-
-
-// Configure the HTTP request pipeline.
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/Home/Error");
-//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//    app.UseHsts();
-//}
-
-//app.UseExceptionHandler(err => err.UseCustomErrors(app.Environment));
-
-
-
+ 
 var app = builder.Build();
 
-app.Logger.LogInformation("Log some information #1");
-app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true);
+if (builder.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true); 
+} 
+
+app.Logger.LogInformation("Starting Jwm Photography Website {0}", DateTime.Now); 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting(); 
 app.UseAuthentication();
 app.UseAuthorization(); 
- 
+
 SetUpRoutes.Setup(app);
     
 app.Run();

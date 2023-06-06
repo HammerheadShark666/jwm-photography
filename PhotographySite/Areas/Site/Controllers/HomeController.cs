@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
-using PhotographySite.Models;
-using System.Diagnostics;
 
 namespace PhotographySite.Areas.Site.Controllers;
 
@@ -36,11 +34,5 @@ public class HomeController : Controller
     public IActionResult Privacy()
     {
         return View();
-    }
-     
-    [HttpGet("error")]
-    public IActionResult Error()
-    {
-        return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }     
+    } 
 }

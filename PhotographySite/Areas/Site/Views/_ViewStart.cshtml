@@ -1,19 +1,13 @@
-﻿@*@{
-    Layout = "_LayoutAccount";
-}*@
-
-@{
+﻿@{
     var routeController = ViewContext.RouteData.Values["controller"].ToString();
-    //you can put pages' name into pages
-    var pages = new List<string> { "Account" };
-    //if routeUrl contains any of pages,the page will use _Layout as Layout page,the other pages will use _Layout1 ad Layout page
-    if (pages.Any(routeController.Contains))
+    var routeAction = ViewContext.RouteData.Values["action"].ToString(); 
+    var accountPages = new List<string> { "Account" }; 
+    if (accountPages.Any(routeController.Contains))
     {
         Layout = "~/Areas/Site/Views/Shared/_LayoutAccount.cshtml";
-    }
+    } 
     else
     {
         Layout = "~/Areas/Site/Views/Shared/_Layout.cshtml";
     }
-
 }
