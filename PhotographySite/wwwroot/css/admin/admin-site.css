@@ -643,8 +643,8 @@ nav ul {
             width: 100%;
             border-left: 3px solid transparent;
         }
-
-        nav ul li.active a {
+         
+        nav ul li.active form input {
             color: #FC5404;
             background: #1e1e1e;
             border-left-color: #FC5404;
@@ -916,3 +916,13 @@ nav ul li a span {
     margin-top: 10px;
 }
 
+.logout {
+    color: white;
+    font-size: 13px;
+    padding-left: 16px;
+}
+
+.logout:hover {
+    color: #FC5404;
+    background: #1e1e1e; 
+}

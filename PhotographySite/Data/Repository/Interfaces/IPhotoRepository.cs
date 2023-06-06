@@ -9,7 +9,7 @@ public interface IPhotoRepository : IBaseRepository<Photo>
 
     Task<int> CountAsync();
 
-    List<Photo> MontagePhotos(Helpers.Enums.PhotoOrientation orientation, int numberOfPhotos);
+    List<Photo> MontagePhotos(Helpers.Enums.PhotoOrientation orientation, int numberOfPhotos, Guid userId);
      
     Task<List<Photo>> ByPagingAsync(PhotoFilterDto photoFilterDto);
      

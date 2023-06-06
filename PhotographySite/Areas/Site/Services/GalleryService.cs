@@ -23,7 +23,7 @@ public class GalleryService : IGalleryService
 
     public async Task<GalleryDto> GetGalleryAsync(long id)
     {
-		GalleryDto galleryDto = _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(id));
+        GalleryDto galleryDto = _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(id));
         galleryDto.AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl();
         return galleryDto;
 	}

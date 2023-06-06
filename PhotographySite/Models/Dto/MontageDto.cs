@@ -23,4 +23,6 @@ public class MontageDto
 
     [JsonProperty("orientation")]
     public int Orientation { get; set; }
+
+    public bool IsFavourite { get; set; }
 }

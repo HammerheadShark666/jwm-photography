@@ -29,7 +29,14 @@
             </ul>
         </li>
         <li data-montage-menu-id="1"><a href="/admin/montage">Montage</a></li>
+        <li>
+            @using (Html.BeginForm("LogOff", "Account"))
+            {
+                <input type="submit" class="btn btn-default logout" value="Log out" />
+            }
+        </li>
     </ul>
+    
 </nav>
 
 @await Html.PartialAsync("../Gallery/_NewGalleryModal")

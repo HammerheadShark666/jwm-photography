@@ -8,4 +8,10 @@ public class Enums
         portrait,
         square
     }
+
+    public enum Role
+    {
+        Admin,
+        User
+    }
 }

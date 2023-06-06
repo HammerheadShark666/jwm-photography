@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Models;
 using System.Diagnostics;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
-[Area("admin")]
-[Route("admin")]
+[Authorize(Roles = "Admin")]
+[Area("Admin")]
+[Route("admin")] 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

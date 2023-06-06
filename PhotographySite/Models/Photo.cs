@@ -60,4 +60,6 @@ public class Photo
     public Category Category { get; set; }  
 
     public Palette Palette { get; set; } 
+
+    public List<Favourite> Favourites { get; set; }
 }

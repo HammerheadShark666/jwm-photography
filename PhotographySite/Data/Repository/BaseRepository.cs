@@ -11,7 +11,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public BaseRepository(PhotographySiteDbContext context)
     {
-        _context = context;
+        _context = context; 
     }
 
     public async Task<T> AddAsync(T entity)

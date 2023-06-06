@@ -4,5 +4,5 @@ namespace PhotographySite.Areas.Site.Services.Interfaces;
 
 public interface IMontageService
 {
-    Task<MontagesDto> GetMontageAsync();
+    Task<MontagesDto> GetMontageAsync(string username);
 }

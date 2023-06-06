@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Admin.Models;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Area("Admin")]
 [Route("admin/gallery-photos")]
 public class GalleryPhotoController : Controller

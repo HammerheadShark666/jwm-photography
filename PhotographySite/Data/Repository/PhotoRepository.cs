@@ -43,10 +43,11 @@ public class PhotoRepository : BaseRepository<Photo>, IPhotoRepository
            .CountAsync(); 
     }
 
-    public List<Photo> MontagePhotos(Helpers.Enums.PhotoOrientation orientation, int numberOfPhotos)
+    public List<Photo> MontagePhotos(Helpers.Enums.PhotoOrientation orientation, int numberOfPhotos, Guid userId)
     {
         return _context.Photo
             .Include(a => a.Country)
+            .Include(a => a.Favourites.Where(favourite => favourite.UserId == userId))
             .Where(p => p.UseInMontage == true && (int)orientation == p.Orientation)
             .Distinct()
             .OrderBy(x => Guid.NewGuid())               

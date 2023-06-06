@@ -11,12 +11,15 @@
 
     @{
         var photos = Model.Photos.OrderBy(p => p.Order);
-    }   
 
-    @foreach (var photo in photos)
-    {
-        <img class="lightboxed gallery-photo" rel="group1" src="@Model.AzureStoragePath@photo.FileName" data-caption="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
-    }
+        if(photos != null)
+        {
+            foreach (var photo in photos)
+            {
+                <img class="lightboxed gallery-photo" rel="group1" src="@Model.AzureStoragePath@photo.FileName" data-caption="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
+            }
+        }        
+    }    
 
 </div>
  
@@ -25,5 +28,3 @@
     <script type="module" src="@Url.Content("~/lib/lightboxed/lightboxed.js")"></script> 
     <script type="module" src="@Url.Content("~/js/site/gallery.js")"></script>
 }
- 
- 

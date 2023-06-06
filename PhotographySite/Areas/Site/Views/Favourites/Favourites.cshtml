@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Favourites";
+}
+
+@model PhotographySite.Models.Dto.FavouritesDto
+
+<div>
+    <h3 class="page-title">Favourites</h3>
+</div>
+
+<div id="favourites-images">
+
+    @{
+        if(Model.Favourites != null)
+        { 
+            foreach (var photo in Model.Favourites)
+            {
+                <img id="@photo.PhotoId" class="lightboxed gallery-photo" rel="group1" src="@Model.AzureStoragePath@photo.FileName" data-caption="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
+            }
+        }        
+    }
+
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div id="contextMenu" class="context-menu" style="display: none">
+        <ul class="menu">
+            <li data-id="0"><a href="#">Delete from Favourites</a></li>
+        </ul>
+    </div>
+
+    @await Html.PartialAsync("../Shared/_ModalMessage") 
+}
+ 
+@section Scripts
+{
+    <script type="module" src="@Url.Content("~/lib/lightboxed/lightboxed.js")"></script>
+    <script type="module" src="@Url.Content("~/js/site/favourites.js")"></script>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script type="module" src="@Url.Content("~/js/site/contextMenu.js")"></script>
+        <script type="module" src="@Url.Content("~/js/site/favourites-authorised.js")"></script>
+    }
+}
