@@ -1,34 +1,58 @@
-﻿@{
+﻿@using PhotographySite.Models.Dto;
+@model PhotographySite.Models.Dto.MontagesDto;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-@model PhotographySite.Models.Dto.MontagesDto
- 
 <div class="draggable-main">
     <div class="row">
         @{
             int index = 0;
-        }
-
-        @foreach (var column in Model.MontageImagesColumns)
-        {         
-            <div id="image-list-container" class="column">
-                <ul class="image-list ">
-                    @foreach (var image in column)
-                    {
-                        <li>
-                            <img id="@image.PhotoId" src="@Model.AzureStoragePath@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true"> 
-                        </li>
-                        index++;
-                    }
-                </ul>
-            </div>
-        }       
+         
+            foreach (var column in Model.MontageImagesColumns)
+            {         
+                <div id="image-list-container" class="column">
+                    <ul class="image-list ">
+                        @foreach (var image in column)
+                        {
+                            <li>
+                                <div class="home-image-container">
+                                    <img class="home-image" id="@image.PhotoId" src="@Model.AzureStoragePath@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true">
+                                    @if (image.IsFavourite)
+                                    {
+                                        <img class="home-image-favourite" src="~/images/icons8-orange-heart-48.png" class="like-icon">
+                                    }                                    
+                                </div>
+                            </li>
+                            index++;
+                        }
+                    </ul>
+                </div>
+            }       
+         }
     </div>
 </div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div id="contextMenu" class="context-menu" style="display: none">
+        <ul class="menu">
+            <li data-id="0"><a href="#">Add to Favourites</a></li>
+        </ul>
+    </div> 
+ 
+    @await Html.PartialAsync("../Shared/_ModalMessage")
+}
 
 @section Scripts
 {
     <script type="module" src="@Url.Content("~/js/fadein/jquery.random-fade-in.min.js")"></script>
-    <script type="module" src="@Url.Content("~/js/site/home.js")"></script>      
+    <script type="module" src="@Url.Content("~/js/site/home.js")"></script> 
+    
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script type="module" src="@Url.Content("~/js/site/contextMenu.js")"></script>
+        <script type="module" src="@Url.Content("~/js/site/home-authorised.js")"></script>        
+    }
 }

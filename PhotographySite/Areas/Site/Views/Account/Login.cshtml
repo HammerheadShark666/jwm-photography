@@ -1,0 +1,168 @@
+@*@{
+  Layout = "_Layout";
+}*@
+
+@using PhotographySite.ViewModels
+
+@model LoginViewModel 
+
+<h2>Log in with your account (User)</h2>
+<hr />
+
+@if(!ViewData.ModelState.IsValid) 
+{
+  @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form:") 
+}
+
+@*@using (Html.BeginForm("LogIn", "Account", new { area = "Admin" }, FormMethod.Post))
+{
+  @Html.LabelFor(m => m.Email)
+  @Html.TextBoxFor(m => m.Email)
+
+  @Html.LabelFor(m => m.Password)
+  @Html.EditorFor(m => m.Password)
+
+  <input type="submit" value="Log in" />
+}
+
+<p>@Html.ActionLink("Register for an account", "Register", new { area = "admin" })</p>
+<p>@Html.ActionLink("Back to accounts page", "Index", new { area = "admin" })</p>
+*@
+
+<div class="bg-white border rounded-5">
+    <section class="w-100 p-4 d-flex justify-content-center pb-4">
+        <div style="width: 26rem;">
+            <div class="tab-content">
+                <div aria-labelledby="tab-login">
+                    @using (Html.BeginForm("LogIn", "Account", new { area = "site", @class = "row g-4" }, FormMethod.Post))
+                    {
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            @Html.LabelFor(m => m.Email)
+                            @Html.TextBoxFor(m => m.Email, new { placeholder ="Enter Email", type="email", @class = "form-control" }) 
+                        </div>
+
+                        <!-- Password input -->
+                        <div class="form-outline mb-4">
+                            @Html.LabelFor(m => m.Password)
+                            @Html.EditorFor(m => m.Password, new { htmlAttributes = new { placeholder="Enter Password", type="password", @class = "form-control" }})    
+                        </div>
+
+                        <!-- 2 column grid layout -->
+                       @* <div class="row mb-4">
+                            <div class="col-md-6 d-flex justify-content-center">
+                                <!-- Checkbox -->
+                                <div class="form-check mb-3 mb-md-0">
+                                    <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
+                                    <label class="form-check-label" for="loginCheck"> Remember me </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-flex justify-content-center">
+                                <!-- Simple link -->
+                                <a href="#!">Forgot password?</a>
+                            </div>
+                        </div>*@
+
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+                        <!-- Register buttons -->
+                        <div class="text-center">
+                            <p>Not a member? @Html.ActionLink("Register for an account", "Register", new { area = "site" })</p>
+                        </div>
+                    }
+                </div> 
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+@*<div class="login-page bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <h3 class="mb-3">Login Now</h3>
+                <div class="bg-white shadow rounded">
+                    <div class="row">
+                        <div class="col-md-7 pe-0">
+                            <div class="form-left h-100 py-5 px-5">
+                                <form action="" class="row g-4">
+                                    <div class="col-12">
+                                        <label>Username<span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
+                                            <input type="text" class="form-control" placeholder="Enter Username">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label>Password<span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                                            <input type="text" class="form-control" placeholder="Enter Password">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="inlineFormCheck">
+                                            <label class="form-check-label" for="inlineFormCheck">Remember me</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <a href="#" class="float-end text-primary">Forgot Password?</a>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary px-4 float-end mt-4">login</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-5 ps-0 d-none d-md-block">
+                            <div class="form-right h-100 bg-primary text-white text-center pt-5">
+                                <i class="bi bi-bootstrap"></i>
+                                <h2 class="fs-1">Welcome Back!!!</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-end text-secondary mt-3">Bootstrap 5 Login Page Design</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+*@
+
+
+
+
+
+
+
+
+
+
+
+@section Scripts
+{
+
+}

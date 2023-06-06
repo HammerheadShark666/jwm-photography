@@ -67,6 +67,7 @@ public class MontageHelper
     {
         montageDto.Path = photo.FileName;
 		montageDto.PhotoId = photo.Id;
+        montageDto.IsFavourite = photo.Favourites != null & photo.Favourites.Count() > 0 ? true : false;
         montageDto.Title = photo.Title + (photo.Country != null ? " - " + photo.Country.Name : "");
     }
 

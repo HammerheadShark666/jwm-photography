@@ -30,7 +30,7 @@ public class HomeController : Controller
         System.Diagnostics.Trace.TraceInformation("My message!");
         Console.Write("MY TEST MESSAGE");
 		_logger.LogInformation("HOME PAGE");
-        return View(await _montageService.GetMontageAsync());
+        return View(await _montageService.GetMontageAsync(HttpContext.User.Identity.Name));
     }
  
     public IActionResult Privacy()

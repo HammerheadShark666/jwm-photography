@@ -49,7 +49,6 @@ class Photo {
         let data = JSON.stringify(photo);
 
         return new Promise(function (resolve, reject) {
-
             ajax.ajaxCall("POST", "/admin/photo/catalog/update-photo", data).then(function (jqXHR) {
                 return resolve(jqXHR);
             }).catch((jqXHR) => {
@@ -58,6 +57,27 @@ class Photo {
         });
     };
 
+    addPhotoToFavourites(photoId) {
+        return new Promise(function (resolve, reject) {
+
+            ajax.ajaxCall("POST", "/favourites/add-photo/" + photoId).then(function (jqXHR) {
+                return resolve(jqXHR);
+            }).catch((jqXHR) => {
+                return reject(jqXHR);
+            });
+        });
+    };
+
+    deletePhotoFromFavourites(photoId) {
+        return new Promise(function (resolve, reject) {
+
+            ajax.ajaxCall("POST", "/favourites/delete-photo/" + photoId).then(function (jqXHR) {
+                return resolve(jqXHR);
+            }).catch((jqXHR) => {
+                return reject(jqXHR);
+            });
+        });
+    };
 }
 
 export { Photo };

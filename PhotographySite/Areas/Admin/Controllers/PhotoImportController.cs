@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Area("Admin")]
 [Route("admin/photo")]
 public class PhotoImportController : Controller

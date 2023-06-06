@@ -1,6 +1,7 @@
 ﻿@model PhotographySite.Areas.Admin.Models.GalleriesDto
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-	<div class="container">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<div class="container-fluid">
 		<a class="navbar-brand" href="/">
 			<img src="/images/logo.jpg" alt="..." height="45">
 		</a>
@@ -8,34 +9,55 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav ms-auto">
+
+			@{ 				 
+				var routeUrl = Url.RouteUrl(ViewContext.RouteData.Values); 
+			}
+
+			<ul id="site-menu-bar" class="navbar-nav ms-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="/">Home</a>
-				</li>				
-				<li class="nav-item dropdown dropstart">
-					<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Galleries </a>
-					<div class="dropdown-menu dropdown-large">
-						<div class="row g-2">
-							<div class="col-12">
-								<div class="container">
-									<div class="row text-center">
-										@foreach (var gallery in Model.GalleryListDto)
-										{
-											<div class="gallery-item col-xl-3 col-sm-6 mb-5 col-6">
-												<a href="/gallery/@gallery.Id">
-													<div class="bg-white shadow-sm py-5 px-3">
-														<img src="@Model.AzureStoragePhotosContainerUrl@gallery.RandomPhoto" alt="" width="100" class="img-fluid mb-3 img-thumbnail shadow-sm">
-														<h6 class="mb-0">@gallery.Name</h6>
-													</div>
-												</a>
-											</div>										}
-									</div>
-								</div>
-							</div>
-						</div> 
-					</div> 
+					<a class="nav-link @(routeUrl == "/" ? "active" : "")" aria-current="page" href="/">Home</a>
+				</li>				 
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle @(routeUrl.Contains("gallery") ? "active" : "") href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						Galleries
+					</a>
+					<ul id="menu-bar" class="dropdown-menu" aria-labelledby="navbarDropdown"> 
+						@foreach (var gallery in Model.GalleryListDto)
+						{
+							<li>
+								<a class="dropdown-item"  href="/gallery/@gallery.Id">
+									@gallery.Name							 
+								</a>
+							</li>
+						}
+					</ul>
+				</li> 
+				<li class="nav-item dropdown">
+					@if (this.User.Identity.IsAuthenticated)
+					{
+						<a class="nav-link dropdown-toggle @(routeUrl.Contains("favourites") ? "active" : "")" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							@User.Identity.Name
+						</a>
+						<ul id="menu-bar" class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+							<li><a class="dropdown-item" href="/favourites">Favourites</a></li> 
+							<li><hr class="dropdown-divider"></li>
+							<li>
+								@using (Html.BeginForm("LogOff", "Account", FormMethod.Post))
+								{
+									<button class="dropdown-item" type="submit">LogOff</button>
+								}
+							</li>
+						</ul> 
+					}
 				</li>
-			</ul>
+				<li class="nav-item">
+					@if (!this.User.Identity.IsAuthenticated)
+					{
+						<a class="nav-link" aria-current="page" href="/login">Login</a>
+					}
+				</li>
+			</ul> 
 		</div>
 	</div>
 </nav>

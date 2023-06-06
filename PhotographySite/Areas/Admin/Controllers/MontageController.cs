@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Area("Admin")]
 [Route("admin/montage")]
 public class MontageController : Controller

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Admin.Models;
 using PhotographySite.Areas.Admin.Services.Interfaces;
-using PhotographySite.Helpers;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Area("Admin")]
 [Route("admin/gallery")]
 public class GalleryController : Controller
@@ -22,7 +23,7 @@ public class GalleryController : Controller
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Gallery(long id)
-    {       
+    {
         GalleriesDto galleriesDto = new()
         {			
 			SelectedGallery = await _galleryService.GetGalleryAsync(id),

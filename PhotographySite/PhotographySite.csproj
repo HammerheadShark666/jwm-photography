@@ -7,23 +7,47 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Views\Account\**" />
+    <Compile Remove="Areas\Site\Views\Account\**" />
+    <Content Remove="Areas\Admin\Views\Account\**" />
+    <Content Remove="Areas\Site\Views\Account\**" />
+    <EmbeddedResource Remove="Areas\Admin\Views\Account\**" />
+    <EmbeddedResource Remove="Areas\Site\Views\Account\**" />
+    <EntityDeploy Remove="Areas\Admin\Views\Account\**" />
+    <EntityDeploy Remove="Areas\Site\Views\Account\**" />
+    <None Remove="Areas\Admin\Views\Account\**" />
+    <None Remove="Areas\Site\Views\Account\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Remove="Areas\Site\Controllers\AccountController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCore.Unobtrusive.Ajax" Version="2.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="LinqKit" Version="1.2.3" />
     <PackageReference Include="MetadataExtractor" Version="2.7.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.3" /> 
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" /> 
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="7.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.25" />
   </ItemGroup>
@@ -33,6 +57,13 @@
     <Folder Include="Areas\Site\Helpers\" />
     <Folder Include="Areas\Site\Models\" />
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\Footer.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\_ViewImports.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
 
 </Project>

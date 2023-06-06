@@ -29,7 +29,13 @@ public class AutoMapperProfile : AutoMapper.Profile
                 .ForMember(dest => dest.PhotoId, act => act.MapFrom(src => src.Id))
                 .ForMember(dest => dest.FileName, act => act.MapFrom(src => src.Photo.FileName))
                 .ForMember(dest => dest.Country, act => act.MapFrom(src => src.Photo.Country.Name))
-                .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Photo.Title)); 
-                
+                .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Photo.Title));
+
+        base.CreateMap<Photo, FavouriteDto>()
+                .ForMember(dest => dest.PhotoId, act => act.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FileName, act => act.MapFrom(src => src.FileName))
+                .ForMember(dest => dest.Country, act => act.MapFrom(src => src.Country.Name))
+                .ForMember(dest => dest.Orientation, act => act.MapFrom(src => src.Orientation))
+                .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Title));
     }
 }

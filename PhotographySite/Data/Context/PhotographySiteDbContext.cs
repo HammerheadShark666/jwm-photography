@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PhotographySite.Data.Context;
 using PhotographySite.Helpers;
 using PhotographySite.Models;
 
 namespace PhotographySite.Data.Contexts;
-public class PhotographySiteDbContext : DbContext
+public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser> //: DbContext
 { 
     public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options) { }
  
@@ -18,12 +19,16 @@ public class PhotographySiteDbContext : DbContext
     public DbSet<Photo> Photo { get; set; }
     public DbSet<Showcase> Showcase { get; set; }
     public DbSet<ShowcasePhoto> ShowcasePhoto { get; set; } 
+    public DbSet<Favourite> Favourite { get; set; }
+     
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);         
+        base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Category>().HasData(DefaultData.GetCategoryDefaultData());
+		modelBuilder.Entity<Favourite>().HasKey(fv => new { fv.UserId, fv.PhotoId });
+
+		modelBuilder.Entity<Category>().HasData(DefaultData.GetCategoryDefaultData());
         modelBuilder.Entity<Country>().HasData(DefaultData.GetCountryDefaultData());
         modelBuilder.Entity<Gallery>().HasData(DefaultData.GetGalleryDefaultData());
         modelBuilder.Entity<Montage>().HasData(DefaultData.GetMontageDefaultData());
@@ -33,7 +38,7 @@ public class PhotographySiteDbContext : DbContext
     }
 }
 
-//EntityFrameworkCore\Add-Migration create-db
+//EntityFrameworkCore\Add-Migration create-db add-favorite-table
 //EntityFrameworkCore\update-database   
 
 //EntityFramework6\Add-Migration

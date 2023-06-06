@@ -4,14 +4,17 @@ using PhotographySite.StartUp;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllersWithViews();
+
 SetUpDatabaseContext.Setup(builder);
 SetUpMvc.Setup(builder);
 SetUpController.Setup(builder); 
 SetUpScoped.Setup(builder); 
 SetUpAutoMapper.Setup(builder); 
 SetUpFluentValidation.Setup(builder);
+SetUpIdentity.Setup(builder);
 
-var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 //if (!app.Environment.IsDevelopment())
@@ -23,12 +26,17 @@ var app = builder.Build();
 
 //app.UseExceptionHandler(err => err.UseCustomErrors(app.Environment));
 
+
+
+var app = builder.Build();
+
 app.Logger.LogInformation("Log some information #1");
 app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true);
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
+app.UseRouting(); 
+app.UseAuthentication();
+app.UseAuthorization(); 
  
 SetUpRoutes.Setup(app);
     
