@@ -12,10 +12,10 @@ public static class GlobalExceptionHandlerExtension
     //This method will globally handle logging unhandled execeptions.
     //It will respond json response for ajax calls that send the json accept header
     //otherwise it will redirect to an error page
-    public static void UseGlobalExceptionHandler(this IApplicationBuilder app
-                                                , ILogger logger
-                                                , string errorPagePath
-                                                , bool respondWithJsonErrorDetails = false)
+    public static void UseGlobalExceptionHandler(this IApplicationBuilder app, 
+                                                 ILogger logger, 
+                                                 string errorPagePath, 
+                                                 bool respondWithJsonErrorDetails = false)
     {
         app.UseExceptionHandler(appBuilder =>
         {

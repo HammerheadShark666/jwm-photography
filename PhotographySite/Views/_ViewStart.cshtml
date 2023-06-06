@@ -1,3 +1,18 @@
 ﻿@{
-    Layout = "_Layout";
+    var routeController = ViewContext.RouteData.Values["controller"].ToString();
+    var routeAction = ViewContext.RouteData.Values["action"].ToString();
+    var accountPages = new List<string> { "Account" };
+    var errorActions = new List<string> { "Error" }; 
+    if (accountPages.Any(routeController.Contains))
+    {
+        Layout = "~/Areas/Site/Views/Shared/_LayoutAccount.cshtml";
+    }
+    else if (errorActions.Any(routeAction.Contains))
+    {
+        Layout = "~/Views/Shared/_LayoutError.cshtml";
+    }
+    else
+    {
+        Layout = "~/Areas/Site/Views/Shared/_Layout.cshtml";
+    }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
@@ -12,15 +11,13 @@ namespace PhotographySite.Areas.Site.Controllers;
 [Route("favourites")]
 public class FavouritesController : Controller
 {
-	private IUnitOfWork _unitOfWork;
-	private IMapper _mapper;
+	private IUnitOfWork _unitOfWork; 
 	private IFavouriteService _favouriteService;
 	private ILogger<FavouritesController> _logger;
 
-	public FavouritesController(IUnitOfWork unitOfWork, IMapper mapper, IFavouriteService favouriteService, ILogger<FavouritesController> logger)
+	public FavouritesController(IUnitOfWork unitOfWork, IFavouriteService favouriteService, ILogger<FavouritesController> logger)
 	{
 		_unitOfWork = unitOfWork;
-		_mapper = mapper;
 		_favouriteService = favouriteService;
 		_logger = logger;
 	}
