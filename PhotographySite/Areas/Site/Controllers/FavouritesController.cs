@@ -6,16 +6,16 @@ using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Site.Controllers;
 
-[Authorize(Roles = "User")]
+[Authorize(Roles = "User, Admin")]
 [Area("site")]
 [Route("favourites")]
-public class FavouritesController : Controller
+public class FavouritesController : BaseController
 {
 	private IUnitOfWork _unitOfWork; 
 	private IFavouriteService _favouriteService;
-	private ILogger<FavouritesController> _logger;
+	private ILogger<FavouritesController> _logger; 
 
-	public FavouritesController(IUnitOfWork unitOfWork, IFavouriteService favouriteService, ILogger<FavouritesController> logger)
+	public FavouritesController(IUnitOfWork unitOfWork, IFavouriteService favouriteService, ILogger<FavouritesController> logger, IUserService userService) : base(userService)
 	{
 		_unitOfWork = unitOfWork;
 		_favouriteService = favouriteService;
@@ -48,11 +48,22 @@ public class FavouritesController : Controller
     [HttpPost("delete-photo/{photoId}")]
     public async Task DeletePhoto(long photoId)
     {
-        Guid userId = _unitOfWork.Users.GetUserIdAsync(HttpContext.User.Identity.Name);
+        Guid userId = GetUserId(HttpContext.User.Identity.Name);
 
         if (userId.Equals(Guid.Empty))
             return;
 
         await _favouriteService.DeleteAsync(userId, photoId);
+    }
+
+    [HttpPost("search")]
+    public async Task<JsonResult> SearchPhotosAsync([FromBody] SearchPhotosDto searchPhotosDto)
+    {
+        Guid userId = GetUserId(HttpContext.User.Identity.Name);
+
+        if (userId.Equals(Guid.Empty))
+            return null;
+
+        return new JsonResult(await _favouriteService.SearchPhotosAsync(userId, searchPhotosDto));
     }
 }

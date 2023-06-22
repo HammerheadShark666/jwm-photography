@@ -1,12 +1,7 @@
 ﻿.dropdown-large {
     padding: 1rem;
     margin-top: 50px !important;
-}
-
-/*.container {
-    width: 100%!important; 
-    max-width: none!important;
-}*/
+} 
 
 .display-4 {
     text-align: left;
@@ -38,35 +33,7 @@
     right: 16px;
     top: 5px;
 }
-
-
-
-/*.navbar {
-    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    background-repeat: repeat-x;
-    border: 1px solid #d4d4d4;
-    border-radius: 4px;
-    box-shadow: 0 1px 4px rgb(0 0 0 / 7%);
-    min-height: 40px;
-    padding-left: 20px;
-    padding-right: 20px;
-    background-color: #fafafa;
-}
-
-.navbar-nav > li > a {
-    float: none;
-    padding: 10px 15px 10px;
-    color: #777777 !important;
-    text-decoration: none;
-    text-shadow: 0 1px 0 #ffffff;
-}
-
-.navbar-brand {
-    color: #000;
-    font-family: serif;
-    font-weight: 600;
-}
-*/
+ 
 /* ============ desktop view ============ */
 @media all and (min-width: 992px) {
     .dropdown-large {
@@ -74,30 +41,7 @@
     }
 
     
-}
-/* ============ desktop view .end// ============ */
-
-/*.dropdown-menu[data-bs-popper] {
-    right: 0 !important;
-}
-    */
-
-/*.gallery-item {
-    width:100px;
-}
-
-.gallery-item img {
-    width: 100%;
-}
-
-.gallery-list li {
-    margin-bottom:5px;
-}
-
-.gallery-list li div {
-    width: 100px;
-}
-*/
+} 
 
 .py-5 {
     padding-top: 1rem !important;
@@ -120,9 +64,7 @@
 .gallery-item div { 
     cursor: pointer;
     height: 100%;
-}
-
-
+} 
 
 .photoModalCloseSmall {
     width: 25px;
@@ -152,8 +94,7 @@
     color: white;
     height: 50px;
     padding: 5px;
-}
-
+} 
 
 .draggable {
     filter: alpha(opacity=60);
@@ -175,13 +116,7 @@
     padding: 0px !important;
     height: 100%;
     overflow: auto;
-}
-/*
-ul {
-    padding: 0px !important;
-    height: 100%;
-    overflow: auto;
-} */
+} 
 
 ul li:hover {
     cursor: pointer;
@@ -198,9 +133,7 @@ ul li:hover {
     position: absolute;
     top: 15px;
     right: 0;
-}
-
-
+} 
 
  /*Create four equal columns that sits next to each other */
 .column {
@@ -263,14 +196,14 @@ ul li:hover {
     background-color: black!important;
 }
 
-    .context-menu .menu {
-        display: flex;
-        flex-direction: column;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 10px 20px rgb(64 64 64 / 15%);
-        padding: 10px 0 0 0;
-    }
+.context-menu .menu {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgb(64 64 64 / 15%);
+    padding: 10px 0 0 0;
+}
 
 .context-menu .menu > li > a {
     font: inherit;
@@ -311,8 +244,7 @@ ul li:hover {
 #import-alert {
     margin-top: 20px;
 }
-
-
+ 
 .jsgrid {
     font-size: 0.7em;
 }
@@ -389,7 +321,7 @@ ul li:hover {
     background-color: #1b1b1b;
 }
 
-.jsgrid-pager {
+/*.jsgrid-pager {
     padding-left: 20px;
     display: flex;
     list-style: none;
@@ -462,29 +394,29 @@ ul li:hover {
     background-color: #fcfcfc;
     border: 1px solid #e9e9e9;
 }
-
+*/
 
 
 .row {
    --bs-gutter-x:0;
 }
  
-.vertical-menu a {
-    background-color: #000; /* Grey background color */
-    color: white; /* Black text color */
-    display: block; /* Make the links appear below each other */
-    padding: 12px; /* Add some padding */
-    text-decoration: none; /* Remove underline from links */
-}
+/*.vertical-menu a {
+    background-color: #000;*/ /* Grey background color */
+    /*color: white;*/ /* Black text color */
+    /*display: block;*/ /* Make the links appear below each other */
+    /*padding: 12px;*/ /* Add some padding */
+    /*text-decoration: none;*/ /* Remove underline from links */
+/*}
 
 .vertical-menu a:hover {
-    background-color: #ccc; /* Dark grey background on mouse-over */
-}
+    background-color: #ccc;*/ /* Dark grey background on mouse-over */
+/*}
 
 .vertical-menu a.active {
-    background-color: #04AA6D; /* Add a green color to the "active/current" link */
-    color: white;
-}
+    background-color: #04AA6D;*/ /* Add a green color to the "active/current" link */
+    /*color: white;
+}*/
 
 .search-control-select {    
     margin:5px;
@@ -524,28 +456,7 @@ ul li:hover {
 
 .button-row {
     margin-bottom: 5px;
-}
-
-/*#gallery-work-area {
-    display: none;
-}*/
-
-
-
-/*
-
-.main-menu-column {
-    flex: 20%;
-    padding: 0 4px;
-}
-
-
-.main-workarea-column {
-    flex: 80%;
-    padding: 0 4px;
-}*/
-
-
+} 
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
@@ -556,60 +467,27 @@ ul li:hover {
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-/*
-body {
-    background-color: #eee;
-}*/
-
-/*.btn {
-    position: absolute;
-    top: 10px;
-    left: 45px;
-    height: 37px;
-    width: 37px;
-    text-align: center;
-    background: #1b1b1b;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: left 0.4s ease;
-}*/
-
-   /* .btn.click {
-        left: 260px;
-    }
-
-    .btn span {
-        color: white;
-        font-size: 15px;
-        line-height: 36px;
-    }
-
-    .btn.click span:before {
-        content: '\f00d';
-    }*/
-
-.sidebar {
-    /*position: fixed;
-    width: 250px;*/
+  
+.sidebar { 
     height: 100vh;
     left: -250px;
     background: #1b1b1b;
     transition: left 0.4s ease;
 }
 
-    .sidebar.show {
-        left: 0px;
-    }
+.sidebar.show {
+    left: 0px;
+}
 
-    .sidebar .text {
-        color: white;
-        font-size: 15px;
-        font-weight: 600;
-        line-height: 65px;
-        text-align: center;
-        background: #1e1e1e;
-        letter-spacing: 1px;
-    }
+.sidebar .text {
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 65px;
+    text-align: center;
+    background: #1e1e1e;
+    letter-spacing: 1px;
+}
 
 .main_side li {
     line-height: 50px!important;
@@ -623,36 +501,36 @@ nav ul {
     padding-left: 10px;
 }
 
-    nav ul li {
-        line-height: 25px;
-        border-top: 1px solid rgba(255,255,255,0.1);
-    }
+nav ul li {
+    line-height: 25px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
 
-        nav ul li:last-child {
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+nav ul li:last-child {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
 
-        nav ul li a {
-            position: relative;
-            color: white;
-            text-decoration: none;
-            font-size: 13px;
-            padding-left: 14px;
-            font-weight: 500;
-            display: block;
-            width: 100%;
-            border-left: 3px solid transparent;
-        }
+nav ul li a {
+    position: relative;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    padding-left: 14px;
+    font-weight: 500;
+    display: block;
+    width: 100%;
+    border-left: 3px solid transparent;
+}
          
-        nav ul li.active form input {
-            color: #FC5404;
-            background: #1e1e1e;
-            border-left-color: #FC5404;
-        }
+nav ul li.active form input {
+    color: #FC5404;
+    background: #1e1e1e;
+    border-left-color: #FC5404;
+}
 
-        nav ul li a:hover {
-            background: #1e1e1e;
-        }
+nav ul li a:hover {
+    background: #1e1e1e;
+}
 
 .feat-show {
     transition: all 0.5s;
@@ -677,10 +555,10 @@ nav ul ul li {
     border-top: none;
 }
 
-    nav ul ul li a {
-        font-size: 12px;
-        color: #e6e6e6;
-    }
+nav ul ul li a {
+    font-size: 12px;
+    color: #e6e6e6;
+}
 
 nav ul li.active ul li a {
     color: #e6e6e6;
@@ -706,43 +584,10 @@ nav ul li a span {
     transition: transform 0.4s;
 }
 
-    nav ul li a span.rotate {
-        transform: translateY(-50%) rotate(-180deg);
-    }
-
-/*.content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    color: #202020;
-    z-index: -1;
-    text-align: center;
+nav ul li a span.rotate {
+    transform: translateY(-50%) rotate(-180deg);
 }
-
-*/
-/*
-
-
-.home {
-    position: absolute;
-    top: 0;
-    left: 250px;
-    height: 100vh;
-    width: calc(100% - 250px);
-    background-color: var(--body-color);
-    transition: var(--tran-05);
-}*/
-
-
-
-
-/*#dvSource img, #dvDest img {
-    height: 100px;
-    width: 100px;
-    margin: 2px;
-}*/
-
+ 
 .draggable {
     filter: alpha(opacity=60);
     opacity: 0.6;
@@ -750,14 +595,7 @@ nav ul li a span {
 
 .dropped {
     position: static !important;
-}
-
-
-
-
-
-
-
+} 
 
 #origin {
     background-color: green;
@@ -778,30 +616,13 @@ nav ul li a span {
     padding-right: 20px;
 }
 
-/*.list li img {
-    width: 100px;
-}*/
-
 .gallery-thumbnail { 
     height: 100px;
     border: 1px solid black;
     padding: 5px;
     margin: 5px;
 }
-
-/*.gallery-thumbnail-landscape {
-    width: 170px;
-}
-
-.gallery-thumbnail-portrait {
-    height: 170px;
-}
-
-.gallery-thumbnail-square {
-    width: 170px;
-}*/
-
-
+ 
 #collapseGalleryPhotoSearch {
     margin-bottom: 10px;
 }
@@ -814,8 +635,7 @@ nav ul li a span {
     background-color: black;
     color: white;
 }
-
-
+ 
 .gallery-search-button:hover {
     color: #FC5404;
 }
@@ -836,8 +656,7 @@ nav ul li a span {
 .gallery-photos ul {
     min-height: auto;
     margin-bottom: 0px;
-}
-
+} 
 
 .edit-gallery-name {
     width: 15px;
@@ -857,12 +676,7 @@ nav ul li a span {
 
 .delete-gallery:hover {
     cursor: pointer;
-}
-/*
-.no-close .ui-dialog-titlebar-close {
-    display: none;
-}*/
-
+} 
 
 #deleteGalleryModal {
     color: white;
@@ -876,10 +690,7 @@ nav ul li a span {
     display: none !important;
 }
 
-#search-results-photos {
-    /* overflow-y: scroll;
-    max-height: 750px;
-    */
+#search-results-photos { 
     height: 400px;
 }
 
@@ -897,8 +708,7 @@ nav ul li a span {
 
 #gallery-search-photos-results-pagination ul {
     justify-content:center!important;
-}
-
+} 
 
 #photos-catalogue-results-pagination ul {
     justify-content: center !important;
@@ -926,3 +736,16 @@ nav ul li a span {
     color: #FC5404;
     background: #1e1e1e; 
 }
+
+.latest-photo-thumbnail {
+    height: 150px;
+    margin: 0px 0px 5px 0px;
+    border: 1px solid black;
+    padding: 5px;
+    opacity: 0;
+}
+
+div#lightboxed--content .lightboxed--frame img {
+    border: solid 5px white !important;
+}  
+

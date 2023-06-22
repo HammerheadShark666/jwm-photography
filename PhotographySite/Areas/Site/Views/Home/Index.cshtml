@@ -18,7 +18,7 @@
                         {
                             <li>
                                 <div class="home-image-container">
-                                    <img class="home-image" id="@image.PhotoId" src="@Model.AzureStoragePath@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true">
+                                    <img class="home-image site-image" id="@image.PhotoId" src="@Model.AzureStoragePath@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true">
                                     @if (image.IsFavourite)
                                     {
                                         <img class="home-image-favourite" src="~/images/icons8-orange-heart-48.png" class="like-icon">
@@ -40,9 +40,7 @@
         <ul class="menu">
             <li data-id="0"><a href="#">Add to Favourites</a></li>
         </ul>
-    </div> 
- 
-    @await Html.PartialAsync("../Shared/_ModalMessage")
+    </div>  
 }
 
 @section Scripts
@@ -51,8 +49,7 @@
     <script type="module" src="@Url.Content("~/js/site/home.js")"></script> 
     
     @if (User.Identity.IsAuthenticated)
-    {
-        <script type="module" src="@Url.Content("~/js/site/contextMenu.js")"></script>
-        <script type="module" src="@Url.Content("~/js/site/home-authorised.js")"></script>        
+    {       
+        <script type="module" src="@Url.Content("~/js/site/favourites.js")"></script>        
     }
 }

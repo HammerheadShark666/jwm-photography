@@ -134,19 +134,7 @@ public class DefaultData
             new Palette { Id = 2, Name = "Black & White" },
             new Palette { Id = 3, Name = "Infrared" }
         };
-    }
-
-    //public static List<Photo> GetPhotoDefaultData()
-    //{
-    //    return new List<Photo>()
-    //    {
-    //        CreatePhoto(1, "/Photos/108_2460.jpg", "Juvenile Moray Eel", 2, 4, 16, 2, 3, 1, true, new DateTime(2013, 3, 20)),
-    //        CreatePhoto(2, "/Photos/CRW_7734.jpg", "Farmers fixing tractor", 1, 2, 10, 4, 1, 2, true, new DateTime(2006, 1, 16)),
-    //        //new Photo { Id = 1, Path = "/Photos/108_2460.jpb", Title = "Juvenile Moray Eel", Camera = new Camera() { Id = 1 } , Category = new Category() { Id = 4}, Country = new Country() { Id = 16 }, DateTaken = new DateTime(2013, 3, 20), Lens = new Lens() { Id = 2 }, Orientation = new Orientation() { Id = 3 }, Palette = new Palette() { Id = 1}, UseInMontage = true },
-    //        //new Photo { Id = 2, Name = "Portrait" },
-    //        //new Photo { Id = 3, Name = "Square" }
-    //    };
-    //}
+    } 
 
     public static List<Showcase> GetShowcaseDefaultData()
     {
@@ -156,23 +144,5 @@ public class DefaultData
             new Showcase { Id = 2, Name = "Mountains" },
             new Showcase { Id = 3, Name = "Atacama Desert" }
         };
-    }
-
-    //private static Photo CreatePhoto(int id, string path, string title, int cameraId, int categoryId, int countryId, int lensId, int orientationId, int paletteId, bool useInMontage, DateTime dateTaken)
-    //{
-    //    return new Photo()
-    //    {
-    //        Id = id,
-    //        Path = path,
-    //        Title = title,
-    //        Camera = new Camera() { Id = cameraId },
-    //        Category = new Category() { Id = categoryId },
-    //        Country = new Country() { Id = countryId },
-    //        DateTaken = dateTaken,
-    //        Lens = new Lens() { Id = lensId },
-    //        Orientation = new Orientation() { Id = orientationId },
-    //        Palette = new Palette() { Id = paletteId },
-    //        UseInMontage = useInMontage
-    //    };
-    //}
+    } 
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using PhotographySite.Areas.Admin.Models;
+using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helpers;
@@ -21,11 +21,18 @@ public class GalleryService : IGalleryService
         _galleryValidator = galleryValidator;
     }
 
-    public async Task<GalleryDto> GetGalleryAsync(long id)
-    {
-        GalleryDto galleryDto = _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(id));
-        galleryDto.AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl();
-        return galleryDto;
+    public async Task<GalleryDto> GetGalleryAsync(Guid userId, long id)
+    { 
+		GalleryDto galleryDto;
+
+		if (userId.Equals(Guid.Empty))
+			galleryDto = _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(id));
+		else
+			galleryDto = _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(userId, id));
+
+		galleryDto.AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl();
+        
+        return galleryDto; 
 	}
 
     public async Task<GalleriesDto> GetGalleriesAsync()

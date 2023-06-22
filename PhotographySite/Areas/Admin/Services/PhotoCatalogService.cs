@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PhotographySite.Areas.Admin.Models;
+using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helpers;
@@ -53,4 +53,11 @@ public class PhotoCatalogService : IPhotoCatalogService
             _unitOfWork.Complete();            
         }
     }
+
+
+    public async Task<List<PhotoDto>> GetLatestPhotos(int numberOfPhotos)
+    {
+        return _mapper.Map<List<PhotoDto>>(await _unitOfWork.Photos.GetLatestPhotos(numberOfPhotos));
+    }
+
 }

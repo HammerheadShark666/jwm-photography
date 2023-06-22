@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PhotographySite.Data.Contexts;
+using PhotographySite.Data.Repository.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Models;
 
@@ -14,7 +15,7 @@ public class UserRepository :BaseRepository<ApplicationUser>, IUserRepository
 
     public Guid GetUserIdAsync(string userName)
     {
-        ApplicationUser user = _context.Users.FirstOrDefault(x => x.UserName == userName);
+        ApplicationUser user = _context.Users.FirstOrDefault(user => user.UserName == userName);
 
         if((user != null) && (user.Id != null))            
             return new Guid(user.Id);         

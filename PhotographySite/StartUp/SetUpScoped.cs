@@ -21,8 +21,10 @@ public class SetUpScoped
         builder.Services.AddScoped<Areas.Site.Services.Interfaces.IMontageService, Areas.Site.Services.MontageService>();
         builder.Services.AddScoped<IPhotoCatalogService, PhotoCatalogService>();
         builder.Services.AddScoped<IPhotoImportService, PhotoImportService>();
+        builder.Services.AddScoped<IUserGalleryService, UserGalleryService>();
+        builder.Services.AddScoped<IUserGalleryPhotoService, UserGalleryPhotoService>();
         builder.Services.AddScoped<Areas.Admin.Services.Interfaces.IGalleryService, Areas.Admin.Services.GalleryService>();
-        builder.Services.AddScoped<Areas.Site.Services.Interfaces.IGalleryService, Areas.Site.Services.GalleryService>();
+        builder.Services.AddScoped<Areas.Admin.Services.Interfaces.IGalleryService, Areas.Admin.Services.GalleryService>();
         builder.Services.AddScoped<IGalleryPhotoService, GalleryPhotoService>();
 		builder.Services.AddScoped<ICountryService, CountryService>();
 		builder.Services.AddScoped<ICategoryService, CategoryService>();

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
-using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Admin.Services;
 

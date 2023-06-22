@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PhotographySite.Areas.Admin.Dtos;
+using PhotographySite.Areas.Admin.Services.Interfaces;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
@@ -9,16 +11,23 @@ namespace PhotographySite.Areas.Admin.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private IPhotoCatalogService _photoCatalogService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IPhotoCatalogService photoCatalogService)
     {
         _logger = logger;
+        _photoCatalogService = photoCatalogService;
     }
 
     [HttpGet("")]
-    public IActionResult Index() 
-    {        
-        return View("Home");
+    public async Task<IActionResult> Index() 
+    {
+        GalleriesDto galleriesDto = new()
+        {
+            SelectGalleryPhotos = await _photoCatalogService.GetLatestPhotos(20)
+        };
+
+        return View("Home", galleriesDto); 
     }
 
     public IActionResult Privacy()

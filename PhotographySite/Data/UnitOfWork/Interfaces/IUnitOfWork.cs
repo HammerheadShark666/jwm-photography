@@ -1,5 +1,4 @@
-﻿using PhotographySite.Data.Repository;
-using PhotographySite.Data.Repository.Interfaces;
+﻿using PhotographySite.Data.Repository.Interfaces;
 
 namespace PhotographySite.Data.UnitOfWork.Interfaces;
 
@@ -15,11 +14,15 @@ public interface IUnitOfWork : IDisposable
 
     IPaletteRepository Palettes { get; }
 
-    IGalleryRepository Galleries { get; }
-
-    IFavouriteRepository Favourites { get; }
+    IGalleryRepository Galleries { get; } 
 
     IGalleryPhotoRepository GalleryPhotos { get; }
+
+    IUserGalleryRepository UserGalleries { get; }
+
+    IUserGalleryPhotoRepository UserGalleryPhotos { get; }
+
+    IFavouriteRepository Favourites { get; }
 
     IUserRepository Users { get; }
 

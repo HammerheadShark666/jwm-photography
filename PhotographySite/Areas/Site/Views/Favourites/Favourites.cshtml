@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Favourites";
+    ViewData["Title"] = " - Favourites";
 }
 
 @model PhotographySite.Models.Dto.FavouritesDto
@@ -39,8 +39,7 @@
     <script type="module" src="@Url.Content("~/js/site/favourites.js")"></script>
 
     @if (User.Identity.IsAuthenticated)
-    {
-        <script type="module" src="@Url.Content("~/js/site/contextMenu.js")"></script>
-        <script type="module" src="@Url.Content("~/js/site/favourites-authorised.js")"></script>
+    { 
+        <script type="module" src="@Url.Content("~/js/site/favourites.js")"></script> 
     }
 }

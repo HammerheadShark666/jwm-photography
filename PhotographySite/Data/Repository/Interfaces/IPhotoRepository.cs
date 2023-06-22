@@ -1,5 +1,6 @@
-﻿using PhotographySite.Areas.Admin.Models;
+﻿using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Models;
+using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Data.Repository.Interfaces;
 
@@ -18,4 +19,6 @@ public interface IPhotoRepository : IBaseRepository<Photo>
     bool Exists(string Filename);
 
     Task<Photo> FindByFilenameAsync(string filename);
+
+    Task<List<Photo>> GetLatestPhotos(int numberOfPhotos);
 }

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PhotographySite.Data.Context;
-using PhotographySite.Helpers;
+using PhotographySite.Data.Context; 
 using PhotographySite.Models;
 
 namespace PhotographySite.Data.Contexts;
-public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser> //: DbContext
+public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser>
 { 
     public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options) { }
  
@@ -20,7 +19,8 @@ public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser> //: D
     public DbSet<Showcase> Showcase { get; set; }
     public DbSet<ShowcasePhoto> ShowcasePhoto { get; set; } 
     public DbSet<Favourite> Favourite { get; set; }
-     
+    public DbSet<UserGallery> UserGallery { get; set; }
+    public DbSet<UserGalleryPhoto> UserGalleryPhoto { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

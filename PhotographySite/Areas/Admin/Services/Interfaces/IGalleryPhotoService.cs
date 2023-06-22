@@ -1,5 +1,6 @@
-﻿using PhotographySite.Areas.Admin.Models;
+﻿using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Models;
+using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Admin.Services.Interfaces;
 

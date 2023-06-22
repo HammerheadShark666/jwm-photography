@@ -50,7 +50,7 @@ function loadLookUps() {
             initialisePhotoCatalogLookupArrays(response);
             resolve();
         }).catch((response) => {
-            main.displayAlert(response, "#photo-catalogue-alert");
+            main.showAlert(response, "#photo-catalogue-alert");
             reject()
         });
     });
@@ -126,7 +126,7 @@ function intialisePhotoCatalogGrid() {
                     return response;
 
                 }).catch((response) => {
-                    main.displayAlert(response, "#photo-catalogue-alert");   
+                    main.showAlert(response, "#photo-catalogue-alert");   
                 }); 
             },
             updateItem: function (item) {
@@ -135,7 +135,7 @@ function intialisePhotoCatalogGrid() {
                                        item.category.id, item.palette.id).then(function (response) {
                     return response;
                 }).catch((response) => {
-                    main.displayAlert(response, "#photo-catalogue-alert");
+                    main.showAlert(response, "#photo-catalogue-alert");
                 });
             }           
         },      

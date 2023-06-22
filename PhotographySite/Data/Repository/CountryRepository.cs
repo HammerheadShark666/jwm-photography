@@ -11,6 +11,6 @@ public class CountryRepository : BaseRepository<Country>, ICountryRepository
 
     public async Task<List<Country>> AllSortedAsync()
     {
-        return await _context.Country.OrderBy(c => c.Name).ToListAsync();
+        return await _context.Country.OrderBy(country => country.Name).ToListAsync();
     }
 }
