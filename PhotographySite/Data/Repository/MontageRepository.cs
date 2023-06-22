@@ -11,6 +11,6 @@ public class MontageRepository : BaseRepository<Montage>, IMontageRepository
 
     public async Task<List<Montage>> AllSortedAsync()
     {
-        return await _context.Montage.OrderBy(c => c.Column).ThenBy(o => o.Order).ToListAsync();
+        return await _context.Montage.OrderBy(montage => montage.Column).ThenBy(montage => montage.Order).ToListAsync();
     }
 }

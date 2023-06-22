@@ -1,7 +1,13 @@
 ﻿@using PhotographySite.Areas.Site.Services.Interfaces
+@using PhotographySite.Models.Dto
 @inject IGalleryService galleryService
-@{
-    var galleries = await galleryService.GetGalleriesAsync();
+@inject IUserGalleryService userGalleryService
+@{ 
+	var menuBarDto = new MenuBarDto()
+	{
+		Galleries = await galleryService.GetGalleriesAsync(),
+		UserGalleries = await userGalleryService.GetUserGalleriesAsync(Context.Request.HttpContext)
+	};
 }
 <!DOCTYPE HTML>
 <html lang="en">
@@ -10,17 +16,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="keywords" content="htmlcss bootstrap menu, navbar, hover nav menu CSS examples" />
 	<meta name="description" content="Bootstrap 5 navbar hover examples for any type of project, Bootstrap 5" />
-	<title>JWM Photography</title>
+	<title>JWM Photography @ViewData["Title"]</title>
 	 
-	@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	*@ 
-	  
-@*
-	<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
-*@
 	<link type="text/css" rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
-	<link type="text/css" rel="stylesheet" href="~/lib/lightboxed/lightboxed.css" />
-	   
+	<link type="text/css" rel="stylesheet" href="~/lib/lightboxed/lightboxed.css" />	   
+	<link type="text/css" rel="stylesheet" href="~/lib/simplePagination/simplePagination.css" />
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 	<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
 	@*<link href="css/photoviewer/photoviewer.min.css" rel="stylesheet" /> *@
@@ -29,17 +29,23 @@
 <body>	
 	<div class="h-100 d-flex align-items-center justify-content-center">        	 
         <div class="container">
-			@await Html.PartialAsync("Menubar", galleries)
-			@*<main role="main" class="pb-3">*@
-				@RenderBody()
-		@*	</main>*@
+			@await Html.PartialAsync("Menubar", menuBarDto) 
+		    @RenderBody()	 
 		</div>
 	</div>
+
+	@if (User.Identity.IsAuthenticated)
+	{ 
+		@await Html.PartialAsync("_ModalMessage")
+	}
+
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-@*	<script src="js/photoviewer/photoviewer.min.js"></script>	 *@
-	<script src="~/lib/jquery/dist/jquery-ui.min.js"></script>  
-	<script src="~/js/site/site.js" asp-append-version="true"></script>
+	<script src="~/lib/jquery/dist/jquery-ui.min.js"></script> 
+	<script type="module" src="~/js/ajax.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/main.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/require.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/site/site.js" asp-append-version="true"></script>
 	@RenderSection("scripts")
 </body>
 </html>

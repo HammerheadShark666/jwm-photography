@@ -40,7 +40,7 @@ $(document).on('click', '#delete-gallery', function () {
         $("#deleteGalleryModal").modal('hide');
         window.location = "https://localhost:7166/admin?menu=galleries";
     }).catch((response) => {
-        main.displayAlert(response, "#edit-gallery-alert"); 
+        main.showAlert(response, "#edit-gallery-alert"); 
     });
 });
 
@@ -59,7 +59,7 @@ $(document).on('click', '#save-gallery-name', function () {
             $('li[data-gallary-menu-id="' + galleryId + '"]').find("a").text(galleryName);
             sortGalleryMenuItems();
         }).catch((response) => {
-            main.displayAlert(response, "#edit-gallery-alert"); 
+            main.showAlert(response, "#edit-gallery-alert"); 
         });
     }
 });
@@ -126,7 +126,7 @@ function searchPhotosForGallery(pageNumber) {
         initialiseGallerySearchPhotosResultsPagination(response.numberOfPhotos, true); 
         $('#gallery-search-photos-results-pagination').pagination('drawPage', pageNumber); 
     }).catch((response) => {
-        main.displayAlert(response, "#gallery-alert");
+        main.showAlert(response, "#gallery-alert");
     });
 }
 
@@ -189,7 +189,7 @@ function movePhotoFromSourceToGallery(liElement, galleryId, photoId) {
     gallery.savePhotoToGallery(galleryId, photoId, order).then(function (id) {
         updateOrderOfPhotos(liElement, order);
     }).catch((response) => {
-        main.displayAlert(response, "#gallery-alert"); 
+        main.showAlert(response, "#gallery-alert"); 
     });
 }
 
@@ -199,7 +199,7 @@ function movePhotoFromGalleryToGallery(liElement, galleryId, photoId) {
     gallery.movePhotoInGallery(galleryId, photoId, order).then(function (id) {
         updateOrderOfPhotos(liElement);
     }).catch((response) => {
-        main.displayAlert(response, "#gallery-alert"); 
+        main.showAlert(response, "#gallery-alert"); 
     });
 }
 
@@ -209,7 +209,7 @@ function movePhotoFromGalleryToSource(liElement, galleryId, photoId) {
     gallery.removePhotoInGallery(galleryId, photoId, order).then(function () {
         updateOrderOfPhotos(liElement);
     }).catch((response) => {
-        main.displayAlert(response, "#gallery-alert");
+        main.showAlert(response, "#gallery-alert");
     });
 }
 

@@ -57,10 +57,7 @@
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.25" />
   </ItemGroup>
 
-  <ItemGroup> 
-    <Folder Include="Areas\Site\Data\" />
-    <Folder Include="Areas\Site\Helpers\" />
-    <Folder Include="Areas\Site\Models\" />
+  <ItemGroup>
     <Folder Include="Migrations\" />
   </ItemGroup>
 
@@ -69,6 +66,11 @@
     <None Include="Views\Shared\_Layout.cshtml" />
     <None Include="Views\_ViewImports.cshtml" />
     <None Include="Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\js\site\favourites.js" />
+    <None Include="wwwroot\js\site\gallery.js" />
+    <None Include="wwwroot\js\site\home.js" />
+    <None Include="wwwroot\js\site\site.js" />
+    <None Include="wwwroot\js\site\user-gallery.js" />
   </ItemGroup>
 
 </Project>

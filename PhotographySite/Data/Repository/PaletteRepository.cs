@@ -11,7 +11,7 @@ namespace PhotographySite.Data.Repository
 
         public async Task<List<Palette>> AllSortedAsync()
         {
-            return await _context.Palette.OrderBy(c => c.Name).ToListAsync();
+            return await _context.Palette.OrderBy(palette => palette.Name).ToListAsync();
         }
     }
 }

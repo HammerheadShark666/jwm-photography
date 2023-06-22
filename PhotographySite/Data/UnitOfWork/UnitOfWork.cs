@@ -22,7 +22,11 @@ public class UnitOfWork : IUnitOfWork
 
     public IGalleryPhotoRepository GalleryPhotos { get; private set; }
 
-	public IFavouriteRepository Favourites { get; private set; }
+    public IUserGalleryRepository UserGalleries { get; private set; }
+
+    public IUserGalleryPhotoRepository UserGalleryPhotos { get; private set; }
+
+    public IFavouriteRepository Favourites { get; private set; }
 
     public IUserRepository Users { get; private set; }
 
@@ -37,7 +41,9 @@ public class UnitOfWork : IUnitOfWork
         Galleries = new GalleryRepository(_context);
         GalleryPhotos = new GalleryPhotoRepository(_context);
         Favourites = new FavouriteRepository(_context); 
-        Users = new UserRepository(_context); 
+        Users = new UserRepository(_context);
+        UserGalleries = new UserGalleryRepository(_context);
+        UserGalleryPhotos = new UserGalleryPhotoRepository(_context);
     }        
     
     public int Complete()

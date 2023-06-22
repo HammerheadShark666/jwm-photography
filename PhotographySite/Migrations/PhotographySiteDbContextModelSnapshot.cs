@@ -418,6 +418,8 @@ namespace PhotographySite.Migrations
 
                     b.HasKey("UserId", "PhotoId");
 
+                    b.HasIndex("PhotoId");
+
                     b.ToTable("Favourite");
                 });
 
@@ -841,6 +843,55 @@ namespace PhotographySite.Migrations
                     b.ToTable("ShowcasePhoto");
                 });
 
+            modelBuilder.Entity("PhotographySite.Models.UserGallery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserGallery");
+                });
+
+            modelBuilder.Entity("PhotographySite.Models.UserGalleryPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte>("Order")
+                        .HasColumnType("tinyint");
+
+                    b.Property<long>("PhotoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("UserGalleryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhotoId");
+
+                    b.HasIndex("UserGalleryId");
+
+                    b.ToTable("UserGalleryPhoto");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -892,6 +943,17 @@ namespace PhotographySite.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PhotographySite.Models.Favourite", b =>
+                {
+                    b.HasOne("PhotographySite.Models.Photo", "Photo")
+                        .WithMany("Favourites")
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Photo");
+                });
+
             modelBuilder.Entity("PhotographySite.Models.GalleryPhoto", b =>
                 {
                     b.HasOne("PhotographySite.Models.Gallery", null)
@@ -930,7 +992,34 @@ namespace PhotographySite.Migrations
                     b.Navigation("Palette");
                 });
 
+            modelBuilder.Entity("PhotographySite.Models.UserGalleryPhoto", b =>
+                {
+                    b.HasOne("PhotographySite.Models.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PhotographySite.Models.UserGallery", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("UserGalleryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Photo");
+                });
+
             modelBuilder.Entity("PhotographySite.Models.Gallery", b =>
+                {
+                    b.Navigation("Photos");
+                });
+
+            modelBuilder.Entity("PhotographySite.Models.Photo", b =>
+                {
+                    b.Navigation("Favourites");
+                });
+
+            modelBuilder.Entity("PhotographySite.Models.UserGallery", b =>
                 {
                     b.Navigation("Photos");
                 });

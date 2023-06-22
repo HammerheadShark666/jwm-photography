@@ -11,4 +11,6 @@ public interface IGalleryRepository : IBaseRepository<Gallery>
     Task<bool> ExistsAsync(long id, string name);
 
     Task<Gallery> GetFullGalleryAsync(long id);
+
+    Task<Gallery> GetFullGalleryAsync(Guid userId, long id);
 }

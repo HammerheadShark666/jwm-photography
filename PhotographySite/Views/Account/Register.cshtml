@@ -12,25 +12,7 @@
 @if(!ViewData.ModelState.IsValid) 
 {
   @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form:") 
-}
-@*
-@using (Html.BeginForm("Register", "Account", new { area = "admin" }, FormMethod.Post))
-{
-  @Html.LabelFor(user => user.Email)
-  @Html.TextBoxFor(user=> user.Email)
-
-  @Html.LabelFor(user=> user.Password)
-  @Html.EditorFor(user=> user.Password)
-
-  @Html.LabelFor(user=> user.ConfirmPassword)
-  @Html.EditorFor(user=> user.ConfirmPassword)
-
-  <input type="submit" value="Register" />
-}
-
-<p>@Html.ActionLink("Back to accounts page", "Index", new { area = "admin" })</p>
-*@
- 
+} 
 
 <div class="bg-white border rounded-5">
     <section class="w-100 p-4 d-flex justify-content-center pb-4">

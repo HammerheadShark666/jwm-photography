@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using PhotographySite.Areas.Admin.Business;
-using PhotographySite.Areas.Admin.Models;
+using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helpers;
@@ -59,5 +58,47 @@ public class FavouriteService : IFavouriteService
 			_unitOfWork.Favourites.Remove(currentFavourite);
 			_unitOfWork.Complete();
 		}
-	} 
+	}
+
+    public async Task<PhotosPageDto> GetPhotosPageAsync(PhotoFilterDto photoFilterDto)
+    {
+        return new PhotosPageDto()
+        {
+            Data = _mapper.Map<List<PhotoDto>>(await _unitOfWork.Photos.ByPagingAsync(photoFilterDto)),
+            ItemsCount = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterDto),
+            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(),
+        };
+    }
+     
+    public async Task<SearchPhotosResultsDto> SearchPhotosAsync(Guid userId, SearchPhotosDto searchPhotosDto)
+    {
+        PhotoFilterDto photoFilterDto = new()
+        {
+            Title = searchPhotosDto.Title,
+            CountryId = searchPhotosDto.CountryId,
+            CategoryId = searchPhotosDto.CategoryId,
+            PaletteId = searchPhotosDto.PaletteId,
+            PageIndex = searchPhotosDto.PageIndex,
+            PageSize = searchPhotosDto.PageSize
+        };
+         
+        List<PhotoDto> photos = _mapper.Map<List<PhotoDto>>(await _unitOfWork.Favourites.GetFavouritePhotoByPagingAsync(userId, photoFilterDto));
+        int numberOfPhotos = await _unitOfWork.Favourites.ByFilterCountAsync(userId, photoFilterDto);
+        int numberOfPages = GetNumberOfPages(numberOfPhotos, photoFilterDto.PageSize);
+
+        return new SearchPhotosResultsDto()
+        {
+            NumberOfPhotos = numberOfPhotos,
+            PageIndex = searchPhotosDto.PageIndex + 1,
+            PageSize = searchPhotosDto.PageSize,
+            NumberOfPages = numberOfPages,
+            Photos = photos,
+            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl()
+        };
+    }
+
+    private int GetNumberOfPages(int numberOfPhotos, int pageSize)
+    {
+        return (numberOfPhotos / pageSize) + ((numberOfPhotos % pageSize > 0) ? 1 : 0);
+    }
 }

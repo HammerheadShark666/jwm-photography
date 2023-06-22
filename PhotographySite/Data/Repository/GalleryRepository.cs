@@ -11,31 +11,40 @@ public class GalleryRepository : BaseRepository<Gallery>, IGalleryRepository
 
     public async Task<List<Gallery>> AllSortedAsync()
     {
-        return await _context.Gallery.OrderBy(c => c.Name).ToListAsync();
+        return await _context.Gallery.OrderBy(gallery => gallery.Name).ToListAsync();
     }
 
     public async Task<bool> ExistsAsync(string name)
     {
         return await _context.Gallery
-                                .Where(a => a.Name.Equals(name)).AnyAsync();
+                                .Where(gallery => gallery.Name.Equals(name)).AnyAsync();
     }
 
     public async Task<bool> ExistsAsync(long id, string name)
     {
         return await _context.Gallery
-                               .Where(a => a.Name.Equals(name)
-                                    && !a.Id.Equals(id))
+                               .Where(gallery => gallery.Name.Equals(name)
+                                    && !gallery.Id.Equals(id))
                                .AnyAsync();
     }
 
     public async Task<Gallery> GetFullGalleryAsync(long id)
     {
-        Gallery gallery = await _context.Gallery
-                .Include(i => i.Photos)
-                .ThenInclude(s => s.Photo)
-                .ThenInclude(p => p.Country) 
-                .SingleAsync(x => x.Id == id);
+		return await _context.Gallery
+                .Include(gallery => gallery.Photos)
+                .ThenInclude(photos => photos.Photo)
+                .ThenInclude(photo => photo.Country)                
+                .SingleAsync(gallery => gallery.Id == id); 
+    }
 
-        return gallery;
+    public async Task<Gallery> GetFullGalleryAsync(Guid userId, long id)
+    {
+        return await _context.Gallery
+            .Include(gallery => gallery.Photos)
+                .ThenInclude(photo => photo.Photo.Country)
+            .Include(gallery => gallery.Photos)
+                .ThenInclude(photo => photo.Photo.Favourites.Where(favourite => favourite.UserId == userId))
+
+            .SingleAsync(gallery => gallery.Id == id); 
     }
 }

@@ -9,4 +9,6 @@ public interface IFavouriteService
     Task AddAsync(Guid userId, long photoId);
 
     Task DeleteAsync(Guid userId, long photoId);
+
+    Task<SearchPhotosResultsDto> SearchPhotosAsync(Guid userId, SearchPhotosDto searchPhotosDto);
 }

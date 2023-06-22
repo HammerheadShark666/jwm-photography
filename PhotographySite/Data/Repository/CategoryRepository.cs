@@ -11,6 +11,6 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
 
     public async Task<List<Category>> AllSortedAsync()
     {
-        return await _context.Category.OrderBy(c => c.Name).ToListAsync();
+        return await _context.Category.OrderBy(category => category.Name).ToListAsync();
     }
 }

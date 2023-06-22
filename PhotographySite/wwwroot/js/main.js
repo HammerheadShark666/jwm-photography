@@ -1,4 +1,4 @@
-﻿function displayAlert(response, alertName) {
+﻿function showAlert(response, alertName) {
 
     if (response.message !== undefined) {
         $(alertName).html(response.message);
@@ -21,4 +21,8 @@
     $(alertName).show();
 }
 
-export { displayAlert };
+function hideAlert(alertName) {
+    $(alertName).hide();
+}
+
+export { showAlert, hideAlert };

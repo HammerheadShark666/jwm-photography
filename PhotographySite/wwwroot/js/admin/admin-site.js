@@ -39,7 +39,7 @@ $(document).on('click', '#save-new-gallery', function () {
             window.location = "https://localhost:7166/admin/gallery/" + gallery.id;
 
         }).catch((response) => {    
-            main.displayAlert(response, "#new-gallery-alert");
+            main.showAlert(response, "#new-gallery-alert");
         });
     }
 });

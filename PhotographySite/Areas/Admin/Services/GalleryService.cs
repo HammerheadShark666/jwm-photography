@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using PhotographySite.Areas.Admin.Models;
+using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helpers;
 using PhotographySite.Models;
+using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Admin.Services;
 

@@ -1,4 +1,4 @@
-﻿@model List<PhotographySite.Areas.Admin.Models.GalleryDto>
+﻿@model List<PhotographySite.Areas.Admin.Dtos.GalleryDto>
 <nav class="sidebar show">
     <div class="text">
         <a class="menu-title" href="/admin">PhotographySite.com</a>
@@ -24,7 +24,7 @@
                 <li data-gallary-menu-id="0"><a id="new-gallery" href="#">New Gallery...</a></li>
                 @foreach (var gallery in Model)
                 {
-                    <li data-gallary-menu-id="@gallery.Id"><a href="/admin/gallery/@gallery.Id">@gallery.Name</a></li>
+                    <li data-gallary-menu-id="@gallery.Id"><a class="gallery-anchor" href="/admin/gallery/@gallery.Id">@gallery.Name</a></li>
                 }
             </ul>
         </li>

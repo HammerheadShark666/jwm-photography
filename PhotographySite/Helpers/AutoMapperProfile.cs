@@ -1,4 +1,4 @@
-﻿using PhotographySite.Areas.Admin.Models;
+﻿using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Models;
 using PhotographySite.Models.Dto;
 
@@ -22,14 +22,27 @@ public class AutoMapperProfile : AutoMapper.Profile
         CreateMap<Gallery, GalleryDto>();
         CreateMap<GalleryNameDto, Gallery>();
         CreateMap<Gallery, GalleryNameDto>();
-        CreateMap<GalleryPhotoDto, GalleryPhoto>();
-        CreateMap<GalleryPhoto, GalleryPhotoDto>();
+        CreateMap<GalleryPhotoDto, GalleryPhoto>(); 
+        CreateMap<UserGalleryDto, UserGallery>();
+        CreateMap<UserGallery, UserGalleryDto>();
+        CreateMap<UserGalleryNameDto, UserGallery>();
+        CreateMap<UserGallery, UserGalleryNameDto>();
+        CreateMap<UserGalleryPhotoDto, UserGalleryPhoto>();
+        CreateMap<UserGalleryPhoto, UserGalleryPhotoDto>();
 
         base.CreateMap<GalleryPhoto, GalleryPhotoDto>()
-                .ForMember(dest => dest.PhotoId, act => act.MapFrom(src => src.Id))
+                .ForMember(dest => dest.PhotoId, act => act.MapFrom(src => src.PhotoId))
                 .ForMember(dest => dest.FileName, act => act.MapFrom(src => src.Photo.FileName))
                 .ForMember(dest => dest.Country, act => act.MapFrom(src => src.Photo.Country.Name))
-                .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Photo.Title));
+                .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Photo.Title))
+                .ForMember(dest => dest.IsFavourite, act => act.MapFrom(src => src.Photo.Favourites.Count > 0 ? true : false));
+
+		base.CreateMap<UserGalleryPhoto, UserGalleryPhotoDto>()
+				.ForMember(dest => dest.PhotoId, act => act.MapFrom(src => src.Id))
+				.ForMember(dest => dest.FileName, act => act.MapFrom(src => src.Photo.FileName))
+				.ForMember(dest => dest.Country, act => act.MapFrom(src => src.Photo.Country.Name))
+				.ForMember(dest => dest.Title, act => act.MapFrom(src => src.Photo.Title))
+                .ForMember(dest => dest.IsFavourite, act => act.MapFrom(src => src.Photo.Favourites.Count > 0 ? true : false));
 
         base.CreateMap<Photo, FavouriteDto>()
                 .ForMember(dest => dest.PhotoId, act => act.MapFrom(src => src.Id))

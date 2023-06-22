@@ -1,3 +1,11 @@
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 
 @media (min-width: 768px) {
     html {
@@ -20,13 +28,7 @@ body {
     margin-bottom: 60px;
     font-family: fangsong;
 }
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0 7px;
-}
-
+ 
 /* Create four equal columns that sits next to each other */
 .column {
     flex: 25%;
@@ -62,22 +64,18 @@ body {
         flex: 100%;
         max-width: 100%;
     }
-}
-
-
+} 
 
 .navbar {
     font-size: 1.50em;
 }
 
-.navbar .dropdown-large {
-    /*padding: 1rem;*/
+.navbar .dropdown-large { 
     margin-top: 50px !important;
     background-color: #212529 !important;
 }
 
-.navbar .dropdown-small {
-    /*padding: 1rem;*/
+.navbar .dropdown-small { 
     margin-top: 50px !important;
     background-color: #212529 !important;
 }
@@ -131,6 +129,15 @@ body {
     background-color: #000;
 }
 
+.gallery-dropdown-menu[data-bs-popper] {
+    right: 0 !important;
+}
+
+
+.gallery-dropdown-menu {
+    background-color: #000;
+} 
+
 .gallery-item a div {
     background-color: #212529 !important;
     border: 1px white solid;
@@ -175,8 +182,7 @@ body {
 #favourites-images > img {
     border: 1px solid black;
     padding: 5px;
-}
-
+} 
 
 #image-list-container ul {
     list-style: none;
@@ -190,11 +196,7 @@ body {
 #image-list-container ul li:hover {
     cursor: pointer;
 }
-
-.alert {
-    display: none!important;
-}
-
+  
 .gallery-photo {
     height: 200px;
     margin: 3px; 
@@ -202,12 +204,7 @@ body {
 
 div#lightboxed--content .lightboxed--frame img {
     border: solid 5px white !important;
-}
-
-
-.lightboxed--frame {
-    /*margin-top: 100px;*/
-}
+}  
 
 .page-title {
     margin-top: 10px;
@@ -273,65 +270,372 @@ div#lightboxed--content .lightboxed--frame img {
     width: 200px;
     margin-top: 5px;
 }
-
-
-    /*.favourites-image-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333333;
-}
-
-.favourites-image-list li {
-    float: left;
-}*/
-    /*.favourites-image-list li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 16px;
-    text-decoration: none;
-}
-
-.favourites-image-list li a:hover {
-    background-color: #111111;
-}*/
-
+   
 .image-container {
     position: relative;
 }
-
-
-#menu-bar li a, #menu-bar li button {
-    color: white;
-}
-
+ 
 .like-icon {
     width:20px!important;
     height: 20px!important;
 }
 
-.home-image-container {
+.home-image-container, .gallery-image-container {
     position: relative;
     top: 0;
     left: 0;
-}
+} 
 
-.home-image {
-    position: relative;
-    top: 0;
-    left: 0;
-    border: 1px red solid;
-    z-index: 0 !important;
-}
-
-.home-image-favourite {
+.home-image-favourite, .gallery-image-favourite {
     position: absolute;
     top: 10px;
     right: 10px;
     height: 30px !important;
     width: 30px !important;
     z-index: 1 !important;
-    opacity: 1 !important;
+    opacity: 0;
+}
+
+#access-denied {
+    width: 100%;
+}
+
+.access-denied a {
+    float: right!important;
+    font-size: 1.25rem;
+} 
+
+nav ul {
+    background: #1b1b1b;
+    height: 100%; 
+    list-style: none;
+    padding-left: 10px;
+}
+
+nav ul li {
+    line-height: 25px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    background: #1b1b1b;
+}
+
+nav ul li:last-child {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+nav ul li a {
+    position: relative;
+    color: white;
+    text-decoration: none;
+    /*font-size: 13px;*/
+    padding-left: 14px;
+    font-weight: 500;
+    display: block;
+    width: 100%;
+    border-left: 3px solid transparent;
+}
+
+nav ul li.active form input {
+    color: #FC5404;
+    background: #1e1e1e;
+    border-left-color: #FC5404;
+}
+
+nav ul li a:hover {
+    background: #1e1e1e;
+}
+
+nav ul li.active ul {
+    transition: all 0.5s;
+}
+
+nav ul ul {
+    position: static;
+    display: none;
+}
+
+nav ul.show {
+    display: block;
+    transition: all 0.5s;
+}
+
+nav ul ul li {
+    line-height: 42px;
+    border-top: none;
+}
+
+nav ul ul li a { 
+    color: #e6e6e6;
+}
+
+nav ul li.active ul li a {
+    color: #e6e6e6;
+    background: #1b1b1b;
+    border-left-color: transparent;
+}
+
+a:hover {
+    color: #FC5404 !important;
+} 
+
+nav ul li a span {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 15px;
+    transition: transform 0.4s;
+}
+
+nav ul li a span.rotate {
+    transform: translateY(-50%) rotate(-180deg);
+}
+
+#menu-bar li a, #menu-bar li button {
+    color: white;
+}
+
+#menu-bar li a:hover, #menu-bar li button:hover {
+    color: #FC5404 !important;
+    background: #1e1e1e !important;
+}
+ 
+.page-header {
+    margin: 5px 5px 0px 5px;
+    font-size: 1.70rem;
+}
+ 
+.search-row {
+    padding-top: 7px;
+}
+ 
+.work-area {
+    padding: 10px;
+} 
+
+.search-row button {
+    padding-top: 5px;
+    border: none;
+    font-size: 1em;
+}
+
+.search-row button:hover {
+    border: none;
+}
+
+.button-row {
+    margin-bottom: 5px;
+} 
+
+.card-header {
+    background-color: #1b1b1b;
+    color: white;
+    font-size: 1em;
+} 
+
+.gallery-thumbnail {
+    height: 100px; 
+    margin: 5px;
+}
+ 
+#collapseGalleryPhotoSearch {
+    margin-bottom: 10px;
+}
+
+.card-header {
+    padding: 0px !important;
+} 
+
+.gallery-search-button {
+    background-color: black;
+    color: white;
+    float: right;
+    margin-right: 7px;
+} 
+
+.gallery-search-button:hover {
+    color: #FC5404;
+}
+
+.edit-user-gallery-name:hover {
+    cursor: pointer;
+}
+
+.delete-user-gallery:hover {
+    cursor: pointer;
+}
+
+#galleryDestination {
+    padding: 0px;
+    min-height: 50px;
+}
+
+#galleryDestination, #gallerySource {
+    padding-left: 0px;
+}
+
+#galleryDestination {
+    min-height: 50px;
+    background-color: linen;
+}
+
+#gallerySource {
+    min-height:400px;
+    background-color: linen;
+}
+
+#galleryDestination li, #gallerySource li {
+    padding-right: 0px;
+}
+
+.gallery-photos ul {
+    min-height: auto;
+    margin-bottom: 0px;
+} 
+
+.edit-gallery-name {
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+}
+
+.edit-gallery-name:hover {
+    cursor: pointer;
+}
+
+.delete-gallery {
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+}
+
+.delete-gallery:hover {
+    cursor: pointer;
+} 
+
+#deleteGalleryModal {
+    color: white;
+}
+
+.menu-title {
+    color: white;
+} 
+
+#search-results-photos { 
+    height: 400px;
+}
+
+.card-body-photos {
+    padding: 0.5rem 0.5rem;
+}
+
+#collapseGalleryPhotoSearch .card-body {
+    padding: 0.5rem 0.5rem;
+}
+
+.search-photos-results-pagination {
+    padding: 0.5rem;
+}
+
+#gallery-search-photos-results-pagination ul {
+    justify-content: center !important;
+} 
+
+#photos-catalogue-results-pagination ul {
+    justify-content: center !important;
+}
+
+#photos-catalogue-results-pagination {
+    margin-top: 10px;
+}
+
+#gallery-search-photos-results-pagination {
+    margin-top: 10px;
+}
+
+#photo-catalogue-results-pagination {
+    margin-top: 10px;
+}
+
+.gallery-photos {
+    min-height: 50px;
+    padding: 0.5rem 0.5rem;
+}
+
+#galleryDestination li, #gallerySource li {
+    padding-right: 0px;
+}
+
+.list li {
+    display: inline-block;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+.row {
+    --bs-gutter-x: 0;
+}
+
+.gallery-header {
+    padding: 5px; 
+}
+
+.gallery-header div h5 {
+    padding-top: 7px;
+}
+
+.dropdown-menu-seperator {
+    margin: 0px;
+}
+
+.modal-header {
+    background-color: #1b1b1b;
+    color: white;
+    height: 40px;
+}
+
+.modal-body {
+    background-color: #1b1b1b;
+    color: white; 
+}
+
+.modal-header h5 {
+    font-size: 1em;
+}
+
+.modal-content {
+    background-color: #1b1b1b;
+}
+
+.modal-footer {
+    background-color: #1b1b1b;
+    color: white;
+    height: 50px;
+    padding: 5px;
+}
+
+.gallery-search-photos-search-button {
+    float: right; 
+    width: 100px;
+}
+
+.gallery-image-container {
+    float: left;
+}
+ 
+.site-image {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+#imagePreview {
+    width: 100%;
+}
+
+.photoModalCloseSmall {
+    width: 25px;
+}
+
+.photoModalClose {
+    background-color: #fff;
+    color: black;
 }

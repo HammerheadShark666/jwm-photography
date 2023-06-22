@@ -128,7 +128,7 @@ class Gallery {
         };
 
         return filter;
-    }
+    } 
 }
 
 export { Gallery };

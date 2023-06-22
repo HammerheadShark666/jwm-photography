@@ -1,12 +1,27 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = " - Home Page";
 } 
 
 <div class="text-center">
     <h1 class="display-4">Admin</h1>     
 </div>
+
+<div class="card-body gallery-photos">
+    <div class="text-center">
+        <h3 class="display-7">Latest Photos</h3>
+    </div>
+    <ul id="galleryDestination" class="list"> 
+        @foreach (var photo in Model.SelectGalleryPhotos)
+        {
+            <li>
+                <img data-photo-id='@photo.Id' data-title='@photo.Title' class='lightboxed latest-photo-thumbnail' rel='group1' src='@Model.AzureStoragePhotosContainerUrl@photo.FileName' />
+            </li>
+        }
+    </ul>
+</div>  
  
 @section Scripts
 {
-
+    <script type="module" src="@Url.Content("~/lib/lightboxed/lightboxed.js")"></script>
+    <script type="module" src="@Url.Content("~/js/admin/home.js")"></script>
 }

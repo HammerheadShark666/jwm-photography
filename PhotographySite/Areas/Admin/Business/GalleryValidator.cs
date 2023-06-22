@@ -26,9 +26,7 @@ namespace PhotographySite.Areas.Admin.Business
         }
 
         protected async Task<bool> GalleryNameExists(Gallery gallery)
-        {
-         //   throw new Exception("error occurred");
-
+        { 
             return gallery.Id == 0
                 ? !(await _unitOfWork.Galleries.ExistsAsync(gallery.Name))
                 : !(await _unitOfWork.Galleries.ExistsAsync(gallery.Id, gallery.Name));
