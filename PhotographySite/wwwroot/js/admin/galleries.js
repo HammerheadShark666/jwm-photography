@@ -172,7 +172,7 @@ function initialiseDragAndDrop() {
             if(destination == "")
                 destination = event.target.id;
         },
-        start() {
+        start: function () {
             source = "";
             destination = "";
         },
