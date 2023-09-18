@@ -1,139 +1,158 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
-using PhotographySite.Areas.Admin.Dtos;
+using Microsoft.Extensions.Caching.Memory;
+using PhotographySite.Areas.Admin.Dto.Request;
+using PhotographySite.Areas.Site.Dto.Request;
+using PhotographySite.Areas.Site.Dto.Response;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helpers;
+using PhotographySite.Helpers.Interface;
 using PhotographySite.Models;
-using PhotographySite.Models.Dto;
+using SwanSong.Service.Helpers.Exceptions;
+using System.Security.Authentication;
+using PhotographySite.Dto.Request;
+using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Site.Services;
 
-public class UserGalleryService : BaseService, IUserGalleryService
-{
-    private IUnitOfWork _unitOfWork;
-	private IMapper _mapper;
-	private IValidator<UserGallery> _userGalleryValidator;
+public class UserGalleryService : IUserGalleryService
+{ 
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly IMemoryCache _memoryCache;
+    private readonly IValidatorHelper<UserGallery> _validatorHelper;
 
-	public UserGalleryService(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UserGallery> userGalleryValidator, IUserService userService) : base(userService)
-    { 
-		_unitOfWork = unitOfWork;
-		_mapper = mapper;
-        _userGalleryValidator = userGalleryValidator; 
+    public UserGalleryService(IUnitOfWork unitOfWork,
+                              IMapper mapper,
+                              IValidatorHelper<UserGallery> validatorHelper,
+                              IMemoryCache memoryCache)
+    {
+        _unitOfWork = unitOfWork;
+        _validatorHelper = validatorHelper;
+        _memoryCache = memoryCache;
+        _mapper = mapper;
     }
 
-    public async Task<UserGalleryDto> GetUserGalleryAsync(Guid userId, long id)
+    public async Task<UserGalleryResponse> GetUserGalleryAsync(Guid userId, long id)
     {
         UserGallery userGallery = await _unitOfWork.UserGalleries.GetFullGalleryAsync(userId, id);
-
         if (userGallery == null) 
-            return new UserGalleryDto(); 
+            return new UserGalleryResponse(); 
 
-		UserGalleryDto userGalleryDto = _mapper.Map<UserGalleryDto>(userGallery);
-		userGalleryDto.AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl();
-		return userGalleryDto; 
+		return _mapper.Map<UserGalleryResponse>(userGallery);  
     }
 
-    public async Task<List<UserGalleryDto>> GetUserGalleriesAsync(HttpContext httpContext)
-    { 
-		Guid userId = GetUserId(httpContext.User.Identity.Name);
+    public async Task<List<UserGalleryResponse>> GetUserGalleriesAsync(HttpContext httpContext)
+    {
+        Guid userId = GetUserId(httpContext.User.Identity.Name);
 
-        if (userId != Guid.Empty) 
-            return _mapper.Map<List<UserGalleryDto>>(await _unitOfWork.UserGalleries.AllSortedAsync(userId)); 
+        if (userId != Guid.Empty)
+            return _mapper.Map<List<UserGalleryResponse>>(await _unitOfWork.UserGalleries.AllSortedAsync(userId));
 
         return null;
     }
 
-    public async Task<SearchPhotosResultsDto> SearchPhotosAsync(SearchPhotosDto searchPhotosDto)
+    public async Task<SearchPhotosResponse> SearchPhotosAsync(SearchPhotosRequest searchPhotosRequest)
     {
-        PhotoFilterDto photoFilterDto = new()
-        {
-            Title = searchPhotosDto.Title,
-            CountryId = searchPhotosDto.CountryId,
-            CategoryId = searchPhotosDto.CategoryId,
-            PaletteId = searchPhotosDto.PaletteId,
-            PageIndex = searchPhotosDto.PageIndex,
-            PageSize = searchPhotosDto.PageSize
-        };
+        PhotoFilterRequest photoFilterRequest = PhotoFilterRequest.Create(searchPhotosRequest);
+         
+        List<PhotoResponse> photos = _mapper.Map<List<PhotoResponse>>(await _unitOfWork.Photos.ByPagingAsync(photoFilterRequest));
+        int numberOfPhotos = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterRequest);
+        int numberOfPages = GetNumberOfPages(numberOfPhotos, photoFilterRequest.PageSize);
 
-        List<PhotoDto> photos = _mapper.Map<List<PhotoDto>>(await _unitOfWork.Photos.ByPagingAsync(photoFilterDto));
-        int numberOfPhotos = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterDto);
-        int numberOfPages = GetNumberOfPages(numberOfPhotos, photoFilterDto.PageSize);
-
-        return new SearchPhotosResultsDto()
+        return new SearchPhotosResponse()
         {
             NumberOfPhotos = numberOfPhotos,
-            PageIndex = searchPhotosDto.PageIndex + 1,
-            PageSize = searchPhotosDto.PageSize,
+            PageIndex = searchPhotosRequest.PageIndex + 1,
+            PageSize = searchPhotosRequest.PageSize,
             NumberOfPages = numberOfPages,
-            Photos = photos,
-            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl()
-        };  
+            Photos = photos
+        };
     }
+     
+    public async Task<UserGalleryActionResponse> AddAsync(UserGalleryAddRequest userGalleryAddRequest)
+    {
+        var userGallery = _mapper.Map<UserGallery>(userGalleryAddRequest);
+
+        await _validatorHelper.ValidateAsync(userGallery, Constants.ValidationEventBeforeSave);
+        await SaveAdd(userGallery, CacheKeys.UserGallery);
+
+        return new UserGalleryActionResponse(userGallery.Id, await _validatorHelper.AfterEventAsync(userGallery, Constants.ValidationEventAfterSave));
+    }
+
+    public async Task<UserGalleryActionResponse> UpdateAsync(UserGalleryUpdateRequest galleryUpdateRequest)
+    {
+        var userGallery = await GetUserGallery(galleryUpdateRequest.Id);
+
+        userGallery.Name = galleryUpdateRequest.Name;
+
+        await _validatorHelper.ValidateAsync(userGallery, Constants.ValidationEventBeforeSave);
+        await SaveUpdate(userGallery, CacheKeys.Gallery);
+
+        return new UserGalleryActionResponse(userGallery.Id, await _validatorHelper.AfterEventAsync(userGallery, Constants.ValidationEventAfterSave));
+    }
+
+    public async Task<UserGalleryActionResponse> DeleteAsync(long id)
+    {
+        var userGallery = await GetUserGallery(id);
+
+        await _validatorHelper.ValidateAsync(userGallery, Constants.ValidationEventBeforeDelete);
+        await Delete(userGallery, CacheKeys.Gallery);
+
+        return new UserGalleryActionResponse(userGallery.Id, await _validatorHelper.AfterEventAsync(userGallery, Constants.ValidationEventAfterDelete));
+    }
+
+    private async Task Delete(UserGallery userGallery, string cacheKey)
+    {
+        _unitOfWork.UserGalleries.Delete(userGallery);
+        await CompleteContextAction(cacheKey);
+    }
+
+    private async Task SaveAdd(UserGallery userGallery, string cacheKey)
+    {
+        await _unitOfWork.UserGalleries.AddAsync(userGallery);
+        await CompleteContextAction(cacheKey);
+    }
+
+    private async Task SaveUpdate(UserGallery userGallery, string cacheKey)
+    {
+        _unitOfWork.UserGalleries.Update(userGallery);
+        await CompleteContextAction(cacheKey);
+    }
+
+    private async Task CompleteContextAction(string cacheKey)
+    {
+        await _unitOfWork.Complete();
+
+        if (cacheKey != null)
+            _memoryCache.Remove(cacheKey);
+    }
+
+    private async Task<UserGallery> GetUserGallery(long id)
+    {
+        var userGallery = await _unitOfWork.UserGalleries.ByIdAsync(id);
+        if (userGallery == null)
+            throw new UserGalleryNotFoundException("User gallery not found.");
+
+        return userGallery;
+    }
+
+    public Guid GetUserId(string username)
+    {
+        if (username != null)
+        {
+            Guid userId = _unitOfWork.Users.GetUserId(username);
+            if (userId.Equals(Guid.Empty))
+                throw new AuthenticationException();
+
+            return userId;
+        }
+
+        return new Guid();
+    } 
 
     private int GetNumberOfPages(int numberOfPhotos, int pageSize)
-    { 
+    {
         return (numberOfPhotos / pageSize) + ((numberOfPhotos % pageSize > 0) ? 1 : 0);
-    }     
-
-    public async Task<UserGalleryNameDto> SaveName(UserGalleryNameDto userGalleryNameDto)
-    {
-        UserGallery userGallery = await _unitOfWork.UserGalleries.GetAsync(userGalleryNameDto.UserId, userGalleryNameDto.Id);
-         
-        if(userGallery == null)
-            throw new UnauthorizedAccessException("You are not authorised to make changes to this gallery.");
-
-        userGallery.Name = userGalleryNameDto.Name;
-
-        ValidationResult validationResult = await _userGalleryValidator.ValidateAsync(userGallery, options => options
-                                                                                .IncludeRuleSets("BeforeSave"));
-
-        if (validationResult.IsValid)
-        {             
-            _unitOfWork.UserGalleries.Update(userGallery);
-            _unitOfWork.Complete();
-
-            userGalleryNameDto.IsValid = true;
-        }
-        else
-            userGalleryNameDto.Errors = validationResult.Errors;        
-
-        return userGalleryNameDto;
-    }
-
-    public async Task<UserGalleryNameDto> SaveNewUserGalleryAsync(UserGalleryNameDto userGalleryNameDto)
-    {
-        UserGallery userGallery = _mapper.Map<UserGallery>(userGalleryNameDto);
-
-        ValidationResult validationResult = await _userGalleryValidator.ValidateAsync(userGallery, options => options
-                                                                                .IncludeRuleSets("BeforeSave"));
-
-        if (validationResult.IsValid)
-        {
-            userGallery = await _unitOfWork.UserGalleries.AddAsync(userGallery);
-            _unitOfWork.Complete();
-
-            userGalleryNameDto = _mapper.Map<UserGalleryNameDto>(userGallery);
-            userGalleryNameDto.IsValid = true; 
-        } 
-        else
-        {
-            userGalleryNameDto.Errors = validationResult.Errors;
-            userGalleryNameDto.IsValid= validationResult.IsValid;
-        }
-
-        return userGalleryNameDto;  
-    }
-
-    public async Task DeleteAsync(long id)
-    {
-        UserGallery currentGallery = await _unitOfWork.UserGalleries.ByIdAsync(id);
-
-        if (currentGallery != null)
-        {
-            _unitOfWork.UserGalleries.Remove(currentGallery);
-            _unitOfWork.Complete();
-        }
-    }
+    } 
 }

@@ -1,96 +1,84 @@
 ﻿using AutoMapper;
-using PhotographySite.Areas.Admin.Dtos;
+using PhotographySite.Areas.Admin.Dto.Request;
+using PhotographySite.Areas.Admin.Dto.Response;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Areas.Site.Dto.Response;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helpers;
 using PhotographySite.Helpers.Interface;
 using PhotographySite.Models;
-using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Admin.Services;
 
 public class PhotoImportService : IPhotoImportService
-{
-    private readonly IConfiguration _configuration;
+{ 
     private IUnitOfWork _unitOfWork;
     private IMapper _mapper;
     private IAzureStorageBlobHelper _azureStorageBlobHelper;
 
-    public PhotoImportService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper, IAzureStorageBlobHelper azureStorageBlobHelper)
+    public PhotoImportService(IUnitOfWork unitOfWork, IMapper mapper, IAzureStorageBlobHelper azureStorageBlobHelper)
     {
-        _unitOfWork = unitOfWork;
-        _configuration = configuration;
+        _unitOfWork = unitOfWork; 
         _mapper = mapper;
         _azureStorageBlobHelper = azureStorageBlobHelper;
     }
 
-    public async Task<SavedPhotosDto> ImportAsync(List<IFormFile> photos)
+    public async Task<SavedPhotosResponse> ImportAsync(List<IFormFile> photos)
     {
         string directoryPath = EnvironmentVariablesHelper.TempPhotoDirectoryPath();
          
         var (existingPhotos, newPhotos) = await GetExistingNewPhotoListAsync(photos); 
 
         await _azureStorageBlobHelper.SaveBlobsToAzureStorageContainerAsync(newPhotos, Constants.AzureStorageContainerName);
-        
-        List<string> fileNames = await FileHelper.SaveFilesToDirectoryAsync(newPhotos, directoryPath);
-        List<Photo> photosWithDetails = GetPhotoDetails(fileNames, directoryPath);
-        List<Photo> savedPhotos = SavePhotos(photosWithDetails);
 
-        SavedPhotosDto savedPhotosDto = new SavedPhotosDto()
-        {
-            SavedPhotos = savedPhotos,
-            ExistingPhotos = existingPhotos,
-            Categories = _mapper.Map<List<CategoryDto>>(await _unitOfWork.Categories.AllSortedAsync()),
-            Countries = _mapper.Map<List<CountryDto>>(await _unitOfWork.Countries.AllSortedAsync()),
-            Palettes = _mapper.Map<List<PaletteDto>>(await _unitOfWork.Palettes.AllSortedAsync()),
-            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl()
-        };
+        var fileNames = await FileHelper.SaveFilesToDirectoryAsync(newPhotos, directoryPath);
+        var photosWithDetails = GetPhotoDetails(fileNames, directoryPath);
+
+        var savedPhotosResponse = await GetLookUpsAsync(new SavedPhotosResponse()); 
+        savedPhotosResponse.SavedPhotos = SavePhotos(photosWithDetails);
+        savedPhotosResponse.ExistingPhotos = existingPhotos; 
 
         FileHelper.DeleteAllFilesInDirectory(directoryPath);
 
-        return savedPhotosDto;
+        return savedPhotosResponse;
     }
 
-    private async Task<(List<ExistingPhotoDto>, List<IFormFile>)> GetExistingNewPhotoListAsync(List<IFormFile> photos)
+    public async Task<SavedPhotosResponse> GetLookUpsAsync(SavedPhotosResponse savedPhotosResponse)
     {
-        List<ExistingPhotoDto> existingPhotos = new List<ExistingPhotoDto>();
-        List<IFormFile> newPhotos = new List<IFormFile>();
+        savedPhotosResponse.Lookups.Categories = _mapper.Map<List<CategoryResponse>>(await _unitOfWork.Categories.AllSortedAsync());
+        savedPhotosResponse.Lookups.Countries = _mapper.Map<List<CountryResponse>>(await _unitOfWork.Countries.AllSortedAsync());
+        savedPhotosResponse.Lookups.Palettes = _mapper.Map<List<PaletteResponse>>(await _unitOfWork.Palettes.AllSortedAsync());
+       
+        return savedPhotosResponse;
+    }
+
+    private async Task<(List<ExistingPhotoRequest>, List<IFormFile>)> GetExistingNewPhotoListAsync(List<IFormFile> photos)
+    {
+        var existingPhotos = new List<ExistingPhotoRequest>();
+        var newPhotos = new List<IFormFile>();
 
         foreach (IFormFile photo in photos)
         {
-            Photo existingPhoto = await _unitOfWork.Photos.FindByFilenameAsync(photo.FileName);
-
+            var existingPhoto = await _unitOfWork.Photos.FindByFilenameAsync(photo.FileName);
             if (existingPhoto != null)
             {
-                existingPhotos.Add(new ExistingPhotoDto()
+                existingPhotos.Add(new ExistingPhotoRequest()
                 {
                     FileName = existingPhoto.FileName,
                     Title = existingPhoto.Title,
                     DateTaken = existingPhoto.DateTaken
                 });
             }
-            else
-            {
-                newPhotos.Add(photo);
-            }
+            else 
+                newPhotos.Add(photo); 
         }
 
         return (existingPhotos, newPhotos);
     }
-
-    private Photo Save(Photo photo)
-    {
-        if (photo.Id == 0)
-            _unitOfWork.Photos.AddAsync(photo);
-
-        _unitOfWork.Complete();
-
-        return photo;
-    }
-
+  
     private List<Photo> GetPhotoDetails(List<string> fileNames, string directoryPath)
     {
-        List<Photo> photos = new List<Photo>();
+        var photos = new List<Photo>();
 
         foreach (var filename in fileNames)
         {
@@ -105,13 +93,19 @@ public class PhotoImportService : IPhotoImportService
 
     private List<Photo> SavePhotos(List<Photo> photos)
     {
-        List<Photo> savedPhotos = new List<Photo>();
+        var savedPhotos = new List<Photo>();
 
         foreach (var photo in photos)
         {
-            Photo savedPhoto = Save(photo);
-            savedPhotos.Add(savedPhoto);
+            if (photo.Id == 0)
+            {
+                _unitOfWork.Photos.AddAsync(photo);
+                savedPhotos.Add(photo);
+            }
+               
         }
+            
+        _unitOfWork.Complete();
 
         return savedPhotos;
     }

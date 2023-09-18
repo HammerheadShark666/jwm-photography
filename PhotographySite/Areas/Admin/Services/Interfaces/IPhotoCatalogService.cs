@@ -1,12 +1,13 @@
-﻿using PhotographySite.Areas.Admin.Dtos;
-using PhotographySite.Models.Dto;
+﻿using PhotographySite.Areas.Admin.Dto.Request;
+using PhotographySite.Areas.Admin.Dto.Response;
+using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Services.Interfaces;
 
 public interface IPhotoCatalogService
 {
-    Task<LookupsDto> GetLookupsAsync(); 
-    Task<PhotosPageDto> GetPhotosPageAsync(PhotoFilterDto photoFilterDto);
-    Task UpdatePhotoAsync(UpdatePhotoDto updatePhotoDto);
-    Task<List<PhotoDto>> GetLatestPhotos(int NumberOfPhotos);
+    Task<LookupsResponse> GetLookupsAsync(); 
+    Task<PhotoPageResponse> GetPhotosPageAsync(PhotoFilterRequest photoFilterRequest);
+    Task UpdatePhotoAsync(UpdatePhotoRequest updatePhotoRequest);
+    Task<List<PhotoResponse>> GetLatestPhotos(int NumberOfPhotos);
 }

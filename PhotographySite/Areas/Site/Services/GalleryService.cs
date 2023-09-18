@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
-using PhotographySite.Helpers;
+using PhotographySite.Dto.Response;
 using PhotographySite.Models;
 
 namespace PhotographySite.Areas.Site.Services;
@@ -21,37 +20,27 @@ public class GalleryService : IGalleryService
         _galleryValidator = galleryValidator;
     }
 
-    public async Task<GalleryDto> GetGalleryAsync(Guid userId, long id)
-    { 
-		GalleryDto galleryDto;
-
-		if (userId.Equals(Guid.Empty))
-			galleryDto = _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(id));
-		else
-			galleryDto = _mapper.Map<GalleryDto>(await _unitOfWork.Galleries.GetFullGalleryAsync(userId, id));
-
-		galleryDto.AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl();
-        
-        return galleryDto; 
+    public async Task<GalleryResponse> GetGalleryAsync(long id)
+    {  
+		return _mapper.Map<GalleryResponse>(await _unitOfWork.Galleries.GetFullGalleryAsync(id)); 
 	}
 
-    public async Task<GalleriesDto> GetGalleriesAsync()
+    public async Task<GalleryResponse> GetGalleryAsync(Guid userId, long id)
+    { 
+        return _mapper.Map<GalleryResponse>(await _unitOfWork.Galleries.GetFullGalleryAsync(userId, id));
+    }
+
+    public async Task<GalleriesResponse> GetGalleriesAsync()
     {
-		List<GalleryDto> galleries = _mapper.Map<List<GalleryDto>>(await _unitOfWork.Galleries.AllSortedAsync());
+		var galleries = _mapper.Map<List<GalleryResponse>>(await _unitOfWork.Galleries.AllSortedAsync());
 
-        foreach(GalleryDto gallery in galleries)
+        foreach(GalleryResponse gallery in galleries)
         {
-            Photo randomPhoto = (await _unitOfWork.GalleryPhotos.GetRandomGalleryPhotoAsync(gallery.Id));
-
+            var randomPhoto = (await _unitOfWork.GalleryPhotos.GetRandomGalleryPhotoAsync(gallery.Id));
             if(randomPhoto != null)
 			    gallery.RandomPhoto = randomPhoto.FileName;	 
 		}
-
-        GalleriesDto galleriesDto = new GalleriesDto()
-        {
-            GalleryListDto = galleries 
-        };
-
-        return galleriesDto;
+  
+        return new GalleriesResponse() { Galleries = galleries };
     } 
 }

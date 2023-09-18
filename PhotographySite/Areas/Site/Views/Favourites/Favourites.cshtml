@@ -2,7 +2,7 @@
     ViewData["Title"] = " - Favourites";
 }
 
-@model PhotographySite.Models.Dto.FavouritesDto
+@model PhotographySite.Areas.Site.Dto.Response.FavouritesResponse
 
 <div>
     <h3 class="page-title">Favourites</h3>
@@ -15,7 +15,7 @@
         { 
             foreach (var photo in Model.Favourites)
             {
-                <img id="@photo.PhotoId" class="lightboxed gallery-photo" rel="group1" src="@Model.AzureStoragePath@photo.FileName" data-caption="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
+                <img id="@photo.PhotoId" class="lightboxed gallery-photo" rel="group1" src="@Model.AzureStoragePhotosContainerUrl@photo.FileName" data-caption="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
             }
         }        
     }
@@ -24,9 +24,9 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div id="contextMenu" class="context-menu" style="display: none">
+    <div id="context-menu" class="context-menu" style="display: none">
         <ul class="menu">
-            <li data-id="0"><a href="#">Delete from Favourites</a></li>
+            <li data-id="0"><a href="#">Delete from favourites</a></li>
         </ul>
     </div>
 
@@ -35,11 +35,5 @@
  
 @section Scripts
 {
-    <script type="module" src="@Url.Content("~/lib/lightboxed/lightboxed.js")"></script>
-    <script type="module" src="@Url.Content("~/js/site/favourites.js")"></script>
-
-    @if (User.Identity.IsAuthenticated)
-    { 
-        <script type="module" src="@Url.Content("~/js/site/favourites.js")"></script> 
-    }
+    <script type="module" src="@Url.Content("~/js/min/site-favourites-logged-in.min.js")"></script>
 }

@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhotographySite.Areas.Admin.Dtos;
+using PhotographySite.Areas.Admin.Dto.Request;
 using PhotographySite.Areas.Admin.Services.Interfaces;
-using PhotographySite.Models.Dto;
+using PhotographySite.Dto.Request;
+using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
 [Authorize(Roles = "Admin")]
 [Area("Admin")]
 [Route("admin/gallery")]
+[AutoValidateAntiforgeryToken]
 public class GalleryController : Controller
 {
     private IPhotoCatalogService _photoCatalogService;
@@ -25,49 +27,43 @@ public class GalleryController : Controller
     [HttpGet("{id}")]
     public async Task<IActionResult> Gallery(long id)
     {
-        GalleriesDto galleriesDto = new()
+        GalleriesResponse galleriesResponse = new()
         {			
 			SelectedGallery = await _galleryService.GetGalleryAsync(id),
             SelectGalleryPhotos = await _galleryPhotoService.GetGalleryPhotosAsync(id),
-            LookupsDto = await _photoCatalogService.GetLookupsAsync(),
-            GalleryListDto = await _galleryService.GetGalleriesAsync(),
-            PhotoListDto = await _photoCatalogService.GetPhotosPageAsync(new PhotoFilterDto()
+            LookupsResponse = await _photoCatalogService.GetLookupsAsync(),
+            Galleries = await _galleryService.GetGalleriesAsync(),
+            Photos = await _photoCatalogService.GetPhotosPageAsync(new PhotoFilterRequest()
             {
                 PageIndex = 1,
                 PageSize = 25,
             })
         };
 
-        return View("Galleries", galleriesDto);
+        return View("Galleries", galleriesResponse);
     }
 
-    [HttpPost("search")]
-    public async Task<JsonResult> SearchPhotosAsync([FromBody] SearchPhotosDto searchPhotosDto)
-    {
-        return new JsonResult(await _galleryService.SearchPhotosAsync(searchPhotosDto)); 
+    [HttpPost("search")] 
+	public async Task<IActionResult> SearchPhotosAsync([FromBody] SearchPhotosRequest searchPhotosRequest)
+    { 
+        return Ok(await _galleryService.SearchPhotosAsync(searchPhotosRequest)); 
     }
 
-    [HttpPost("save/name")]
-    public async Task<JsonResult> SaveName([FromBody] GalleryNameDto galleryNameDto)
-    {
-        galleryNameDto = await _galleryService.SaveName(galleryNameDto);
-        Response.StatusCode = galleryNameDto.IsValid ? 200 : 400;
-        return new JsonResult(galleryNameDto);
+    [HttpPost("save/name")] 
+	public async Task<IActionResult> UpdateGallery([FromBody] GalleryUpdateRequest galleryUpdateRequest)
+    {  
+        return Ok(await _galleryService.UpdateAsync(galleryUpdateRequest)); 
     }
 
-    [HttpPost("new/save")]
-    public async Task<JsonResult> SaveNewGallery([FromBody] GalleryNameDto galleryNameDto)
+    [HttpPost("new/save")] 
+	public async Task<IActionResult> SaveNewGallery([FromBody] GalleryUpdateRequest galleryUpdateRequest)
     {
-        galleryNameDto = await _galleryService.SaveNewGalleryAsync(galleryNameDto);
-
-        Response.StatusCode = galleryNameDto.IsValid ? 200 : 400;
-        return new JsonResult(galleryNameDto); 
+        return Ok(await _galleryService.AddAsync(galleryUpdateRequest)); 
     }
 
     [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> DeleteGallery(long id)
-    {
-        await _galleryService.DeleteAsync(id);
-        return Ok();
+    public async Task<IActionResult> DeleteGallery(int id)
+    { 
+        return Ok(await _galleryService.DeleteAsync(id));
     }
 }

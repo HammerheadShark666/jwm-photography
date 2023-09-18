@@ -2,36 +2,35 @@
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Models;
 
-namespace PhotographySite.Areas.Admin.Business
-{
-    public class FavouriteValidator : AbstractValidator<Favourite>
-    {       
-        private readonly IUnitOfWork _unitOfWork;
+namespace PhotographySite.Areas.Admin.Business;
 
-        public FavouriteValidator(IUnitOfWork unitOfWork)
-        {   
-            _unitOfWork= unitOfWork;    
+public class FavouriteValidator : AbstractValidator<Favourite>
+{       
+    private readonly IUnitOfWork _unitOfWork;
 
-            RuleSet("BeforeSave", () =>
-            {              
-                //RuleFor(gallery => gallery.Name)
-                //    .NotEmpty().WithMessage("Gallery name is required.")
-                //    .Length(1, 150).WithMessage("Gallery name must have a length between 1 and 150.");
+    public FavouriteValidator(IUnitOfWork unitOfWork)
+    {   
+        _unitOfWork= unitOfWork;    
 
-                //RuleFor(gallery => gallery).MustAsync(async (gallery, cancellation) =>
-                //{
-                //    return await GalleryNameExists(gallery);
-                //}).WithMessage(gallery => $"The gallery '{gallery.Name}' already exists.");
-            });                
-        }
+        RuleSet("BeforeSave", () =>
+        { 
+            RuleFor(favourite => favourite).MustAsync(async (favourite, cancellation) =>
+            {
+                return await PhotoAlreadyAFavourite(favourite);
+            }).WithMessage("The photo is already a favourite.");
+        });
 
-        //protected async Task<bool> GalleryNameExists(Gallery gallery)
-        //{
-        // //   throw new Exception("error occurred");
+        RuleSet("AfterSave", () => {
 
-        //    return gallery.Id == 0
-        //        ? !(await _unitOfWork.Favourites.ExistsAsync(gallery.Name))
-        //        : !(await _unitOfWork.Favourites.ExistsAsync(gallery.Id, gallery.Name));
-        //}
+            RuleFor(favourite => favourite)
+                .Null()
+                .WithSeverity(Severity.Info) 
+                .WithMessage("Photo added to favourite.");
+        });
+    } 
+
+    protected async Task<bool> PhotoAlreadyAFavourite(Favourite favourite)
+    { 
+        return !(await _unitOfWork.Favourites.PhotoIsAlreadyAFavourite(favourite));
     }
 }

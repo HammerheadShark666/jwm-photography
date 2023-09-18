@@ -1,11 +1,11 @@
-﻿@model PhotographySite.Areas.Admin.Dtos.LookupsDto
+﻿@model PhotographySite.Dto.Response.LookupsResponse
 
-<div class="collapse" id="collapseGalleryPhotoSearch">
+<div class="collapse" id="collapse-gallery-photo-search">
     <div class="card card-body">
         <div class="row">
 
-            <div class="col-md-6 col-sm-12">
-                <div class="input-group input-group-sm mb-3 search-control-input">
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="input-group input-group-sm search-control-input">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Title</span>
                     </div>
@@ -13,8 +13,8 @@
                 </div>
             </div>
 
-            <div class="col-md-2 col-sm-12">
-                <div class="form-group">
+            <div class="col-lg-2 col-md-8 col-sm-12">
+                <div class="input-group input-group-sm">
                     <select class="form-control search-control-select" id="search-country-select">
                         @foreach (var country in Model.Countries)
                         {
@@ -24,8 +24,8 @@
                 </div>
             </div>
 
-            <div class="col-md-2 col-sm-12">
-                <div class="form-group">
+            <div class="col-lg-2 col-md-8 col-sm-12">
+                <div class="input-group input-group-sm">
                     <select class="form-control search-control-select" id="search-category-select">
                         @foreach (var category in Model.Categories)
                         {
@@ -35,8 +35,8 @@
                 </div>
             </div>
 
-            <div class="col-md-2 col-sm-12">
-                <div class="form-group">
+            <div class="col-lg-2 col-md-8 col-sm-12">
+                <div class="input-group input-group-sm">
                     <select class="form-control search-control-select" id="search-palette-select">
                         @foreach (var palette in Model.Palettes)
                         {

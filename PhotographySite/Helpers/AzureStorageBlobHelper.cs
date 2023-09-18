@@ -1,8 +1,9 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using PhotographySite.Helpers; 
 using PhotographySite.Helpers.Interface;
 
-namespace SwanSong.Helper;
+namespace PhotographySite.Helper;
 
 public class AzureStorageBlobHelper : Base, IAzureStorageBlobHelper
 {
@@ -15,19 +16,17 @@ public class AzureStorageBlobHelper : Base, IAzureStorageBlobHelper
         fileStream = file.OpenReadStream();
         var blobClient = new BlobContainerClient(GetStorageConnection(), containerName);
         var blob = blobClient.GetBlobClient(fileName);            
-		    await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = "image/jpeg" });
+		await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = Constants.FileContentType });
+
         return;
     }
 
     public async Task SaveBlobsToAzureStorageContainerAsync(List<IFormFile> files, string containerName)
     { 
-        foreach (IFormFile file in files) {        
-            Stream fileStream = new MemoryStream();
-            fileStream = file.OpenReadStream();
-            var blobClient = new BlobContainerClient(GetStorageConnection(), containerName);
-            var blob = blobClient.GetBlobClient(file.FileName);
-            await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = "image/jpeg" }); 
+        foreach (IFormFile file in files) {          
+            await SaveBlobToAzureStorageContainerAsync(file, containerName, file.FileName);
         }
+
         return;
     }
 

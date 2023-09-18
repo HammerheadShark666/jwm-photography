@@ -1,8 +1,8 @@
-﻿using PhotographySite.Areas.Admin.Dtos;
+﻿using PhotographySite.Areas.Site.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Services.Interfaces;
 
 public interface ICountryService
 {
-	Task<List<CountryDto>> GetCountriesAsync();
+	Task<List<CountryResponse>> GetCountriesAsync();
 }

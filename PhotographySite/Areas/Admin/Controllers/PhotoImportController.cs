@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Dto;
+using PhotographySite.Dto.Response;
+using PhotographySite.Helpers;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
 [Authorize(Roles = "Admin")]
 [Area("Admin")]
 [Route("admin/photo")]
+[AutoValidateAntiforgeryToken]
 public class PhotoImportController : Controller
 {   
     private IPhotoImportService _photoImportService;
@@ -22,12 +26,18 @@ public class PhotoImportController : Controller
         return View("Import");
     }
 
-    [HttpPost("import")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Import(List<IFormFile> files)
+    [HttpPost("import")] 
+	public async Task<IActionResult> Import(List<IFormFile> files)
     {       
         if(files == null || files.Count() == 0)         
-            return BadRequest("No photos have been selected to be imported.");  
+            return BadRequest(new BaseResponse()
+            {
+                IsValid = false,
+
+                Messages = new List<Message>  {
+                    new Message() { Severity = "error", Text = ConstantMessages.NoPhotosToImport}
+                }
+            });        
          
         return PartialView("_ImportedPhotosGrid", await _photoImportService.ImportAsync(files)); 
     }     

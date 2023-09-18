@@ -1,19 +1,16 @@
-﻿using PhotographySite.Areas.Admin.Dtos;
-using PhotographySite.Models.Dto;
+﻿using PhotographySite.Areas.Admin.Dto.Request;
+using PhotographySite.Areas.Admin.Dto.Response;
+using PhotographySite.Dto.Request;
+using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Services.Interfaces;
 
 public interface IGalleryService
 {
-    Task<GalleryDto> GetGalleryAsync(long id);
-
-    Task<List<GalleryDto>> GetGalleriesAsync();
-
-    Task<SearchPhotosResultsDto> SearchPhotosAsync(SearchPhotosDto searchPhotosDto);
-
-    Task<GalleryNameDto> SaveName(GalleryNameDto galleryNameDto);
-
-    Task<GalleryNameDto> SaveNewGalleryAsync(GalleryNameDto galleryNameDto);
-
-    Task DeleteAsync(long id);
+    Task<GalleryResponse> GetGalleryAsync(long id);
+    Task<List<GalleryResponse>> GetGalleriesAsync();
+    Task<SearchPhotosResponse> SearchPhotosAsync(SearchPhotosRequest searchPhotosRequest);
+    Task<GalleryActionResponse> AddAsync(GalleryUpdateRequest galleryAddRequest);
+    Task<GalleryActionResponse> UpdateAsync(GalleryUpdateRequest galleryUpdateRequest);
+    Task<GalleryActionResponse> DeleteAsync(int id);
 }

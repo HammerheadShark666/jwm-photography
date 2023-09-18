@@ -12,7 +12,7 @@ namespace PhotographySite.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Favourite",
+                name: "Gallery",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
@@ -22,7 +22,7 @@ namespace PhotographySite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Favourite", x => new { x.UserId, x.PhotoId });
+                    table.PrimaryKey("PK_Gallery", x => new { x.UserId, x.PhotoId });
                 });
         }
 
@@ -30,7 +30,7 @@ namespace PhotographySite.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Favourite");
+                name: "Gallery");
         }
     }
 }

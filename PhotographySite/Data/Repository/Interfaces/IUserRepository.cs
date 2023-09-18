@@ -2,5 +2,5 @@
 
 public interface IUserRepository
 {
-    Guid GetUserIdAsync(string userName);
+    Guid GetUserId(string userName);
 }

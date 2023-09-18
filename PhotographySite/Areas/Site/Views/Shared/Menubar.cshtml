@@ -1,4 +1,4 @@
-﻿@model PhotographySite.Models.Dto.MenuBarDto
+﻿@model PhotographySite.Dto.Request.MenuBarRequest
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="container-fluid">
@@ -12,7 +12,7 @@
 
 			@{
 				var routeUrl = Url.RouteUrl(ViewContext.RouteData.Values);
-			 }
+			 } 
 
 			<ul id="site-menu-bar" class="navbar-nav ms-auto mb-2 mb-lg-0">
 				<li class="nav-item">
@@ -25,9 +25,9 @@
 
 					<ul id="menu-bar" class="dropdown-menu site-galleries" aria-labelledby="navbarDropdown">
 
-						@if (Model.Galleries.GalleryListDto != null)
+						@if (Model.Galleries.Galleries != null)
 						{
-							@foreach (var gallery in Model.Galleries.GalleryListDto)
+							@foreach (var gallery in Model.Galleries.Galleries)
 							{
 								<li class="site-gallery-menu-item">
 									<a class="dropdown-item" href="/gallery/@gallery.Id">
@@ -66,7 +66,7 @@
 										<span class="fas fa-caret-down"></span>
 									</a>
 									<ul id="user-galleries" class="item-show-2">
-									<li data-user-gallary-menu-id="0"><a id="new-user-gallery" data-bs-target="#newUserGalleryModal" class="user-gallery-item" href="#">New User Gallery...</a></li>
+										<li data-user-gallary-menu-id="0"><a id="new-user-gallery" data-bs-target="#newUserGalleryModal" class="user-gallery-item" href="#">New User Gallery...</a></li>
 										@if (Model.UserGalleries != null)
 										{
 											@foreach (var gallery in Model.UserGalleries)
@@ -79,7 +79,7 @@
 								<li>
 									@using (Html.BeginForm("LogOff", "Account", FormMethod.Post))
 									{
-										<button class="dropdown-item" type="submit">LogOff</button>
+										<button class="dropdown-item" type="submit">Log out</button>
 									}
 								</li>
 							</ul>
@@ -88,11 +88,11 @@
 				}
 				@if (!this.User.Identity.IsAuthenticated)
 				{
-				<li class="nav-item">			
-					<a class="nav-link" aria-current="page" href="/login">Login</a>					
-				</li>
+					<li class="nav-item">			
+						<a class="nav-link" aria-current="page" href="/login">Login</a>					
+					</li>
 				}
-			</ul>
+			</ul> 
 		</div>
 	</div>
 </nav>

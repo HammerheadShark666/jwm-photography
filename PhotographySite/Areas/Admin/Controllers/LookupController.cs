@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Admin.Services.Interfaces;
-using PhotographySite.Models.Dto;
+using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
@@ -22,9 +22,9 @@ public class LookupController : Controller
     }
 
 	[HttpGet("photo-catalogue")]
-	public async Task<JsonResult> LookupsForPhotoCatalogueAsync()
-	{
-		return new JsonResult(new LookupsPhotoCatalogueDto()
+	public async Task<IActionResult> LookupsForPhotoCatalogueAsync()
+	{ 
+        return Ok(new LookupsResponse()
 		{
 			Countries = await _countryService.GetCountriesAsync(),
 			Categories = await _categoryService.GetCategoriesAsync(),

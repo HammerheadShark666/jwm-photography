@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Areas.Site.Dto.Request;
+using PhotographySite.Areas.Site.Dto.Response;
 using PhotographySite.Areas.Site.Services.Interfaces;
-using PhotographySite.Models.Dto;
+using PhotographySite.Helpers.Exceptions;
+using PhotographySite.Services.Interfaces;
+using SwanSong.Service.Helpers.Exceptions;
 
 namespace PhotographySite.Areas.Site.Controllers;
 
@@ -16,7 +19,10 @@ public class UserGalleryController : BaseController
     private IUserGalleryService _userGalleryService;
     private IUserGalleryPhotoService _userGalleryPhotoService; 
 
-    public UserGalleryController(IPhotoCatalogService photoCatalogService, IUserGalleryService userGalleryService, IUserGalleryPhotoService userGalleryPhotoService, IUserService userService) : base(userService)
+    public UserGalleryController(IPhotoCatalogService photoCatalogService, 
+                                 IUserGalleryService userGalleryService, 
+                                 IUserGalleryPhotoService userGalleryPhotoService, 
+                                 IUserService userService) : base(userService)
     {
         _photoCatalogService = photoCatalogService;
         _userGalleryService = userGalleryService;
@@ -26,78 +32,78 @@ public class UserGalleryController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> Gallery(long id)
     {
-		Guid userId = GetUserId(HttpContext.User.Identity.Name);
+        IsValidUser(); 
 
-		UserGalleriesDto userGalleriesDto = new()
+        UserGalleriesResponse userGalleriesResponse = new()
         {
-            SelectedUserGallery = await _userGalleryService.GetUserGalleryAsync(userId, id),
-            SelectUserGalleryPhotos = await _userGalleryPhotoService.GetGalleryPhotosAsync(id),
-            LookupsDto = await _photoCatalogService.GetLookupsAsync(),
-            UserGalleryListDto = await _userGalleryService.GetUserGalleriesAsync(HttpContext),
-            PhotoListDto = await _photoCatalogService.GetPhotosPageAsync(new PhotoFilterDto()
-            {
-                PageIndex = 1,
-                PageSize = 25,
-            })
+            SelectedGallery = await _userGalleryService.GetUserGalleryAsync(GetUserId(), id),
+            SelectGalleryPhotos = await _userGalleryPhotoService.GetGalleryPhotosAsync(id),
+            LookupsResponse = await _photoCatalogService.GetLookupsAsync(),
+            GalleryResponseList = await _userGalleryService.GetUserGalleriesAsync(HttpContext)  
         };
 
-        return View("UserGalleries", userGalleriesDto);
-    } 
-
-    [HttpPost("save/name")]
-    public async Task<JsonResult> SaveName([FromBody] UserGalleryNameDto userGalleryNameDto)
-    {
-        Guid userId = GetUserId(HttpContext.User.Identity.Name);
-
-        if (userId == Guid.Empty) 
-            return NotAuthorised(userGalleryNameDto);  
-          
-        try
-        {
-            userGalleryNameDto.UserId = userId;
-            userGalleryNameDto = await _userGalleryService.SaveName(userGalleryNameDto);
-            Response.StatusCode = userGalleryNameDto.IsValid ? 200 : 400;
-        }
-        catch(UnauthorizedAccessException ex)
-        {
-            Response.StatusCode = 401;
-            return new JsonResult(new { message = ex.Message });
-        } 
-        
-        return new JsonResult(userGalleryNameDto);       
+        return View("UserGalleries", userGalleriesResponse);
     }
 
-    [HttpPost("new/save")]
-    public async Task<JsonResult> SaveNewGallery([FromBody] UserGalleryNameDto userGalleryNameDto)
-    { 
-		Guid userId = GetUserId(HttpContext.User.Identity.Name);
-
-		if (userId != Guid.Empty)
+    [HttpPost("add")]
+    public async Task<ActionResult<UserGalleryActionResponse>>  Add([FromBody] UserGalleryAddRequest userGalleryAddRequest)
+    {
+        try
         {
-			userGalleryNameDto.UserId = userId;
-			userGalleryNameDto = await _userGalleryService.SaveNewUserGalleryAsync(userGalleryNameDto);
+            IsValidUser();
+            userGalleryAddRequest.UserId = GetUserId();
+         
+            return Ok(await _userGalleryService.AddAsync(userGalleryAddRequest));
+        }
+        catch (FailedValidationException fve)
+        {
+            return BadRequest(fve.FailedValidationResponse);
+        }
+        catch (Exception ex)
+        { 
+            return Problem(ex.Message);
+        } 
+    }
 
-			Response.StatusCode = userGalleryNameDto.IsValid ? 200 : 400;
-			return new JsonResult(userGalleryNameDto);
-		}
+    [HttpPost("update")]
+    public async Task<ActionResult<UserGalleryActionResponse>> Update([FromBody] UserGalleryUpdateRequest userGalleryUpdateRequest)
+    {
+        try
+        {
+            IsValidUser();
+            userGalleryUpdateRequest.UserId = GetUserId();
 
-        Response.StatusCode = 403;
-		return new JsonResult(userGalleryNameDto);
-	}
+            return Ok(await _userGalleryService.UpdateAsync(userGalleryUpdateRequest));
+        }
+        catch (FailedValidationException fve)
+        {
+            return BadRequest(fve.FailedValidationResponse);
+        }
+        catch (Exception ex)
+        { 
+            return Problem(ex.Message);
+        } 
+    }
+
 
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteUserGallery(long id)
     {
-        Guid userId = GetUserId(HttpContext.User.Identity.Name);
-
-        if (userId != Guid.Empty)
+        try
         {
-            await _userGalleryService.DeleteAsync(id);
-            return Ok();
-
+            return Ok(await _userGalleryService.DeleteAsync(id));
         }
-
-        Response.StatusCode = 400;
-        return new JsonResult(new { message = "Not authorised to delete" });
+        catch (UserGalleryNotFoundException cnfe)
+        {
+            return NotFound(cnfe.Message);
+        }
+        catch (FailedValidationException fve)
+        {
+            return BadRequest(fve.FailedValidationResponse);
+        }
+        catch (Exception ex)
+        { 
+            return Problem(ex.Message);
+        } 
     }
 }

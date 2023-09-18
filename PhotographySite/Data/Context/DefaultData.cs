@@ -134,15 +134,5 @@ public class DefaultData
             new Palette { Id = 2, Name = "Black & White" },
             new Palette { Id = 3, Name = "Infrared" }
         };
-    } 
-
-    public static List<Showcase> GetShowcaseDefaultData()
-    {
-        return new List<Showcase>()
-        {
-            new Showcase { Id = 1, Name = "Black & White" },
-            new Showcase { Id = 2, Name = "Mountains" },
-            new Showcase { Id = 3, Name = "Atacama Desert" }
-        };
-    } 
+    }  
 }

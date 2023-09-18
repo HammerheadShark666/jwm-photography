@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = " - Home Page";
+    ViewData["Title"] = "Home Page";
 } 
 
 <div class="text-center">
@@ -10,7 +10,7 @@
     <div class="text-center">
         <h3 class="display-7">Latest Photos</h3>
     </div>
-    <ul id="galleryDestination" class="list"> 
+    <ul id="latest-photos" class="list"> 
         @foreach (var photo in Model.SelectGalleryPhotos)
         {
             <li>
@@ -21,7 +21,6 @@
 </div>  
  
 @section Scripts
-{
-    <script type="module" src="@Url.Content("~/lib/lightboxed/lightboxed.js")"></script>
-    <script type="module" src="@Url.Content("~/js/admin/home.js")"></script>
+{   
+    <script type="module" src="~/js/min/admin-home.min.js" asp-append-version="true"></script>
 }

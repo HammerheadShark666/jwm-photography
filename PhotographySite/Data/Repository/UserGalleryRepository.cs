@@ -5,10 +5,16 @@ using PhotographySite.Models;
 
 namespace PhotographySite.Data.Repository;
 
-public class UserGalleryRepository : BaseRepository<UserGallery>, IUserGalleryRepository
+public class UserGalleryRepository : IUserGalleryRepository
 {
-    public UserGalleryRepository(PhotographySiteDbContext context) : base(context) { }
 
+    private readonly PhotographySiteDbContext _context;
+
+    public UserGalleryRepository(PhotographySiteDbContext context)
+    {
+        _context = context;
+    }
+ 
     public async Task<List<UserGallery>> AllSortedAsync()
     {
         return await _context.UserGallery.OrderBy(userGallery => userGallery.Name).ToListAsync();
@@ -42,8 +48,28 @@ public class UserGalleryRepository : BaseRepository<UserGallery>, IUserGalleryRe
     {
 		return await _context.UserGallery
                                 .Include(userGallery => userGallery.Photos)
-                                .ThenInclude(photos => photos.Photo)
-                                .ThenInclude(photo => photo.Country) 
+                                .ThenInclude(photos => photos.Photo)          
+                                .ThenInclude(photo => photo.Country)
                                 .SingleOrDefaultAsync(userGallery => userGallery.UserId == userId && userGallery.Id == id); 
+    }
+
+    public async Task AddAsync(UserGallery gallery)
+    {
+        await _context.UserGallery.AddAsync(gallery);
+    }
+
+    public void Update(UserGallery userGallery)
+    {
+        _context.UserGallery.Update(userGallery);
+    }
+
+    public void Delete(UserGallery userGallery)
+    {
+        _context.UserGallery.Remove(userGallery);
+    }
+
+    public async Task<UserGallery> ByIdAsync(long id)
+    {
+        return await _context.UserGallery.FindAsync(id);
     }
 }

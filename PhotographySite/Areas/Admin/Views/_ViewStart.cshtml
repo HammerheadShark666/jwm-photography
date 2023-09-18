@@ -1,8 +1,4 @@
-﻿@*@{
-    Layout = "_LayoutAccount";
-}*@
-
-@{
+﻿@{
     var routeController = ViewContext.RouteData.Values["controller"].ToString(); 
     var pages = new List<string> { "Account" };    
     if (pages.Any(routeController.Contains))

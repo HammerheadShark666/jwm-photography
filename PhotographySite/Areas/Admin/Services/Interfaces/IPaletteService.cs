@@ -1,8 +1,8 @@
-﻿using PhotographySite.Models.Dto;
+﻿using PhotographySite.Areas.Site.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Services.Interfaces;
 
 public interface IPaletteService
 {
-	Task<List<PaletteDto>> GetPalettesAsync();
+	Task<List<PaletteResponse>> GetPalettesAsync();
 }

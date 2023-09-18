@@ -38,9 +38,7 @@
 @media all and (min-width: 992px) {
     .dropdown-large {
         min-width: 500px; 
-    }
-
-    
+    } 
 } 
 
 .py-5 {
@@ -64,13 +62,13 @@
 .gallery-item div { 
     cursor: pointer;
     height: 100%;
-} 
+}
 
-.photoModalCloseSmall {
+.photo-modal-close-small {
     width: 25px;
 }
 
-.photoModalClose {
+.photo-modal-close {
     background-color: #fff;
     color: black;
 }
@@ -127,12 +125,12 @@ ul li:hover {
 }
 
 .delete-template {
-    width: 30px;
-    height: 30px;
+    max-width: 30%;
+    max-height: 30%; 
     z-index: 9;
     position: absolute;
-    top: 15px;
-    right: 0;
+    top: 10px;
+    right: 5px;
 } 
 
  /*Create four equal columns that sits next to each other */
@@ -189,6 +187,7 @@ ul li:hover {
 .context-menu {
     position: absolute;
     background-color:black;
+    z-index: 12;
 }
 
 .context-menu ul {
@@ -201,12 +200,13 @@ ul li:hover {
     flex-direction: column;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 10px 20px rgb(64 64 64 / 15%);
+   /* box-shadow: 0 10px 20px rgb(64 64 64 / 15%);*/
     padding: 10px 0 0 0;
 }
 
 .context-menu .menu > li > a {
     font: inherit;
+    font-size: .7rem;
     border: 0;
     padding: 10px 15px 10px 15px;
     width: 100%;
@@ -241,7 +241,7 @@ ul li:hover {
     margin-bottom: 20px;
 }
 
-#import-alert {
+#import-alerts {
     margin-top: 20px;
 }
  
@@ -271,7 +271,6 @@ ul li:hover {
     flex-wrap: inherit;
     align-items: center;
     justify-content: space-between;
-    /*width: 100%;*/
     margin: 0 2%;
 }
 
@@ -302,8 +301,7 @@ ul li:hover {
 .navbar {
     padding-top: 0px !important;
     padding-bottom: 0px !important;
-}
-
+} 
 
 .work-area {
     padding: 10px;
@@ -319,118 +317,27 @@ ul li:hover {
 
 .menu-column {
     background-color: #1b1b1b;
-}
-
-/*.jsgrid-pager {
-    padding-left: 20px;
-    display: flex;
-    list-style: none;
-    border-radius: .25rem;
-    width: 100%;
-    margin: 0 auto;
-}
-
-.jsgrid-pager-page, .jsgrid-pager-nav-button {
-    position: relative;
-    display: block;
-    padding: .5rem .75rem !important;
-    margin-left: -1px;
-    line-height: 1.25;
-    color: #007bff;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-}
-
-.jsgrid-pager span:first-child {
-    margin-left: 0 !important;
-    border-top-left-radius: .25rem !important;
-    border-bottom-left-radius: .25rem !important;
-}
-
-.jsgrid-pager span:last-child {
-    border-top-right-radius: .25rem;
-    border-bottom-right-radius: .25rem;
-}
-
-.jsgrid-pager-nav-inactive-button {
-    display: block !important;
-    pointer-events: auto !important;
-}
-
-    .jsgrid-pager-nav-inactive-button a {
-        color: #007bff !important;
-    }
-
-.jsgrid-pager-page:hover, .jsgrid-pager-nav-button:hover {
-    z-index: 2;
-    color: #0056b3;
-    text-decoration: none;
-    background-color: #e9ecef;
-    border-color: #dee2e6
-}
-
-.jsgrid-pager-page:focus, .jsgrid-pager-nav-button:focus {
-    z-index: 2;
-    outline: 0;
-    box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25)
-}
-
-.jsgrid-pager-current-page {
-    font-weight: 400 !important;
-    cursor: pointer !important;
-    z-index: 1;
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.jsgrid-pager-current-page:hover {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.jsgrid-pager-container {
-    background-color: #fcfcfc;
-    border: 1px solid #e9e9e9;
-}
-*/
-
+}  
 
 .row {
    --bs-gutter-x:0;
 }
- 
-/*.vertical-menu a {
-    background-color: #000;*/ /* Grey background color */
-    /*color: white;*/ /* Black text color */
-    /*display: block;*/ /* Make the links appear below each other */
-    /*padding: 12px;*/ /* Add some padding */
-    /*text-decoration: none;*/ /* Remove underline from links */
-/*}
 
-.vertical-menu a:hover {
-    background-color: #ccc;*/ /* Dark grey background on mouse-over */
-/*}
-
-.vertical-menu a.active {
-    background-color: #04AA6D;*/ /* Add a green color to the "active/current" link */
-    /*color: white;
-}*/
-
-.search-control-select {    
-    margin:5px;
+.search-control-select {
+    padding: .5rem !important;
+    margin: 0px 5px 5px 5px;
     width: 93%;
+    font-size: .775rem !important;
 }
 
 .search-control-input {
-    margin: 5px 5px 5px 5px !important;
+   /* margin: 5px 5px 0px 5px !important;*/
     width: auto;
 }
 
 .gallery-search-photos-search-button {
     float: right;
-    margin-right: 10px;
+    margin-right: 5px!important;
     width: 100px;
 }
 
@@ -448,6 +355,8 @@ ul li:hover {
     padding-top: 5px;
     border: none;
     font-size: 1em;
+    float: right;
+    margin-right: 10px;
 }
 
 .search-row button:hover {
@@ -458,7 +367,7 @@ ul li:hover {
     margin-bottom: 5px;
 } 
 
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+/*@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');*/
 
 * {
     margin: 0;
@@ -481,7 +390,7 @@ ul li:hover {
 
 .sidebar .text {
     color: white;
-    font-size: 15px;
+    font-size: .8rem;
     font-weight: 600;
     line-height: 65px;
     text-align: center;
@@ -496,7 +405,7 @@ ul li:hover {
 nav ul {
     background: #1b1b1b;
     height: 100%;
-    width: 100%;
+    /*width: 100%;*/
     list-style: none;
     padding-left: 10px;
 }
@@ -514,7 +423,7 @@ nav ul li a {
     position: relative;
     color: white;
     text-decoration: none;
-    font-size: 13px;
+    font-size: .8rem;
     padding-left: 14px;
     font-weight: 500;
     display: block;
@@ -556,7 +465,7 @@ nav ul ul li {
 }
 
 nav ul ul li a {
-    font-size: 12px;
+    font-size: .8rem;
     color: #e6e6e6;
 }
 
@@ -564,6 +473,11 @@ nav ul li.active ul li a {
     color: #e6e6e6;
     background: #1b1b1b;
     border-left-color: transparent;
+}
+
+.active-menu-item {    
+    font-weight: 600;
+    color: white;
 }
 
 a:hover {
@@ -622,8 +536,8 @@ nav ul li a span.rotate {
     padding: 5px;
     margin: 5px;
 }
- 
-#collapseGalleryPhotoSearch {
+
+#collapse-gallery-photo-search {
     margin-bottom: 10px;
 }
 
@@ -640,16 +554,22 @@ nav ul li a span.rotate {
     color: #FC5404;
 }
 
-#galleryDestination {
-    padding: 0px;
-    min-height:50px;
+#gallery-destination {
+    padding: 0px; 
+    min-height: 300px;
+    background-color: linen;
 }
 
-#galleryDestination, #gallerySource {
+#gallery-source {
+    height: 100%;
+    background-color: linen;
+}
+
+#gallery-destination, #gallery-source {
     padding-left: 0px;
 }
 
-#galleryDestination li, #gallerySource li {
+#gallery-destination li, #gallery-source li {
     padding-right: 0px;
 }
 
@@ -676,29 +596,25 @@ nav ul li a span.rotate {
 
 .delete-gallery:hover {
     cursor: pointer;
-} 
+}
 
-#deleteGalleryModal {
+#delete-gallery-modal {
     color: white;
 }
 
 .menu-title {
    color: white;
-}
-
-.alert {
-    display: none !important;
-}
+} 
 
 #search-results-photos { 
-    height: 400px;
+    min-height: 400px;
 }
 
 .card-body-photos {
     padding: 0.5rem 0.5rem;
 }
 
-#collapseGalleryPhotoSearch .card-body {
+#collapse-gallery-photo-search .card-body {
     padding: 0.5rem 0.5rem;
 }
 
@@ -747,5 +663,21 @@ nav ul li a span.rotate {
 
 div#lightboxed--content .lightboxed--frame img {
     border: solid 5px white !important;
-}  
+}
 
+#latest-photos {
+    padding: 0px;
+    min-height: 300px; 
+}
+
+#latest-photos {
+    padding-left: 0px;
+}
+
+#latest-photos li {
+    padding-right: 0px;
+}
+
+#new-gallery-alert {
+    display: block;
+}

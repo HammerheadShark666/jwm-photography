@@ -1,0 +1,17 @@
+﻿@model PhotographySite.Areas.Site.Dto.Response.UserGalleryResponse
+
+@if (Model.Photos != null)
+{
+    var photos = Model.Photos.OrderBy(p => p.Order);
+
+    foreach (var photo in photos)
+    {
+        <div class="gallery-image-container">
+            <img id="@photo.PhotoId" class="lightboxed gallery-photo site-image" rel="group1" src="@Model.AzureStoragePhotosContainerUrl@photo.FileName" title="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
+            @if (photo.IsFavourite)
+            {
+                <img class="gallery-image-favourite" src="~/images/icons8-orange-heart-48.png" class="like-icon">
+            }
+        </div>
+    }
+}        

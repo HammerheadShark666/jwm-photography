@@ -1,10 +1,10 @@
-﻿using PhotographySite.Areas.Admin.Dtos; 
+﻿using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Site.Services.Interfaces;
 
 public interface IGalleryService
 {
-    Task<GalleryDto> GetGalleryAsync(Guid userId, long id);
-
-    Task<GalleriesDto> GetGalleriesAsync(); 
+    Task<GalleryResponse> GetGalleryAsync(long id);
+    Task<GalleryResponse> GetGalleryAsync(Guid userId, long id);
+    Task<GalleriesResponse> GetGalleriesAsync(); 
 }

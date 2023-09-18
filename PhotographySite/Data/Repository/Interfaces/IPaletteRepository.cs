@@ -2,7 +2,8 @@
 
 namespace PhotographySite.Data.Repository.Interfaces;
 
-public interface IPaletteRepository : IBaseRepository<Palette>
+public interface IPaletteRepository
 {
     Task<List<Palette>> AllSortedAsync();
+    Task<Palette> ByIdAsync(int id);
 }

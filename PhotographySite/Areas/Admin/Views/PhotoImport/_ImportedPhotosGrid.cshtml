@@ -1,4 +1,4 @@
-﻿@model PhotographySite.Areas.Admin.Dtos.SavedPhotosDto
+﻿@model PhotographySite.Areas.Admin.Dto.Response.SavedPhotosResponse
 
 <div class="card p-3 shadow import-results-container">	
 	<nav>
@@ -9,10 +9,10 @@
 	</nav>
 	<div class="tab-content p-3 border bg-light" id="nav-tabContent">
 		<div class="tab-pane fade active show" id="nav-saved-photos" role="tabpanel" aria-labelledby="nav-saved-photos-tab">
-			 <div id="importPhotosGrid"></div>
+			 <div id="import-photos-grid"></div>
 		</div>
 		<div class="tab-pane fade" id="nav-existing-photos" role="tabpanel" aria-labelledby="nav-existing-photos-tab">
-			<div id="failedToImportPhotosGrid"></div>
+			<div id="failed-to-import-photos-grid"></div>
 		</div>
 
 	</div>
@@ -23,9 +23,9 @@
 <script>
     var savedPhotos = @Html.Raw(Json.Serialize(Model.SavedPhotos));
     var existingPhotos = @Html.Raw(Json.Serialize(Model.ExistingPhotos));
-    var countries = @Html.Raw(Json.Serialize(Model.Countries));
-    var categories = @Html.Raw(Json.Serialize(Model.Categories));  
-	var palettes = @Html.Raw(Json.Serialize(Model.Palettes));
-	var azureStoragePhotosContainerUrl = @Html.Raw(Json.Serialize(Model.AzureStoragePhotosContainerUrl));
+    var countries = @Html.Raw(Json.Serialize(Model.Lookups.Countries));
+	var categories = @Html.Raw(Json.Serialize(Model.Lookups.Categories));
+	var palettes = @Html.Raw(Json.Serialize(Model.Lookups.Palettes));
+	var azureStoragePhotosContainerUrl = @Html.Raw(Json.Serialize(Model.Lookups.AzureStoragePhotosContainerUrl));
 </script>
 

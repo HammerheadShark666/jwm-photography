@@ -408,7 +408,7 @@ namespace PhotographySite.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PhotographySite.Models.Favourite", b =>
+            modelBuilder.Entity("PhotographySite.Models.Gallery", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("UNIQUEIDENTIFIER");
@@ -420,7 +420,7 @@ namespace PhotographySite.Migrations
 
                     b.HasIndex("PhotoId");
 
-                    b.ToTable("Favourite");
+                    b.ToTable("Gallery");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Gallery", b =>
@@ -943,10 +943,10 @@ namespace PhotographySite.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PhotographySite.Models.Favourite", b =>
+            modelBuilder.Entity("PhotographySite.Models.Gallery", b =>
                 {
                     b.HasOne("PhotographySite.Models.Photo", "Photo")
-                        .WithMany("Favourites")
+                        .WithMany("Gallerys")
                         .HasForeignKey("PhotoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1016,7 +1016,7 @@ namespace PhotographySite.Migrations
 
             modelBuilder.Entity("PhotographySite.Models.Photo", b =>
                 {
-                    b.Navigation("Favourites");
+                    b.Navigation("Gallerys");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.UserGallery", b =>

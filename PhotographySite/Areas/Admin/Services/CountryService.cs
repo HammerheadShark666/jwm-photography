@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Areas.Site.Dto.Response;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 
 namespace PhotographySite.Areas.Admin.Services;
@@ -16,8 +16,8 @@ public class CountryService : ICountryService
 		_mapper = mapper;
 	}
 
-	public async Task<List<CountryDto>> GetCountriesAsync()
+	public async Task<List<CountryResponse>> GetCountriesAsync()
 	{
-		return _mapper.Map<List<CountryDto>>(await _unitOfWork.Countries.AllSortedAsync());
+		return _mapper.Map<List<CountryResponse>>(await _unitOfWork.Countries.AllSortedAsync());
 	}
 }

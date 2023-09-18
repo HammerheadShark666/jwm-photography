@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
+using PhotographySite.Dto.Response;
 using PhotographySite.Helpers;
 using PhotographySite.Models;
-using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Admin.Services;
 
@@ -29,14 +29,14 @@ public class MontageService : IMontageService
 
         montage = await _unitOfWork.Montages.AddAsync(montage);        
         await UpdateMontageColumnOrderAsync(column, order, montage);
-        _unitOfWork.Complete();
+        await _unitOfWork.Complete();
 
         return montage;
     }
 
     public async Task MoveImageTemplateAsync(int id, int column, int order)
     {
-        Montage montageToMove = await _unitOfWork.Montages.ByIdAsync(id);
+        var montageToMove = await _unitOfWork.Montages.ByIdAsync(id);
 
         if (montageToMove != null)
         {
@@ -48,38 +48,37 @@ public class MontageService : IMontageService
 
             _unitOfWork.Montages.Update(montageToMove);
             await UpdateMontageColumnOrderAsync(originalColumn, originalOrder, montageToMove);
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
         }
     }
 
     public async Task DeleteImageTemplateAsync(int id)
     {
-        Montage montageToDelete = await _unitOfWork.Montages.ByIdAsync(id);
+        var montageToDelete = await _unitOfWork.Montages.ByIdAsync(id);
 
         if (montageToDelete != null)
         {
-            _unitOfWork.Montages.Remove(montageToDelete);
+            _unitOfWork.Montages.Delete(montageToDelete);
 
-            List<Montage> montages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montageToDelete.Column && m.Order > montageToDelete.Order)).OrderBy(m => m.Order).ToList<Montage>();
+            var montages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montageToDelete.Column && m.Order > montageToDelete.Order)).OrderBy(m => m.Order).ToList<Montage>();
             UpdateMontagesOrder(montages, montageToDelete.Order, null);
 
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
         }
     }
 
-    public async Task<MontagesDto> GetMontageTemplatesAsync()
+    public async Task<MontagesResponse> GetMontageTemplatesAsync()
     {
-        List<Montage> montages = await _unitOfWork.Montages.AllSortedAsync();
+        var montages = await _unitOfWork.Montages.AllSortedAsync(); 
 
-        List<List<MontageDto>> montageImagesColumns = new List<List<MontageDto>>();
-        montageImagesColumns.Add(GetMontageTemplatesForColumn(montages, 1));
-        montageImagesColumns.Add(GetMontageTemplatesForColumn(montages, 2));
-        montageImagesColumns.Add(GetMontageTemplatesForColumn(montages, 3));
-        montageImagesColumns.Add(GetMontageTemplatesForColumn(montages, 4));
-
-        return new MontagesDto()
+        return new MontagesResponse()
         {
-            MontageImagesColumns = montageImagesColumns 
+            MontageImagesColumns = new List<List<MontageResponse>> {
+                GetMontageTemplatesForColumn(montages, 1),
+                GetMontageTemplatesForColumn(montages, 2),
+                GetMontageTemplatesForColumn(montages, 3),
+                GetMontageTemplatesForColumn(montages, 4)
+            }
         };
     }
 
@@ -87,22 +86,22 @@ public class MontageService : IMontageService
     {
         if (originalColumn != montage.Column)
         {
-            List<Montage> originalColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == originalColumn && m.Order > originalOrder)).OrderBy(m => m.Order).ToList<Montage>();
+            var originalColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == originalColumn && m.Order > originalOrder)).OrderBy(m => m.Order).ToList<Montage>();
             UpdateMontagesOrder(originalColumnMontages, originalOrder, null);
 
-            List<Montage> newColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montage.Column && m.Order >= montage.Order)).OrderBy(m => m.Order).ToList<Montage>();
+            var newColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montage.Column && m.Order >= montage.Order)).OrderBy(m => m.Order).ToList<Montage>();
             UpdateMontagesOrder(newColumnMontages, montage.Order + 1, null);
         } 
         else if(montage.Id == 0)
         {
-            List<Montage> allColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montage.Column)).OrderBy(m => m.Order).ToList<Montage>();
+            var allColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montage.Column)).OrderBy(m => m.Order).ToList<Montage>();
             
             UpdateMontagesOrder(allColumnMontages, 1, montage.Order);
             allColumnMontages.Insert(montage.Order - 1, montage);
         }
         else
         {
-            List<Montage> allColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montage.Column)).OrderBy(m => m.Order).ToList<Montage>();
+            var allColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montage.Column)).OrderBy(m => m.Order).ToList<Montage>();
             allColumnMontages.RemoveAt(allColumnMontages.FindIndex(m => m.Id == montage.Id));
             allColumnMontages.Insert(montage.Order - 1, montage);
             UpdateMontagesOrder(allColumnMontages, 1, null);
@@ -112,25 +111,20 @@ public class MontageService : IMontageService
     private void UpdateMontagesOrder(List<Montage> montages, int baseOrder, int? ignoreOrder)
     {
         foreach (Montage m in montages)
-        {
-            if (!ignoreOrder.HasValue || ignoreOrder != m.Order) {  
-                m.Order = baseOrder;
-                _unitOfWork.Montages.Update(m);                
-            } 
-            else
-            {
-                baseOrder++;
-                m.Order = baseOrder;
-                _unitOfWork.Montages.Update(m);
-            }
+        { 
+            if ((ignoreOrder.HasValue && ignoreOrder == m.Order)) 
+                baseOrder++;  
+
+            m.Order = baseOrder;
+            _unitOfWork.Montages.Update(m); 
 
             baseOrder++;
         }
     }
 
-    private List<MontageDto> GetMontageTemplatesForColumn(List<Montage> montages, int column)
+    private List<MontageResponse> GetMontageTemplatesForColumn(List<Montage> montages, int column)
     {
-        return MontageHelper.AddMontageTemplateImages(_mapper.Map<List<MontageDto>>(GetColumnMontages(montages, column)));
+        return MontageHelper.AddMontageTemplateImages(_mapper.Map<List<MontageResponse>>(GetColumnMontages(montages, column)));
     }
 
     private List<Montage> GetColumnMontages(List<Montage> montages, int column)

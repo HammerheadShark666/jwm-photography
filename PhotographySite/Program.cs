@@ -1,37 +1,34 @@
+using PhotographySite.Extensions;
 using PhotographySite.Middleware;
-using PhotographySite.SetUp;
-using PhotographySite.StartUp;
 
-var builder = WebApplication.CreateBuilder(args);
- 
-builder.Services.AddControllersWithViews();
+var builder = WebApplication.CreateBuilder(args); 
 
-SetUpDatabaseContext.Setup(builder);
-SetUpMvc.Setup(builder);
-SetUpController.Setup(builder); 
-SetUpScoped.Setup(builder); 
-SetUpAutoMapper.Setup(builder); 
-SetUpFluentValidation.Setup(builder);
-SetUpIdentity.Setup(builder);
+builder.Services.ConfigureSession();
+builder.Services.ConfigureDatabaseContext(builder.Configuration);
+builder.Services.ConfigureMvc();  
+builder.Services.ConfigureControllers();
+builder.Services.ConfigureScoped();
+builder.Services.ConfigureAutoMapper();
+builder.Services.ConfigureFluentValidation();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureResponseCaching();
  
 var app = builder.Build();
 
 if (builder.Environment.IsDevelopment())
-{
     app.UseDeveloperExceptionPage();
-}
 else
-{
-    app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true); 
-} 
+    app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true);  
 
 app.Logger.LogInformation("Starting Jwm Photography Website {0}", DateTime.Now); 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection(); 
+ 
 app.UseStaticFiles();
-app.UseRouting(); 
+app.UseRouting();
+app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization(); 
-
-SetUpRoutes.Setup(app);
+app.UseSession(); 
+app.ConfigureRoutes();
     
 app.Run();

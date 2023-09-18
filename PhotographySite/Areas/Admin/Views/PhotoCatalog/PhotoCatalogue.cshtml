@@ -1,20 +1,16 @@
-﻿@model PhotographySite.Areas.Admin.Dtos.LookupsDto
+﻿@model PhotographySite.Dto.Response.LookupsResponse
 
 @{
-    ViewData["Title"] = " - Photos Catalogue";
+    ViewData["Title"] = "Photos Catalogue";
 }
 
 <h5>@ViewData["Title"]</h5>
+ 
+<div id="photo-catalogue-alert" class="row"></div>
 
-<div class="row">
-    <div class="col-12">
-        <div id="photo-catalogue-alert" class="alert alert-warning" role="alert"></div>
-    </div>
-</div>
-
-<div id="photosGridContainer" class="row">
+<div id="photos-grid-container" class="row">
     <div class="col">     
-        <div id="catalogPhotosGrid"></div>      
+        <div id="catalog-photos-grid"></div>      
         <div class="pagination-holder black clearfix">
             <ul id="photo-catalogue-results-pagination" class="pagination dark-theme simple-pagination text-center justify-content-center"></ul>
         </div>         
@@ -23,9 +19,9 @@
 
 <input type="hidden" id="selected-photo-id" value="2" /> 
 
-@section Scripts {  
-    <script type="module" src="@Url.Content("~/lib/simplePagination/simplePagination.js")"></script> 
-    <script type="module" src="@Url.Content("~/js/admin/photos-catalogue.js")"></script> 
+@section Scripts {
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script type="module" src="~/js/min/admin-photo-catalogue.min.js" asp-append-version="true"></script>
 }
 
 @await Html.PartialAsync("../Shared/PhotoModal")

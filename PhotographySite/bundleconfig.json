@@ -1,0 +1,232 @@
+[
+  {
+    "outputFileName": "wwwroot/css/min/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site/site.css",
+      "wwwroot/lib/simplePagination/simplePagination.css",
+      "wwwroot/lib/lightboxed/lightboxed.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/min/admin.min.css",
+    "inputFiles": [
+      "wwwroot/css/admin/admin-site.css",
+      "wwwroot/lib/simplePagination/simplePagination.css",
+      "wwwroot/lib/lightboxed/lightboxed.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/min/site-home.min.js",
+    "inputFiles": [
+      "wwwroot/js/main.js",
+      "wwwroot/js/module/UserGallery.js",
+      "wwwroot/js/site/site.js",
+      "wwwroot/js/site/home.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/site-home-logged-in.min.js",
+    "inputFiles": [
+      "wwwroot/js/module/Photo.js",
+      "wwwroot/js/module/UserGallery.js",
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/site/site.js",
+      "wwwroot/js/site/home.js",
+      "wwwroot/js/site/manage-favourites.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/site-gallery.min.js",
+    "inputFiles": [
+      "wwwroot/lib/lightboxed/lightboxed.js",
+      "wwwroot/js/module/UserGallery.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/site/site.js",
+      "wwwroot/js/site/gallery.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/site-gallery-logged-in.min.js",
+    "inputFiles": [
+      "wwwroot/lib/lightboxed/lightboxed.js",
+      "wwwroot/js/module/Photo.js",
+      "wwwroot/js/module/UserGallery.js",
+      "wwwroot/js/modal-message.js",
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/site/site.js",
+      "wwwroot/js/site/favourites.js",
+      "wwwroot/js/site/manage-favourites.js",
+      "wwwroot/js/site/gallery.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/site-favourites-logged-in.min.js",
+    "inputFiles": [
+      "wwwroot/lib/lightboxed/lightboxed.js",
+      "wwwroot/js/module/Photo.js",
+      "wwwroot/js/modal-message.js",
+      "wwwroot/js/module/UserGallery.js",
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/site/site.js",
+      "wwwroot/js/site/favourites.js",
+      "wwwroot/js/site/manage-favourites.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/site-user-gallery-logged-in.min.js",
+    "inputFiles": [
+      "wwwroot/lib/simplePagination/simplePagination.js",
+      "wwwroot/js/modal-message.js",
+      "wwwroot/js/module/UserGallery.js",
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/modal-photo.js",
+      "wwwroot/js/site/site.js",
+      "wwwroot/js/site/user-gallery.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/admin-home.min.js",
+    "inputFiles": [     
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/lib/lightboxed/lightboxed.js",
+      "wwwroot/js/module/Gallery.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/admin/admin-site.js",
+      "wwwroot/js/admin/admin-menu.js",
+      "wwwroot/js/admin/home.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/admin-photo-import.min.js",
+    "inputFiles": [
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/lib/lightboxed/lightboxed.js",
+      "wwwroot/js/module/Gallery.js",
+      "wwwroot/js/module/Photo.js",
+      "wwwroot/js/modal-photo.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/admin/admin-site.js",
+      "wwwroot/js/admin/admin-menu.js",
+      "wwwroot/js/admin/photos-import.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/admin-photo-catalogue.min.js",
+    "inputFiles": [
+      "wwwroot/lib/simplePagination/simplePagination.js",
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/lib/lightboxed/lightboxed.js",
+      "wwwroot/js/module/Gallery.js",
+      "wwwroot/js/module/Photo.js",
+      "wwwroot/js/module/LookUp.js",
+      "wwwroot/js/modal-photo.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/admin/admin-site.js",
+      "wwwroot/js/admin/admin-menu.js",
+      "wwwroot/js/admin/photos-catalogue.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/admin-galleries.min.js",
+    "inputFiles": [
+      "wwwroot/lib/simplePagination/simplePagination.js",
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/js/module/Gallery.js",
+      "wwwroot/js/modal-photo.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/admin/admin-site.js",
+      "wwwroot/js/admin/admin-menu.js",
+      "wwwroot/js/admin/galleries.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/admin-montage.min.js",
+    "inputFiles": [
+      "wwwroot/js/axiosClient.js",
+      "wwwroot/js/module/Montage.js",
+      "wwwroot/js/module/Gallery.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/admin/admin-site.js",
+      "wwwroot/js/admin/admin-menu.js",
+      "wwwroot/js/admin/montage.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  }
+]

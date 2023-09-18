@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PhotographySite.Areas.Site.Services.Interfaces;
+using PhotographySite.Services.Interfaces;
+using System.Security.Authentication;
 
 namespace PhotographySite.Areas.Site.Controllers;
 
@@ -10,16 +11,26 @@ public class BaseController : Controller
 	public BaseController(IUserService userService)
 	{
 		_userService = userService;
-	}
-
-	public Guid GetUserId(string username)
-	{
-		return _userService.GetUserIdAsync(username);
 	} 
+  
+	public void IsValidUser()
+	{ 
+        if((!User.Identity.IsAuthenticated) || (!User.IsInRole("User") && !User.IsInRole("Admin"))) 
+            throw new AuthenticationException();
+    }  
 
-	public JsonResult NotAuthorised(Object entity)
-	{
-        Response.StatusCode = 403;
-        return new JsonResult(entity);
+    public Guid GetUserId()
+    {
+        Guid userId = _userService.GetUserIdAsync(HttpContext.User.Identity.Name);
+        if (userId.Equals(Guid.Empty))
+            throw new AuthenticationException();
+
+        return userId;
+    }
+
+    public bool IsLoggedIn()
+    {
+        Guid userId = _userService.GetUserIdAsync(HttpContext.User.Identity.Name);
+        return userId.Equals(Guid.Empty) ? false : true; 
     }
 }

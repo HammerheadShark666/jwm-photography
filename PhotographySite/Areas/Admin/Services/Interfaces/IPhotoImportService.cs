@@ -1,8 +1,8 @@
-﻿using PhotographySite.Areas.Admin.Dtos;
+﻿using PhotographySite.Areas.Admin.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Services.Interfaces;
 
 public interface IPhotoImportService
 {
-    Task<SavedPhotosDto> ImportAsync(List<IFormFile> photos);
+    Task<SavedPhotosResponse> ImportAsync(List<IFormFile> photos);
 }

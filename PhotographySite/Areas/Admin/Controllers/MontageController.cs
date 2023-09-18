@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Admin.Services.Interfaces;
-using PhotographySite.Models.Dto;
+using PhotographySite.Dto.Request;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
 [Authorize(Roles = "Admin")]
 [Area("Admin")]
 [Route("admin/montage")]
+[AutoValidateAntiforgeryToken]
 public class MontageController : Controller
 {   
     private IMontageService _montageService;
@@ -23,16 +24,16 @@ public class MontageController : Controller
         return View("Montage", await _montageService.GetMontageTemplatesAsync());
     }
 
-    [HttpPost("add-image")]
-    public async Task<JsonResult> AddMontageImageAsync([FromBody] MontageDto montageDto)
+    [HttpPost("add-image")] 
+	public async Task<IActionResult> AddMontageImageAsync([FromBody] MontageRequest montageRequest)
     {
-        return new JsonResult(await _montageService.AddImageTemplateAsync(montageDto.Column, montageDto.Order, montageDto.Orientation));
+        return Ok(await _montageService.AddImageTemplateAsync(montageRequest.Column, montageRequest.Order, montageRequest.Orientation));
     }
 
-    [HttpPost("move-image")]
-    public async Task MoveMontageImageAsync([FromBody] MontageDto montageDto)
+    [HttpPost("move-image")] 
+	public async Task MoveMontageImageAsync([FromBody] MontageRequest montageRequest)
     {
-        await _montageService.MoveImageTemplateAsync(montageDto.Id, montageDto.Column, montageDto.Order); 
+        await _montageService.MoveImageTemplateAsync(montageRequest.Id, montageRequest.Column, montageRequest.Order); 
     }
 
     [HttpDelete("delete-image/{id:int}")]

@@ -1,11 +1,11 @@
 ﻿@{
-    ViewData["Title"] = " - Monatage Manager";
+    ViewData["Title"] = "Montage Manager";
 }
 
-@model PhotographySite.Models.Dto.MontagesDto
+@model PhotographySite.Dto.Response.MontagesResponse
 
 <div class="row">     
-    <h5">@ViewData["Title"]</h5>
+    <h5>@ViewData["Title"]</h5>
 </div> 
 
 <div class="draggable-main row container">
@@ -29,7 +29,7 @@
     }    
 </div>
  
-<div id="contextMenu" class="context-menu" style="display: none">
+<div id="context-menu" class="context-menu" style="display: none">
     <ul class="menu">
         <li data-id="0"><a href="#">Landscape</a></li>
         <li data-id="1"><a href="#">Portrait</a></li>
@@ -40,6 +40,6 @@
 <input type="hidden" id="selected-montage-id" value="1" />
 
 @section Scripts
-{  
-    <script type="module" src="@Url.Content("~/js/admin/montage-manager.js")"></script>     
+{
+    <script type="module" src="~/js/min/admin-montage.min.js" asp-append-version="true"></script>
 }
