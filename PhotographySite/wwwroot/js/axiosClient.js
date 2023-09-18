@@ -1,4 +1,5 @@
-﻿const baseUrl = "https://localhost:7166";
+﻿//const baseUrl = "https://localhost:7166";
+const baseUrl = "https://jwm-photography-mvc.azurewebsites.net";
 
 const axiosClient = axios.create({
     baseURL: baseUrl, 
