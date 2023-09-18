@@ -136,6 +136,7 @@ function getPhotoElements(photos) {
 
     return photoElements;
 }
+
 function getLiImageElement(photo) {
     return "<li><img data-photo-id='" + photo.id + "' data-title='" + photo.title + "' class='draggable-img gallery-thumbnail' src='" + azureStoragePhotosContainerUrl + photo.fileName + "' /></li>";
 }
@@ -154,7 +155,7 @@ function initialiseDragAndDrop() {
             if(destination == "")
                 destination = event.target.id;
         },
-        start() {
+        start: function () {
             source = "";
             destination = "";
         },
