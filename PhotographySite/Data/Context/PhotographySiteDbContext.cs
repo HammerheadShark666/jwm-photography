@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PhotographySite.Areas.Site.Dto.Response;
 using PhotographySite.Data.Context; 
 using PhotographySite.Models;
 
@@ -15,9 +16,7 @@ public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Montage> Montage { get; set; }
     public DbSet<Orientation> Orientation { get; set; }
     public DbSet<Palette> Palette { get; set; }
-    public DbSet<Photo> Photo { get; set; }
-    public DbSet<Showcase> Showcase { get; set; }
-    public DbSet<ShowcasePhoto> ShowcasePhoto { get; set; } 
+    public DbSet<Photo> Photo { get; set; } 
     public DbSet<Favourite> Favourite { get; set; }
     public DbSet<UserGallery> UserGallery { get; set; }
     public DbSet<UserGalleryPhoto> UserGalleryPhoto { get; set; }
@@ -33,8 +32,7 @@ public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<Gallery>().HasData(DefaultData.GetGalleryDefaultData());
         modelBuilder.Entity<Montage>().HasData(DefaultData.GetMontageDefaultData());
         modelBuilder.Entity<Orientation>().HasData(DefaultData.GetOrientationDefaultData());
-        modelBuilder.Entity<Palette>().HasData(DefaultData.GetPaletteDefaultData());         
-        modelBuilder.Entity<Showcase>().HasData(DefaultData.GetShowcaseDefaultData()); 
+        modelBuilder.Entity<Palette>().HasData(DefaultData.GetPaletteDefaultData());      
     }
 }
 

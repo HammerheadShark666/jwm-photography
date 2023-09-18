@@ -1,11 +1,10 @@
 ﻿using PhotographySite.Helpers; 
 
-namespace SwanSong.Helper;
+namespace PhotographySite.Helper;
 
 public class Base
 {
-    public Base(){
-    }
+    public Base(){}
 
     public string GetStorageConnection()
     {

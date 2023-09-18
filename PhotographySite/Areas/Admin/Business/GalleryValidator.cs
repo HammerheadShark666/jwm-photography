@@ -2,34 +2,33 @@
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Models;
 
-namespace PhotographySite.Areas.Admin.Business
-{
-    public class GalleryValidator : AbstractValidator<Gallery>
-    {       
-        private readonly IUnitOfWork _unitOfWork;
+namespace PhotographySite.Areas.Admin.Business;
 
-        public GalleryValidator(IUnitOfWork unitOfWork)
-        {   
-            _unitOfWork= unitOfWork;    
+public class GalleryValidator : AbstractValidator<Gallery>
+{       
+    private readonly IUnitOfWork _unitOfWork;
 
-            RuleSet("BeforeSave", () =>
-            {              
-                RuleFor(gallery => gallery.Name)
-                    .NotEmpty().WithMessage("Gallery name is required.")
-                    .Length(1, 150).WithMessage("Gallery name must have a length between 1 and 150.");
+    public GalleryValidator(IUnitOfWork unitOfWork)
+    {   
+        _unitOfWork= unitOfWork;    
 
-                RuleFor(gallery => gallery).MustAsync(async (gallery, cancellation) =>
-                {
-                    return await GalleryNameExists(gallery);
-                }).WithMessage(gallery => $"The gallery '{gallery.Name}' already exists.");
-            });                
-        }
+        RuleSet("BeforeSave", () =>
+        {              
+            RuleFor(gallery => gallery.Name)
+                .NotEmpty().WithMessage("Gallery name is required.")
+                .Length(1, 150).WithMessage("Gallery name must have a length between 1 and 150.");
 
-        protected async Task<bool> GalleryNameExists(Gallery gallery)
-        { 
-            return gallery.Id == 0
-                ? !(await _unitOfWork.Galleries.ExistsAsync(gallery.Name))
-                : !(await _unitOfWork.Galleries.ExistsAsync(gallery.Id, gallery.Name));
-        }
+            RuleFor(gallery => gallery).MustAsync(async (gallery, cancellation) =>
+            {
+                return await GalleryNameExists(gallery);
+            }).WithMessage(gallery => $"The gallery '{gallery.Name}' already exists.");
+        });                
+    }
+
+    protected async Task<bool> GalleryNameExists(Gallery gallery)
+    { 
+        return gallery.Id == 0
+            ? !(await _unitOfWork.Galleries.ExistsAsync(gallery.Name))
+            : !(await _unitOfWork.Galleries.ExistsAsync(gallery.Id, gallery.Name));
     }
 }

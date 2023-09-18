@@ -1,10 +1,5 @@
-﻿$(document).ready(function () {      
-     
-    $('#image-list-container > ul > li > div > img').each(function (index) {
-        $(this).delay(Math.random() * 500 + 100).fadeTo('slow', 1);
-    }); 
+﻿$(function () {      
 
-    $('.home-image-favourite').each(function (index) {
-        $(this).delay(Math.random() * 500 + 100).fadeTo('slow', 1);
-    });     
+    fadeInImages($('#image-list-container > ul > li > div > img'));
+    fadeInImages($('.home-image-favourite')); 
 });

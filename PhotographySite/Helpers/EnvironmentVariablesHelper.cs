@@ -15,5 +15,5 @@ public class EnvironmentVariablesHelper
     public static string TempPhotoDirectoryPath()
     {
         return Environment.GetEnvironmentVariable(Constants.TempPhotoDirectoryPath);
-    }
+    } 
 }

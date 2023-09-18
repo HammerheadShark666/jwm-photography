@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PhotographySite.Extensions;
+using PhotographySite.Dto;
+using PhotographySite.Dto.Response;
 using System.Net;
 using System.Text;
 
@@ -34,35 +34,34 @@ public static class GlobalExceptionHandlerExtension
 
                 context.Response.StatusCode = statusCode;
 
-                var problemDetails = new ProblemDetails
+                BaseResponse baseResponse = new BaseResponse()
                 {
-                    Title = "Unexpected Error",
-                    Status = statusCode,
-                    Detail = errorDetails,
-                    Instance = Guid.NewGuid().ToString()
-                };
+                    Messages = new List<Message>  {
+                        new Message() { Severity = "error", Text = exception.Message}
+                    }
+                }; 
 
-                var json = JsonConvert.SerializeObject(problemDetails);
+                var json = JsonConvert.SerializeObject(baseResponse); 
 
-                logger.LogError(json);
-                 
-                if (context.Request.IsAjaxRequest())
+				logger.LogError(json);
+
+				var matchText = "JSON";
+
+				bool requiresJsonResponse = context.Request
+													.GetTypedHeaders()
+													.Accept
+													.Any(t => t.Suffix.Value?.ToUpper() == matchText
+															  || t.SubTypeWithoutSuffix.Value?.ToUpper() == matchText);  
+
+				if (requiresJsonResponse)
                 {
-                    context.Response.ContentType = "application/json; charset=utf-8";
-
-                    if (!respondWithJsonErrorDetails)
-                        json = JsonConvert.SerializeObject(new
-                        {
-                            Title = "Unexpected Error"                                                               ,
-                            Status = statusCode
-                        });
-                    await context.Response
+                    context.Response.ContentType = "application/json; charset=utf-8"; 
+					await context.Response
                                     .WriteAsync(json, Encoding.UTF8);
                 }
                 else
                 {
                     context.Response.Redirect(errorPagePath);
-
                     await Task.CompletedTask;
                 }
             });

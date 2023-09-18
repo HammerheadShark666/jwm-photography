@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Areas.Site.Dto.Response;
 using PhotographySite.Data.UnitOfWork.Interfaces;
-using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Admin.Services;
 
@@ -16,8 +16,8 @@ public class PaletteService : IPaletteService
 		_mapper = mapper;
 	}
 
-	public async Task<List<PaletteDto>> GetPalettesAsync()
+	public async Task<List<PaletteResponse>> GetPalettesAsync()
 	{
-		return _mapper.Map<List<PaletteDto>>(await _unitOfWork.Palettes.AllSortedAsync());
+		return _mapper.Map<List<PaletteResponse>>(await _unitOfWork.Palettes.AllSortedAsync());
 	}
 }

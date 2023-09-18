@@ -7,10 +7,15 @@ using PhotographySite.Models;
 
 namespace PhotographySite.Data.Repository;
 
-public class UserGalleryPhotoRepository : BaseRepository<UserGalleryPhoto>, IUserGalleryPhotoRepository
+public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
 {
-    public UserGalleryPhotoRepository(PhotographySiteDbContext context) : base(context) { }
-     
+    private readonly PhotographySiteDbContext _context;
+
+    public UserGalleryPhotoRepository(PhotographySiteDbContext context)
+    {
+        _context = context;
+    }
+
     public async Task<List<Photo>> GetGalleryPhotosAsync(long galleryId)
     {
         return await (from galleryPhoto in _context.UserGalleryPhoto
@@ -24,7 +29,8 @@ public class UserGalleryPhotoRepository : BaseRepository<UserGalleryPhoto>, IUse
     public async Task<UserGalleryPhoto> GetGalleryPhotoAsync(long galleryId, long photoId)
     {
         return await (from galleryPhoto in _context.UserGalleryPhoto
-                      where galleryPhoto.UserGalleryId == galleryId && galleryPhoto.PhotoId == photoId                      
+                      where galleryPhoto.UserGalleryId == galleryId 
+                        && galleryPhoto.PhotoId == photoId                      
                       select galleryPhoto).SingleOrDefaultAsync();
     }
 
@@ -32,8 +38,8 @@ public class UserGalleryPhotoRepository : BaseRepository<UserGalleryPhoto>, IUse
     {
         return await (from galleryPhotos in _context.UserGalleryPhoto
                       where galleryPhotos.UserGalleryId == galleryId
-                      && galleryPhotos.PhotoId != photoId
-                      && galleryPhotos.Order >= order
+                        && galleryPhotos.PhotoId != photoId
+                            && galleryPhotos.Order >= order
                       orderby (galleryPhotos.Order)
                       select galleryPhotos).ToListAsync();
     }
@@ -42,8 +48,8 @@ public class UserGalleryPhotoRepository : BaseRepository<UserGalleryPhoto>, IUse
     {
         return await (from galleryPhotos in _context.UserGalleryPhoto
                       where galleryPhotos.UserGalleryId == galleryId
-                      && galleryPhotos.PhotoId != photoId
-                      && galleryPhotos.Order <= order
+                        && galleryPhotos.PhotoId != photoId
+                            && galleryPhotos.Order <= order
                       orderby (galleryPhotos.Order)
                       select galleryPhotos).ToListAsync();
     }
@@ -68,4 +74,15 @@ public class UserGalleryPhotoRepository : BaseRepository<UserGalleryPhoto>, IUse
                 orderby (galleryPhoto.Order)
 				select photo).Skip(toSkip).FirstOrDefaultAsync(); 
 	}
+
+    public async Task<UserGalleryPhoto> AddAsync(UserGalleryPhoto userGalleryPhoto)
+    {
+        await _context.UserGalleryPhoto.AddAsync(userGalleryPhoto);
+        return userGalleryPhoto;
+    }
+
+    public void Delete(UserGalleryPhoto userGalleryPhoto)
+    {
+        _context.UserGalleryPhoto.Remove(userGalleryPhoto);
+    }
 }

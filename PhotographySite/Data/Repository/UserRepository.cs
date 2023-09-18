@@ -1,19 +1,19 @@
-﻿using AutoMapper;
-using PhotographySite.Data.Contexts;
+﻿using PhotographySite.Data.Contexts;
 using PhotographySite.Data.Repository.Interfaces;
-using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Models;
 
 namespace PhotographySite.Data.Repository;
 
-public class UserRepository :BaseRepository<ApplicationUser>, IUserRepository
+public class UserRepository : IUserRepository
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
+    private readonly PhotographySiteDbContext _context;
 
-    public UserRepository(PhotographySiteDbContext context) : base(context) { }
+    public UserRepository(PhotographySiteDbContext context)
+    {
+        _context = context;
+    }
 
-    public Guid GetUserIdAsync(string userName)
+    public Guid GetUserId(string userName)
     {
         ApplicationUser user = _context.Users.FirstOrDefault(user => user.UserName == userName);
 

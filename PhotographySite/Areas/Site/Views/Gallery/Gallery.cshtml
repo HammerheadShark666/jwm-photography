@@ -1,4 +1,4 @@
-﻿@model PhotographySite.Areas.Admin.Dtos.GalleryDto
+﻿@model PhotographySite.Dto.Response.GalleryResponse
 @{
     if (Model.Name == null)
     {
@@ -6,7 +6,7 @@
     }
     else
     {
-        ViewData["Title"] = " - Gallery (" + @Model.Name + ")";
+        ViewData["Title"] = "Gallery (" + @Model.Name + ")";
     }
 }
  
@@ -14,29 +14,13 @@
     <h3 class="page-title">@ViewData["Title"]</h3>
 </div>
  
-<div id="gallery-images">
-    @{
-        if (Model.Photos != null)
-        {
-            var photos = Model.Photos.OrderBy(p => p.Order);
-         
-            foreach (var photo in photos)
-            {
-                <div class="gallery-image-container">
-                    <img id="@photo.PhotoId" class="lightboxed gallery-photo site-image" rel="group1" src="@Model.AzureStoragePath@photo.FileName" title="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
-                    @if (photo.IsFavourite)
-                    {
-                        <img class="gallery-image-favourite" src="~/images/icons8-orange-heart-48.png" class="like-icon">
-                    }
-                </div>
-            }
-        }        
-    }    
+<div id="gallery-images"> 
+    @await Html.PartialAsync("_GalleryPhotos", Model) 
 </div>
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div id="contextMenu" class="context-menu" style="display: none">
+    <div id="context-menu" class="context-menu" style="display: none">
         <ul class="menu">
             <li data-id="0"><a href="#">Add to Favourites</a></li>
         </ul>
@@ -44,12 +28,13 @@
 }
  
 @section Scripts
-{
-    <script type="module" src="@Url.Content("~/lib/lightboxed/lightboxed.js")"></script> 
-    <script type="module" src="@Url.Content("~/js/site/gallery.js")"></script>
-
+{ 
     @if (User.Identity.IsAuthenticated)
+    { 
+        <script type="module" src="~/js/min/site-gallery-logged-in.min.js" asp-append-version="true"></script>
+    }
+    else
     {
-        <script type="module" src="@Url.Content("~/js/site/favourites.js")"></script>
+        <script type="module" src="~/js/min/site-gallery.min.js" asp-append-version="true"></script>
     }
 }

@@ -5,12 +5,22 @@ using PhotographySite.Models;
 
 namespace PhotographySite.Data.Repository;
 
-public class CountryRepository : BaseRepository<Country>, ICountryRepository
+public class CountryRepository : ICountryRepository
 {
-    public CountryRepository(PhotographySiteDbContext context) : base(context) { }
+    private readonly PhotographySiteDbContext _context;
+
+    public CountryRepository(PhotographySiteDbContext context)
+    {
+        _context = context;
+    }
 
     public async Task<List<Country>> AllSortedAsync()
     {
         return await _context.Country.OrderBy(country => country.Name).ToListAsync();
+    }
+
+    public async Task<Country> ByIdAsync(int id)
+    {
+        return await _context.Country.FindAsync(id);
     }
 }

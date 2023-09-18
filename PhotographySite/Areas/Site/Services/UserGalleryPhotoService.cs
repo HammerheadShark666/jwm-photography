@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using PhotographySite.Areas.Site.Dto.Request;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
+using PhotographySite.Dto.Response;
 using PhotographySite.Models;
-using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Areas.Site.Services;
 
@@ -17,53 +18,53 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
         _mapper = mapper;
     } 
 
-    public async Task<List<PhotoDto>> GetGalleryPhotosAsync(long id)
+    public async Task<List<PhotoResponse>> GetGalleryPhotosAsync(long id)
     {
-        return _mapper.Map<List<PhotoDto>>(await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAsync(id));
+        return _mapper.Map<List<PhotoResponse>>(await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAsync(id));
     }
 
-    public async Task<UserGalleryPhoto> AddPhotoToUserGalleryAsync(UserGalleryPhotoDto galleryPhotoDto)  //long galleryId, long photoId, int order)
+    public async Task<UserGalleryPhoto> AddPhotoToUserGalleryAsync(UserGalleryPhotoRequest userGalleryPhotoRequest)
     {
-        UserGalleryPhoto galleryPhoto = _mapper.Map<UserGalleryPhoto>(galleryPhotoDto);  
+        var galleryPhoto = _mapper.Map<UserGalleryPhoto>(userGalleryPhotoRequest);  
 
         galleryPhoto = await _unitOfWork.UserGalleryPhotos.AddAsync(galleryPhoto);
-        await UpdatePhotosOrderAsync(galleryPhoto, (galleryPhoto.Order + 1));       
-        _unitOfWork.Complete();
+        await UpdatePhotosOrderAsync(galleryPhoto, (galleryPhoto.Order + 1));
+        await _unitOfWork.Complete();
 
         return galleryPhoto;
     }
 
-    public async Task<UserGalleryPhoto> MovePhotoInGalleryAsync(UserGalleryPhotoDto galleryPhotoDto)
+    public async Task<UserGalleryPhoto> MovePhotoInGalleryAsync(UserGalleryMovePhotoRequest userGalleryMovePhotoRequest)
     {
-        UserGalleryPhoto currentGalleryPhoto = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(galleryPhotoDto.UserGalleryId, galleryPhotoDto.PhotoId);
+        var currentGalleryPhoto = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(userGalleryMovePhotoRequest.UserGalleryId, userGalleryMovePhotoRequest.PhotoId);
         
         if(currentGalleryPhoto != null)
         {
-            int newOrder = galleryPhotoDto.Order; 
+            int newOrder = userGalleryMovePhotoRequest.Order; 
             await UpdatePhotosAfterMovingPhotosAsync(currentGalleryPhoto, newOrder);
             currentGalleryPhoto.Order = newOrder;
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
         }
 
         return currentGalleryPhoto;
     }
 
-    public async Task RemovePhotoFromGalleryAsync(UserGalleryPhotoDto galleryPhotoDto)
+    public async Task RemovePhotoFromGalleryAsync(long userGalleryId, long photoId)
     {
-        UserGalleryPhoto currentGalleryPhoto = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(galleryPhotoDto.UserGalleryId, galleryPhotoDto.PhotoId);
+        var currentGalleryPhoto = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(userGalleryId, photoId);
         
         if (currentGalleryPhoto != null)
         {           
-            _unitOfWork.UserGalleryPhotos.Remove(currentGalleryPhoto);
+            _unitOfWork.UserGalleryPhotos.Delete(currentGalleryPhoto);
             await UpdatePhotosOrderAsync(currentGalleryPhoto, currentGalleryPhoto.Order);
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
         }
         return;
     } 
 
     private async Task UpdatePhotosOrderAsync(UserGalleryPhoto galleryPhoto, int newOrder)
     {
-        List<UserGalleryPhoto> galleryPhotosAfterOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, galleryPhoto.Order);
+        var galleryPhotosAfterOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, galleryPhoto.Order);
 
         foreach (var galleryPhotoAfterOrderPosition in galleryPhotosAfterOrderPosition)
         {
@@ -74,21 +75,17 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
      
     private async Task UpdatePhotosAfterMovingPhotosAsync(UserGalleryPhoto galleryPhoto, int newOrder)
     {
-        if (newOrder > galleryPhoto.Order)
-        {
-            await MovePhotoInGalleryForwardAsync(galleryPhoto, newOrder);             
-        }
+        if (newOrder > galleryPhoto.Order)         
+            await MovePhotoInGalleryForwardAsync(galleryPhoto, newOrder);  
         else if (newOrder < galleryPhoto.Order)
-        {
             await MovePhotoInGalleryBackwardAsync(galleryPhoto, newOrder);
-        }
     }
 
     private async Task MovePhotoInGalleryForwardAsync(UserGalleryPhoto galleryPhoto, int newOrder)
     {
         int order = 1;
 
-        List<UserGalleryPhoto> galleryPhotosBeforeOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosBeforeOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, newOrder);
+        var galleryPhotosBeforeOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosBeforeOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, newOrder);
 
         foreach (var galleryPhotoBeforeOrderPosition in galleryPhotosBeforeOrderPosition)
         {
@@ -101,7 +98,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
 
     private async Task MovePhotoInGalleryBackwardAsync(UserGalleryPhoto galleryPhoto, int newOrder)
     {
-        List<UserGalleryPhoto> galleryPhotosAfterOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, newOrder);
+        var galleryPhotosAfterOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, newOrder);
 
         newOrder++; ;
 

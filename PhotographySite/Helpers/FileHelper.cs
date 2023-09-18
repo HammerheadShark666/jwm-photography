@@ -25,6 +25,7 @@ public class FileHelper
     {
         DirectoryInfo di = new DirectoryInfo(directoryPath);
         FileInfo[] files = di.GetFiles();
+
         foreach (FileInfo file in files)
         {
             file.Delete();

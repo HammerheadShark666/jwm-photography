@@ -8,26 +8,17 @@ namespace PhotographySite.Data.UnitOfWork;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly PhotographySiteDbContext _context;
+
     public IPhotoRepository Photos { get; private set; } 
-
     public ICountryRepository Countries { get; private set; }
-
     public ICategoryRepository Categories { get; private set; }
-
     public IPaletteRepository Palettes { get; private set; }
-
     public IMontageRepository Montages { get; private set; }
-
     public IGalleryRepository Galleries { get; private set; }
-
     public IGalleryPhotoRepository GalleryPhotos { get; private set; }
-
     public IUserGalleryRepository UserGalleries { get; private set; }
-
     public IUserGalleryPhotoRepository UserGalleryPhotos { get; private set; }
-
     public IFavouriteRepository Favourites { get; private set; }
-
     public IUserRepository Users { get; private set; }
 
 	public UnitOfWork(PhotographySiteDbContext context)
@@ -44,14 +35,30 @@ public class UnitOfWork : IUnitOfWork
         Users = new UserRepository(_context);
         UserGalleries = new UserGalleryRepository(_context);
         UserGalleryPhotos = new UserGalleryPhotoRepository(_context);
-    }        
-    
-    public int Complete()
+    }
+
+    public async Task<int> Complete()
     {
-        return _context.SaveChanges();
+        return await _context.SaveChangesAsync();
+    }
+
+    private bool disposed = false;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposed)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+        }
+        this.disposed = true;
     }
 
     public void Dispose()
-    { 
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

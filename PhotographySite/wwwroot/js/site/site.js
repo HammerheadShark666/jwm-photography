@@ -1,80 +1,64 @@
-﻿import { UserGallery } from "../classes/UserGallery.js";
-import * as main from '../main.js'
+﻿
+const userGalleryService = new UserGallery();
+ 
+let addUserGalleryNameAlerts = $("#add-user-gallery-name-alerts"),
+    newUserGalleryName = $("#new-user-gallery-name"),
+	newUserGalleryModal = $("#new-user-gallery-modal"),
+    navLi = $('nav ul li');
 
-const userGallery = new UserGallery();
+$(function () {
+	 
+	addUserGalleryNameAlerts.empty();
+});
 
-let modalMessage;
-document.addEventListener("DOMContentLoaded", function () { 
-	document.querySelectorAll('.site-galleries').forEach(function (element) {
-		element.addEventListener('click', function (e) {
-			e.stopPropagation();
-		});
-	}); 
-
-	document.querySelectorAll('.user-galleries').forEach(function (element) {
-		element.addEventListener('click', function (e) {
-			e.stopPropagation();
-		});
-	}); 
-
-	document.querySelectorAll('.new-gallery-item').forEach(function (element) {
-		element.addEventListener('click', function (e) {
-			e.stopPropagation();
-		});
-	}); 
-
-	modalMessage = new bootstrap.Modal(document.getElementById('modal-message-popup'), {
-		keyboard: false
-	});
+document.addEventListener("DOMContentLoaded", function () {  
+	stopClickEventPropagation('.site-galleries'); 
+	stopClickEventPropagation('.user-galleries'); 
+	stopClickEventPropagation('.new-gallery-item');	
 }); 
-
-function showModalMessage(title, message) {
-
-	$("#model-message-title").text(title);
-	$("#model-message").text(message);
-	modalMessage.show();
-} 
-
+ 
 $('#menu-bar li a').click(function () {
-	var id = $(this).attr('id');
-	$('nav ul li ul.item-show-' + id).toggleClass("show");
-	$('nav ul li #' + id + ' span').toggleClass("rotate");
-
+	var id = $(this).attr('id'); 
+	navLi.find('ul.item-show-' + id).toggleClass("show");
+	navLi.find('#' + id + ' span').toggleClass("rotate");  
 }); 
 
-$('nav ul li').click(function () {
-	$("nav ul li").removeClass("active");
+navLi.click(function () {
+	navLi.removeClass("active");
 	$(this).addClass("active");
 }); 
 
 $(document).on('click', '#new-user-gallery', function () {
-	$("#newUserGalleryModal").modal('show');
-	$("#new-user-gallery-name").val("");
-	$("#new-user-gallery-alert").hide();
+	newUserGalleryModal.modal('show');
+	newUserGalleryName.val(""); 
+	addUserGalleryNameAlerts.empty();
 });
 
 $(document).on('click', '#save-user-new-gallery', function () {
 
-	let galleryName = $("#new-user-gallery-name").val();
+	let galleryName = newUserGalleryName.val();
+
+	addUserGalleryNameAlerts.empty();
 
 	if (galleryName != "") {
-		userGallery.saveNewUserGallery(galleryName).then(function (gallery) {
-			$("#newUserGalleryModal").modal('hide'); 
-			$("#user-galleries").append("<li><a href='/user/gallery/" + gallery.id + "'>" + gallery.name + "</a></li>");
-			$(".site-galleries").append("<li class='user-gallery-menu-item' data-user-gallary-menu-id='" + gallery.id + "'><a class='dropdown-item' href='/gallery/user/" + gallery.id + "'>" + gallery.name + "</a></li>");
+		userGalleryService.saveNewUserGallery(galleryName).then(function (response) {
+			newUserGalleryModal.modal('hide'); 
+			$("#user-galleries").append("<li><a href='/user/gallery/" + response.data.id + "'>" + response.data.name + "</a></li>");
+			$(".site-galleries").append("<li class='user-gallery-menu-item' data-user-gallary-menu-id='" + response.data.id + "'><a class='dropdown-item' href='/gallery/user/" + response.data.id + "'>" + response.data.name + "</a></li>");
 			sortUserGalleryMenuItems();
 			sortGalleryUserMenuItems()
-		}).catch((response) => {
-			main.showAlert(response, "#new-user-gallery-alert");
+			window.location = baseUrl + "/user/gallery/" + response.data.id;
+		}).catch((error) => {
+			error.response.data.messages.forEach(function (i) { addAlert(i, addUserGalleryNameAlerts); });
 		});
 	}
 });
 
 function sortUserGalleryMenuItems() {
 
-	var menuGalleryList = $('#user-galleries')
-	var menuGalleryListItems = $('li', menuGalleryList).get();
-	var newGalleryItem = menuGalleryListItems[0];
+	var menuGalleryList = $('#user-galleries'),
+	    menuGalleryListItems = $('li', menuGalleryList).get(),
+	    newGalleryItem = menuGalleryListItems[0];
 
 	menuGalleryListItems.shift();
 
@@ -87,11 +71,11 @@ function sortUserGalleryMenuItems() {
 
 function sortGalleryUserMenuItems() {
 
-	var menuGalleryList = $('.site-galleries');	 
-	var siteGalleryMenuItems = $('li.site-gallery-menu-item', menuGalleryList);
-	var userGalleryMenuItems = $('li.user-gallery-menu-item', menuGalleryList);
-	var seperatorMenuItem = $('li.seperator', menuGalleryList);
-	var sortedUserGalleryMenuItems = sortList(userGalleryMenuItems);
+	var menuGalleryList = $('.site-galleries'),	 
+	    siteGalleryMenuItems = $('li.site-gallery-menu-item', menuGalleryList),
+	    userGalleryMenuItems = $('li.user-gallery-menu-item', menuGalleryList),
+	    seperatorMenuItem = $('li.seperator', menuGalleryList),
+	    sortedUserGalleryMenuItems = sortList(userGalleryMenuItems),
 	 
 	menuGalleryList = appendItemsToList(menuGalleryList, siteGalleryMenuItems);
 	menuGalleryList.append(seperatorMenuItem);  

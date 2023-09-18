@@ -1,85 +1,92 @@
-﻿import { UserGallery } from "../classes/UserGallery.js";
-import * as main from '../main.js'
+﻿const userGallery = new UserGallery();
 
-const userGallery = new UserGallery();
+let pageSize = 20, 
+    azureStoragePhotosContainerUrl = "",
+    galleryAlerts = $("#gallery-alerts"),
+    userGallerySearchPhotosResultsPagination = $('#user-gallery-search-photos-results-pagination'),
+    editUserGalleryNameAlerts = $("#edit-user-gallery-name-alerts"),    
+    editUserGalleryNameModal = $("#edit-user-gallery-name-modal"), 
+    editUserGalleryName = $("#edit-user-gallery-name"), 
+    deleteUserGalleryModal = $("#delete-user-gallery-modal"),  
+    gallerySource = $('#gallery-source');
 
-
-let pageSize = 20;
-let azureStoragePhotosContainerUrl = "";
- 
-$(document).ready(function () {   
-    $('#search-country-select').prepend("<option value='0' selected='selected'>Select Country...</option>");        
-    $('#search-category-select').prepend("<option value='0' selected='selected'>Select Category...</option>");
-    $('#search-palette-select').prepend("<option value='0' selected='selected'>Select Palette...</option>"); 
+$(function () {  
+    initialiseDropDowns();
     setUserGallaryMenuItem();  
     initialiseDragAndDrop();   
     initialiseUserGallerySearchPhotosResultsPagination(1, false);
     history.pushState("", document.title, window.location.pathname);
 
-    main.hideAlert("#gallery-alert");
-});
+    galleryAlerts.empty();
+}); 
 
-$(document).on('click', '.photoModalClose, .photoModalCloseSmall', function () {
-    $("#photoModal").modal('hide');
-});
+function initialiseDropDowns() {
+    $('#search-country-select').prepend(dropdownDefaultItem("Country"));
+    $('#search-category-select').prepend(dropdownDefaultItem("Category"));
+    $('#search-palette-select').prepend(dropdownDefaultItem("Palette"));
+}
+
+function dropdownDefaultItem(dropdownType) {
+    return "<option value='0' selected='selected'>Select " + dropdownType + "...</option>";
+}  
  
-$(document).on('click', '.gallery-thumbnail', function () {
-    $("#photoModalLabel").text($(this).attr("data-title"));
-    $("#imagePreview").attr("src", $(this).attr("src"));
-    $('#photoModal').modal('show');
+$(document).on('click', '.gallery-thumbnail', function () { 
+    setModal($(this).attr("data-title"), $(this).attr("src"));
 });
 
 $(document).on('click', '.edit-user-gallery-name', function () {
-    let galleryName = $(this).attr("data-gallery-name")
-    $("#editUserGalleryNameModal").modal('show');
-    $("#edit-user-gallery-name").val(galleryName);
-    $("#edit-user-gallery-alert").hide();
+    let galleryName = $(this).attr("data-gallery-name");
+    editUserGalleryNameModal.modal('show');
+    editUserGalleryName.val(galleryName); 
+    editUserGalleryNameAlerts.empty();
 });
 
 $(document).on('click', '.delete-user-gallery', function () {
-    $("#deleteUserGalleryModal").modal('show');
+    deleteUserGalleryModal.modal('show');
 });
 
 $(document).on('click', '#delete-user-gallery', function () {
 
     let galleryId = $("#selected-user-gallery-id").val(); 
     userGallery.deleteUserGallery(galleryId).then(function () {
-        $("#deleteUserGalleryModal").modal('hide');
-        window.location = "https://localhost:7166";
+        deleteUserGalleryModal.modal('hide');
+        window.location = baseUrl;
     }).catch((response) => {
-        main.showAlert(response, "#edit-user-gallery-alert"); 
+        response.responseJSON.messages.forEach(function (i) { addAlert(i, editUserGalleryNameAlerts); });
     });
+});
+
+$(document).on('click', '.gallery-search-photos-search-button', function () {
+    userGallerySearchPhotosResultsPagination.hide();
+    searchPhotosForUserGallery(1);
 });
 
 $(document).on('click', '#save-user-gallery-name', function () { 
 
-    let galleryId = $("#selected-user-gallery-id").val();  
-    let galleryName = $("#edit-user-gallery-name").val(); 
+    let galleryId = $("#selected-user-gallery-id").val(),   
+        galleryName = editUserGalleryName.val();  
 
-    if (galleryName != "") { 
+    editUserGalleryNameAlerts.empty();
 
-        userGallery.saveUserGalleryName(galleryId, galleryName).then(function () {
+    if (galleryName != "") {  
 
-            $("#user-galley-name-title").text("Gallery (" + galleryName + ")"); 
-            $("#editUserGalleryNameModal").modal('hide');
-            $("#edit-user-gallery-name").val("");
-            $(".edit-user-gallery-name").attr("data-gallery-name", galleryName);
+        userGallery.saveUserGalleryName(galleryId, galleryName).then(function () { 
+            
+            editUserGalleryNameModal.modal('hide');
+            editUserGalleryName.val("");
+            editUserGalleryName.attr("data-gallery-name", galleryName);
+            $("#user-galley-name-title").text("Gallery (" + galleryName + ")");             
             $('li[data-user-gallary-menu-id="' + galleryId + '"]').find("a").text(galleryName);
             sortUserGalleryMenuItems();
-        }).catch((response) => {
-            main.showAlert(response.responseJSON, "#edit-user-gallery-alert"); 
+        }).catch((error) => {  
+            error.response.data.messages.forEach(function (i) { addAlert(i, editUserGalleryNameAlerts); });
         });
     }
-});
-
-$(document).on('click', '.gallery-search-photos-search-button', function () {     
-    $('#gallery-search-photos-results-pagination').hide();
-    searchPhotosForUserGallery(1);
-});
-
+}); 
+ 
 function initialiseUserGallerySearchPhotosResultsPagination(numberOfPhotos, showPaginator) {
 
-    $('#gallery-search-photos-results-pagination').pagination({
+    userGallerySearchPhotosResultsPagination.pagination({
         items: numberOfPhotos,
         itemsOnPage: pageSize,
         cssStyle: 'dark-theme',
@@ -93,27 +100,27 @@ function initialiseUserGallerySearchPhotosResultsPagination(numberOfPhotos, show
 
 function showPaginationController(showPaginator) {
     if (showPaginator)
-        $('#gallery-search-photos-results-pagination').show();
+        userGallerySearchPhotosResultsPagination.show();
     else
-        $('#gallery-search-photos-results-pagination').hide();
+        userGallerySearchPhotosResultsPagination.hide();
 }
  
 function searchPhotosForUserGallery(pageNumber) {
 
-    $('#gallerySource').empty(); 
+    gallerySource.empty(); 
 
-    let countryId = parseInt($("#search-country-select").val());
-    let categoryId = parseInt($("#search-category-select").val());
-    let paletteId = parseInt($("#search-palette-select").val());
-    let title = $("#gallery-search-title").val();     
+    let countryId = parseInt($("#search-country-select").val()),
+        categoryId = parseInt($("#search-category-select").val()),
+        paletteId = parseInt($("#search-palette-select").val()),
+        title = $("#gallery-search-title").val();     
 
     userGallery.searchPhotos(title, countryId, categoryId, paletteId, pageNumber, pageSize).then(function (response) {    
-        azureStoragePhotosContainerUrl = response.azureStoragePhotosContainerUrl;
-        $("#gallerySource").append(getPhotoElements(response.photos)); 
-        initialiseUserGallerySearchPhotosResultsPagination(response.numberOfPhotos, true); 
-        $('#gallery-search-photos-results-pagination').pagination('drawPage', pageNumber); 
-    }).catch((response) => {
-        main.showAlert(response, "#gallery-alert");
+        azureStoragePhotosContainerUrl = response.data.azureStoragePhotosContainerUrl;
+        gallerySource.append(getPhotoElements(response.data.photos)); 
+        initialiseUserGallerySearchPhotosResultsPagination(response.data.numberOfPhotos, true); 
+        userGallerySearchPhotosResultsPagination.pagination('drawPage', pageNumber); 
+    }).catch((error) => {  
+        error.response.data.messages.forEach(function (i) { addAlert(i, galleryAlerts); });
     });
 }
 
@@ -129,13 +136,16 @@ function getPhotoElements(photos) {
 
     return photoElements;
 }
+function getLiImageElement(photo) {
+    return "<li><img data-photo-id='" + photo.id + "' data-title='" + photo.title + "' class='draggable-img gallery-thumbnail' src='" + azureStoragePhotosContainerUrl + photo.fileName + "' /></li>";
+}
 
 function initialiseDragAndDrop() {
 
-    let source = "";
-    let destination = "";
+    let source = "",
+        destination = "";
 
-    $("#gallerySource, #galleryDestination").sortable({
+    $("#gallery-source, #gallery-destination").sortable({
         helper: "clone",
         opacity: 0.5,
         cursor: "crosshair",
@@ -153,21 +163,24 @@ function initialiseDragAndDrop() {
                 source = event.target.id;
         },         
         stop: function (event, ui) {
-             
-            let photoId = $(ui.item[0]).find("img").attr("data-photo-id");
-            let galleryId = $("#selected-user-gallery-id").val();  
-
-            if (source === 'gallerySource' && destination === 'galleryDestination') {
-                movePhotoFromSourceToUserGallery(ui.item, galleryId, photoId);              
-            } else if (source === 'galleryDestination' && destination === '') {    
-                movePhotoFromUserGalleryToUserGallery(ui.item, galleryId, photoId);
-            } else if ((source === 'galleryDestination' && destination === 'gallerySource') || (source === '' && destination === '')) {
-                movePhotoFromUserGalleryToSource(ui.item, galleryId, photoId);
-            }                   
+            dropPhoto(ui, source, destination); 
         }
     });
 
-    $("#gallerySource, #galleryDestination").disableSelection();
+    $("#gallery-source, #gallery-destination").disableSelection();
+}
+
+function dropPhoto(ui, source, destination) {
+
+    let photoId = $(ui.item[0]).find("img").attr("data-photo-id"),
+        galleryId = $("#selected-user-gallery-id").val();
+
+    if (source === 'gallery-source' && destination === 'gallery-destination')
+        movePhotoFromSourceToUserGallery(ui.item, galleryId, photoId);
+    else if (source === 'gallery-destination' && destination === '')
+        movePhotoFromUserGalleryToUserGallery(ui.item, galleryId, photoId);
+    else if ((source === 'gallery-destination' && destination === 'gallery-source') || (source === '' && destination === ''))
+        movePhotoFromUserGalleryToSource(ui.item, galleryId, photoId);
 }
 
 function movePhotoFromSourceToUserGallery(liElement, galleryId, photoId) {
@@ -175,8 +188,8 @@ function movePhotoFromSourceToUserGallery(liElement, galleryId, photoId) {
     var order = $(liElement).prevAll().length + 1;
     userGallery.savePhotoToUserGallery(galleryId, photoId, order).then(function (id) {
         updateOrderOfPhotos(liElement, order);
-    }).catch((response) => {
-        main.showAlert(response, "#gallery-alert"); 
+    }).catch((error) => {
+        error.response.data.messages.forEach(function (i) { addAlert(i, galleryAlerts); });
     });
 }
 
@@ -185,8 +198,8 @@ function movePhotoFromUserGalleryToUserGallery(liElement, galleryId, photoId) {
     var order = $(liElement).prevAll().length + 1;
     userGallery.movePhotoInUserGallery(galleryId, photoId, order).then(function (id) {
         updateOrderOfPhotos(liElement);
-    }).catch((response) => {
-        main.showAlert(response, "#gallery-alert"); 
+    }).catch((error) => {
+        error.response.data.messages.forEach(function (i) { addAlert(i, galleryAlerts); });
     });
 }
 
@@ -195,42 +208,42 @@ function movePhotoFromUserGalleryToSource(liElement, galleryId, photoId) {
     var order = $(liElement).prevAll().length;
     userGallery.removePhotoInUserGallery(galleryId, photoId, order).then(function () {
         updateOrderOfPhotos(liElement);
-    }).catch((response) => {
-        main.showAlert(response, "#gallery-alert");
+    }).catch((error) => {
+        error.response.data.messages.forEach(function (i) { addAlert(i, galleryAlerts); });
     });
 }
 
 function updateOrderOfPhotos(liElement) {
 
-    let order = 1;
-    let listLiElements = $(liElement).parent().children();
+    let order = 1,
+        listLiElements = $(liElement).parent().children();
 
     listLiElements.each(function (index, element) {
         $(element).find("img").attr("data-photo-order", order);
         order++;
     });
 }
-
-function getLiImageElement(photo) {      
-    return "<li><img data-photo-id='" + photo.id + "' data-title='" + photo.title + "' class='draggable-img gallery-thumbnail' src='" + azureStoragePhotosContainerUrl + photo.fileName + "' /></li>";
-}
-
+ 
 function setUserGallaryMenuItem() {
-    $("nav ul li").removeClass("active");
+
+    let navListItem = $("nav ul li");
+
+    navListItem.removeClass("active");
 
     var selectedUserGalleryId = $("#selected-gallery-id").val();
     var menuItem = $('[data-gallary-menu-id="' + selectedUserGalleryId + '"]');
 
     $(menuItem).addClass("active");
-    $('nav ul li ul.item-show-2').toggleClass("show");
-    $('nav ul li #2 span').toggleClass("rotate");
+    navListItem.find('ul.item-show-2').toggleClass("show");
+    navListItem.find('#2 span').toggleClass("rotate");
 }
 
 function photoInUserGallery(sourcePhotoId) {
 
-    let photoInUserGallery = false;
+    let photoInUserGallery = false; 
 
-    $('#galleryDestination li img').each(function (index, element) {
+    $('#gallery-destination li img').each(function (index, element) {
+
         let userGalleryPhotoId = parseInt($(element).attr("data-photo-id"));
 
         if (userGalleryPhotoId === sourcePhotoId) {

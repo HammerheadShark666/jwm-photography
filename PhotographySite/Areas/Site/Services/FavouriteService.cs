@@ -1,104 +1,105 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using PhotographySite.Areas.Admin.Dtos;
+using PhotographySite.Areas.Admin.Dto.Request;
+using PhotographySite.Areas.Site.Dto.Request;
+using PhotographySite.Areas.Site.Dto.Response;
 using PhotographySite.Areas.Site.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helpers;
+using PhotographySite.Helpers.Interface;
 using PhotographySite.Models;
-using PhotographySite.Models.Dto;
+using SwanSong.Service.Helpers.Exceptions;
+using PhotographySite.Dto.Request;
+using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Site.Services;
 
 public class FavouriteService : IFavouriteService
-{
-	private IUnitOfWork _unitOfWork;
-	private IMapper _mapper;
-	private IValidator<Favourite> _favouriteValidator;
+{	 
+    private IUnitOfWork _unitOfWork;
+    private IMapper _mapper;
+    private readonly IValidatorHelper<Favourite> _validatorHelper;
 
-	public FavouriteService(IUnitOfWork unitOfWork, IMapper mapper, IValidator<Favourite> favouriteValidator)
-	{
-		_unitOfWork = unitOfWork;
-		_mapper = mapper;
-		_favouriteValidator = favouriteValidator;
-	} 
-
-    public async Task<FavouritesDto> AllAsync(Guid userId)
-    { 
-        List<FavouriteDto> favourites = _mapper.Map<List<FavouriteDto>>(await _unitOfWork.Favourites.GetFavouritePhotosAsync(userId));
-         
-        FavouritesDto favouritesDto = new FavouritesDto()
+    public FavouriteService(IUnitOfWork unitOfWork, IMapper mapper, IValidatorHelper<Favourite> validatorHelper)
+    {
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _validatorHelper = validatorHelper;
+    }
+     
+    public async Task<FavouritesResponse> AllAsync(Guid userId)
+    {
+		return new FavouritesResponse()
         {
-            Favourites = favourites,
-            AzureStoragePath = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl()
-        };
+            Favourites = _mapper.Map<List<FavouriteResponse>>(await _unitOfWork.Favourites.GetFavouritePhotosAsync(userId)) 
+        }; 
+    } 
 
-        return favouritesDto;
+    public async Task<FavouriteActionResponse> AddAsync(FavouriteAddRequest favouriteAddRequest)
+    {
+        var favourite = _mapper.Map<Favourite>(favouriteAddRequest);
+
+        await _validatorHelper.ValidateAsync(favourite, Constants.ValidationEventBeforeSave);
+        await SaveAdd(favourite);
+
+        return new FavouriteActionResponse(await _validatorHelper.AfterEventAsync(favourite, Constants.ValidationEventAfterSave));
+    } 
+
+    public async Task<FavouriteActionResponse> DeleteAsync(Guid userId, long photoId)
+    {
+        var favourite = await GetFavourite(userId, photoId);
+
+        await _validatorHelper.ValidateAsync(favourite, Constants.ValidationEventBeforeDelete);
+        await Delete(favourite);
+
+        return new FavouriteActionResponse(await _validatorHelper.AfterEventAsync(favourite, Constants.ValidationEventAfterDelete));
     }
 
-	public async Task AddAsync(Guid userId, long photoId)
-	{
-        Favourite favourite = new Favourite()
-        {
-            UserId = userId,
-            PhotoId = photoId
-        };
+    private async Task Delete(Favourite favourite)
+    {
+        _unitOfWork.Favourites.Delete(favourite);
+        await CompleteContextAction();
+    }
 
+    private async Task SaveAdd(Favourite favourite)
+    {
         await _unitOfWork.Favourites.AddAsync(favourite);
+        await CompleteContextAction();
+    }
+  
+    private async Task CompleteContextAction()
+    {
+        await _unitOfWork.Complete(); 
+    }
 
-        _unitOfWork.Complete();
+    private async Task<Favourite> GetFavourite(Guid userId, long photoId)
+    {
+        var favourite = await _unitOfWork.Favourites.GetFavouritePhotoAsync(userId, photoId);
+        if (favourite == null)
+            throw new FavouriteNotFoundException("Favourite not found.");
+
+        return favourite;
     }
      
-
-    public async Task DeleteAsync(Guid userId, long photoId)
-	{
-		Favourite currentFavourite = await _unitOfWork.Favourites.GetFavouritePhotoAsync(userId, photoId);
-
-		if (currentFavourite != null)
-		{
-			_unitOfWork.Favourites.Remove(currentFavourite);
-			_unitOfWork.Complete();
-		}
-	}
-
-    public async Task<PhotosPageDto> GetPhotosPageAsync(PhotoFilterDto photoFilterDto)
+    public async Task<SearchPhotosResponse> SearchPhotosAsync(Guid userId, SearchPhotosRequest searchPhotosRequest)
     {
-        return new PhotosPageDto()
-        {
-            Data = _mapper.Map<List<PhotoDto>>(await _unitOfWork.Photos.ByPagingAsync(photoFilterDto)),
-            ItemsCount = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterDto),
-            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(),
-        };
-    }
-     
-    public async Task<SearchPhotosResultsDto> SearchPhotosAsync(Guid userId, SearchPhotosDto searchPhotosDto)
-    {
-        PhotoFilterDto photoFilterDto = new()
-        {
-            Title = searchPhotosDto.Title,
-            CountryId = searchPhotosDto.CountryId,
-            CategoryId = searchPhotosDto.CategoryId,
-            PaletteId = searchPhotosDto.PaletteId,
-            PageIndex = searchPhotosDto.PageIndex,
-            PageSize = searchPhotosDto.PageSize
-        };
-         
-        List<PhotoDto> photos = _mapper.Map<List<PhotoDto>>(await _unitOfWork.Favourites.GetFavouritePhotoByPagingAsync(userId, photoFilterDto));
-        int numberOfPhotos = await _unitOfWork.Favourites.ByFilterCountAsync(userId, photoFilterDto);
-        int numberOfPages = GetNumberOfPages(numberOfPhotos, photoFilterDto.PageSize);
+        PhotoFilterRequest photoFilterRequest = PhotoFilterRequest.Create(searchPhotosRequest); 
 
-        return new SearchPhotosResultsDto()
+        var photos = _mapper.Map<List<PhotoResponse>>(await _unitOfWork.Favourites.GetFavouritePhotoByPagingAsync(userId, photoFilterRequest));
+        int numberOfPhotos = await _unitOfWork.Favourites.ByFilterCountAsync(userId, photoFilterRequest);
+        int numberOfPages = GetNumberOfPages(numberOfPhotos, photoFilterRequest.PageSize);
+
+        return new SearchPhotosResponse()
         {
             NumberOfPhotos = numberOfPhotos,
-            PageIndex = searchPhotosDto.PageIndex + 1,
-            PageSize = searchPhotosDto.PageSize,
+            PageIndex = searchPhotosRequest.PageIndex + 1,
+            PageSize = searchPhotosRequest.PageSize,
             NumberOfPages = numberOfPages,
-            Photos = photos,
-            AzureStoragePhotosContainerUrl = EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl()
+            Photos = photos  
         };
     }
-
+ 
     private int GetNumberOfPages(int numberOfPhotos, int pageSize)
     {
         return (numberOfPhotos / pageSize) + ((numberOfPhotos % pageSize > 0) ? 1 : 0);
-    }
+    } 
 }

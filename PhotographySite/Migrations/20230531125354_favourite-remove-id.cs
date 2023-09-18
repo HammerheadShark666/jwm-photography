@@ -13,11 +13,11 @@ namespace PhotographySite.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Id",
-                table: "Favourite");
+                table: "Gallery");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "UserId",
-                table: "Favourite",
+                table: "Gallery",
                 type: "UNIQUEIDENTIFIER",
                 nullable: false,
                 oldClrType: typeof(Guid),
@@ -29,7 +29,7 @@ namespace PhotographySite.Migrations
         {
             migrationBuilder.AlterColumn<Guid>(
                 name: "UserId",
-                table: "Favourite",
+                table: "Gallery",
                 type: "uuids",
                 nullable: false,
                 oldClrType: typeof(Guid),
@@ -37,7 +37,7 @@ namespace PhotographySite.Migrations
 
             migrationBuilder.AddColumn<int>(
                 name: "Id",
-                table: "Favourite",
+                table: "Gallery",
                 type: "int",
                 nullable: false,
                 defaultValue: 0)

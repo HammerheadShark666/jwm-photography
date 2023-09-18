@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhotographySite.Areas.Admin.Dtos;
+using PhotographySite.Areas.Admin.Dto.Request;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 
 namespace PhotographySite.Areas.Admin.Controllers;
@@ -8,6 +8,7 @@ namespace PhotographySite.Areas.Admin.Controllers;
 [Authorize(Roles = "Admin")]
 [Area("Admin")]
 [Route("admin/photo/catalog")]
+[AutoValidateAntiforgeryToken]
 public class PhotoCatalogController : Controller
 {   
     private IPhotoCatalogService _photoCatalogService;
@@ -21,18 +22,18 @@ public class PhotoCatalogController : Controller
     public async Task<IActionResult> Catalog()
     {
         return View("PhotoCatalogue", await _photoCatalogService.GetLookupsAsync());
-    }
+    } 
 
     [HttpPost("")]
-    public async Task<IActionResult> PhotoCatalogAsync([FromBody] PhotoFilterDto photoFilterDto)
+    public async Task<IActionResult> PhotoCatalogAsync([FromBody] PhotoFilterRequest photoFilterRequest)
     {
-        return new JsonResult(await _photoCatalogService.GetPhotosPageAsync(photoFilterDto));
+        return Ok(await _photoCatalogService.GetPhotosPageAsync(photoFilterRequest));
     }
 
     [HttpPost("update-photo")]
-    public async Task<IActionResult> AddUpdatePhotoAsync([FromBody] UpdatePhotoDto updatePhotoDto)
-    {
-        await _photoCatalogService.UpdatePhotoAsync(updatePhotoDto);
+	public async Task<IActionResult> AddUpdatePhotoAsync([FromBody] UpdatePhotoRequest updatePhotoRequest)
+    { 
+        await _photoCatalogService.UpdatePhotoAsync(updatePhotoRequest);
         return Ok();
     }
 }

@@ -411,7 +411,7 @@ namespace PhotographySite.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PhotographySite.Models.Favourite", b =>
+            modelBuilder.Entity("PhotographySite.Models.Gallery", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("UNIQUEIDENTIFIER");
@@ -421,7 +421,7 @@ namespace PhotographySite.Migrations
 
                     b.HasKey("UserId", "PhotoId");
 
-                    b.ToTable("Favourite");
+                    b.ToTable("Gallery");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Gallery", b =>

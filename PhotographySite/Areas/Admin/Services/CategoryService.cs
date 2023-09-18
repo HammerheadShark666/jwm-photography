@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Areas.Site.Dto.Response;
 using PhotographySite.Data.UnitOfWork.Interfaces;
 
 namespace PhotographySite.Areas.Admin.Services;
@@ -16,8 +16,8 @@ public class CategoryService : ICategoryService
 		_mapper = mapper;
 	}
 
-	public async Task<List<CategoryDto>> GetCategoriesAsync()
+	public async Task<List<CategoryResponse>> GetCategoriesAsync()
 	{
-		return _mapper.Map<List<CategoryDto>>(await _unitOfWork.Categories.AllSortedAsync());
+		return _mapper.Map<List<CategoryResponse>>(await _unitOfWork.Categories.AllSortedAsync());
 	}
 }

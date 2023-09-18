@@ -2,7 +2,8 @@
 
 namespace PhotographySite.Data.Repository.Interfaces;
 
-public interface ICategoryRepository : IBaseRepository<Category>
+public interface ICategoryRepository
 {
     Task<List<Category>> AllSortedAsync();
+    Task<Category> ByIdAsync(int id);
 }

@@ -1,10 +1,6 @@
-﻿$(document).ready(function () {
-  
-    $('#gallery-images > img').each(function (index) {
-        $(this).delay(Math.random() * 500 + 100).fadeTo('slow', 1);
-    });
+﻿$(function () {
 
-    $('.gallery-image-favourite').each(function (index) {
-        $(this).delay(Math.random() * 500 + 100).fadeTo('slow', 1);
-    });
+    fadeInImages($('#gallery-images > div > img'));
+    fadeInImages($('.gallery-image-favourite')); 
+    fadeInImages($('#user-gallery-images > div > img'));
 });

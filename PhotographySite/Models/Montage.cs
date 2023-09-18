@@ -22,4 +22,3 @@ public class Montage
     [Required]
     public PhotoOrientation Orientation { get; set; }
 }
-

@@ -1,19 +1,23 @@
 ﻿using LinqKit;
 using Microsoft.EntityFrameworkCore;
-using PhotographySite.Areas.Admin.Dtos;
+using PhotographySite.Areas.Admin.Dto.Request;
 using PhotographySite.Data.Contexts;
 using PhotographySite.Data.Repository.Interfaces;
 using PhotographySite.Models;
-using PhotographySite.Models.Dto;
 using System.Linq.Dynamic.Core;
 
 namespace PhotographySite.Data.Repository;
 
-public class PhotoRepository : BaseRepository<Photo>, IPhotoRepository
+public class PhotoRepository : IPhotoRepository
 {
-    public PhotoRepository(PhotographySiteDbContext context) : base(context) { }
+    private readonly PhotographySiteDbContext _context;
 
-    public new async Task<List<Photo>> AllAsync()
+    public PhotoRepository(PhotographySiteDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<List<Photo>> AllAsync()
     {
         return await _context.Photo
             .Include(photo => photo.Country) 
@@ -25,22 +29,22 @@ public class PhotoRepository : BaseRepository<Photo>, IPhotoRepository
         return await _context.Photo.CountAsync();                 
     }
 
-    public async Task<List<Photo>> ByPagingAsync(PhotoFilterDto photoFilterDto)
-    { 
+    public async Task<List<Photo>> ByPagingAsync(PhotoFilterRequest photoFilterRequest)
+    {
         return await _context.Photo
             .Include(photo => photo.Country)
             .Include(photo => photo.Category)
             .Include(photo => photo.Palette)
-            .Where(GetPredicateWhereClause(photoFilterDto))
-            .OrderBy(GetOrderByStatement(photoFilterDto))
-            .Skip((photoFilterDto.PageIndex-1) * photoFilterDto.PageSize).Take(photoFilterDto.PageSize)
+            .Where(GetPredicateWhereClause(photoFilterRequest))
+            .OrderBy(GetOrderByStatement(photoFilterRequest))
+            .Skip((photoFilterRequest.PageIndex - 1) * photoFilterRequest.PageSize).Take(photoFilterRequest.PageSize)
             .ToListAsync();
     }
 
-    public async Task<int> ByFilterCountAsync(PhotoFilterDto photoFilterDto)
+    public async Task<int> ByFilterCountAsync(PhotoFilterRequest photoFilterRequest)
     {
         return await _context.Photo                 
-           .Where(GetPredicateWhereClause(photoFilterDto))
+           .Where(GetPredicateWhereClause(photoFilterRequest))
            .CountAsync(); 
     }
 
@@ -51,8 +55,8 @@ public class PhotoRepository : BaseRepository<Photo>, IPhotoRepository
             .Include(photo => photo.Favourites.Where(favourite => favourite.UserId == userId))
             .Where(p => p.UseInMontage == true && (int)orientation == p.Orientation)
             .Distinct()
-            .OrderBy(x => Guid.NewGuid())               
-            .Take(numberOfPhotos)                
+            .OrderBy(x => Guid.NewGuid())
+            .Take(numberOfPhotos)
             .ToList();
     }
 
@@ -75,59 +79,74 @@ public class PhotoRepository : BaseRepository<Photo>, IPhotoRepository
                       .ToListAsync(); 
     }
 
-    private string GetOrderByStatement(PhotoFilterDto photoFilterDto)
+    private string GetOrderByStatement(PhotoFilterRequest photoFilterRequest)
     {
         string orderByStatement = "FileName asc";
 
-        if (!string.IsNullOrEmpty(photoFilterDto.SortField) && !string.IsNullOrEmpty(photoFilterDto.SortOrder))
-            orderByStatement = photoFilterDto.SortField + " " + photoFilterDto.SortOrder;
+        if (!string.IsNullOrEmpty(photoFilterRequest.SortField) && !string.IsNullOrEmpty(photoFilterRequest.SortOrder))
+            orderByStatement = photoFilterRequest.SortField + " " + photoFilterRequest.SortOrder;
 
         return orderByStatement;
     }
 
-    private ExpressionStarter<Photo> GetPredicateWhereClause(PhotoFilterDto photoFilterDto)
+    private ExpressionStarter<Photo> GetPredicateWhereClause(PhotoFilterRequest photoFilterRequest)
     {
         var predicate = PredicateBuilder.New<Photo>(true);
 
-        if (photoFilterDto.Id > 0)
-            predicate = predicate.And(photo => photo.Id.Equals(photoFilterDto.Id));
+        if (photoFilterRequest.Id > 0)
+            predicate = predicate.And(photo => photo.Id.Equals(photoFilterRequest.Id));
 
-        if (photoFilterDto.Iso > 0)
-            predicate = predicate.And(photo => photo.Iso.Equals(photoFilterDto.Iso));
+        if (photoFilterRequest.Iso > 0)
+            predicate = predicate.And(photo => photo.Iso.Equals(photoFilterRequest.Iso));
 
-        if (photoFilterDto.PaletteId > 0)
-            predicate = predicate.And(photo => photo.Palette.Id.Equals(photoFilterDto.PaletteId));
+        if (photoFilterRequest.PaletteId > 0)
+            predicate = predicate.And(photo => photo.Palette.Id.Equals(photoFilterRequest.PaletteId));
 
-        if (photoFilterDto.CategoryId > 0)
-            predicate = predicate.And(photo => photo.Category.Id.Equals(photoFilterDto.CategoryId));
+        if (photoFilterRequest.CategoryId > 0)
+            predicate = predicate.And(photo => photo.Category.Id.Equals(photoFilterRequest.CategoryId));
 
-        if (photoFilterDto.CountryId > 0)
-            predicate = predicate.And(photo => photo.Country.Id.Equals(photoFilterDto.CountryId));
+        if (photoFilterRequest.CountryId > 0)
+            predicate = predicate.And(photo => photo.Country.Id.Equals(photoFilterRequest.CountryId));
 
-        if (photoFilterDto.DateTaken != null)
-            predicate = predicate.And(photo => photo.DateTaken.Equals(photoFilterDto.DateTaken));
+        if (photoFilterRequest.DateTaken != null)
+            predicate = predicate.And(photo => photo.DateTaken.Equals(photoFilterRequest.DateTaken));
 
-        if (!string.IsNullOrEmpty(photoFilterDto.FileName))
-            predicate = predicate.And(photo => photo.FileName.Contains(photoFilterDto.FileName));
+        if (!string.IsNullOrEmpty(photoFilterRequest.FileName))
+            predicate = predicate.And(photo => photo.FileName.Contains(photoFilterRequest.FileName));
 
-        if (!string.IsNullOrEmpty(photoFilterDto.FocalLength))
-            predicate = predicate.And(photo => photo.FocalLength.Contains(photoFilterDto.FocalLength));
+        if (!string.IsNullOrEmpty(photoFilterRequest.FocalLength))
+            predicate = predicate.And(photo => photo.FocalLength.Contains(photoFilterRequest.FocalLength));
 
-        if (!string.IsNullOrEmpty(photoFilterDto.Lens))
-            predicate = predicate.And(photo => photo.Lens.Contains(photoFilterDto.Lens));
+        if (!string.IsNullOrEmpty(photoFilterRequest.Lens))
+            predicate = predicate.And(photo => photo.Lens.Contains(photoFilterRequest.Lens));
 
-        if (!string.IsNullOrEmpty(photoFilterDto.AperturValue))
-            predicate = predicate.And(photo => photo.AperturValue.Contains(photoFilterDto.AperturValue));
+        if (!string.IsNullOrEmpty(photoFilterRequest.AperturValue))
+            predicate = predicate.And(photo => photo.AperturValue.Contains(photoFilterRequest.AperturValue));
 
-        if (!string.IsNullOrEmpty(photoFilterDto.Camera))
-            predicate = predicate.And(photo => photo.Camera.Contains(photoFilterDto.Camera));
+        if (!string.IsNullOrEmpty(photoFilterRequest.Camera))
+            predicate = predicate.And(photo => photo.Camera.Contains(photoFilterRequest.Camera));
 
-        if (!string.IsNullOrEmpty(photoFilterDto.Title))
-            predicate = predicate.And(photo => photo.Title.Contains(photoFilterDto.Title));
+        if (!string.IsNullOrEmpty(photoFilterRequest.Title))
+            predicate = predicate.And(photo => photo.Title.Contains(photoFilterRequest.Title));
 
-        if (!string.IsNullOrEmpty(photoFilterDto.ExposureTime))
-            predicate = predicate.And(photo => photo.ExposureTime.Contains(photoFilterDto.ExposureTime));
+        if (!string.IsNullOrEmpty(photoFilterRequest.ExposureTime))
+            predicate = predicate.And(photo => photo.ExposureTime.Contains(photoFilterRequest.ExposureTime));
 
         return predicate;
+    }
+
+    public async Task AddAsync(Photo photo)
+    {
+        await _context.Photo.AddAsync(photo);
+    }
+
+    public void Update(Photo photo)
+    {
+        _context.Photo.Update(photo);
+    }
+
+    public async Task<Photo> ByIdAsync(long id)
+    {
+        return await _context.Photo.FindAsync(id);
     }
 }

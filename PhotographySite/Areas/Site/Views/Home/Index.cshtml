@@ -1,5 +1,5 @@
-﻿@using PhotographySite.Models.Dto;
-@model PhotographySite.Models.Dto.MontagesDto;
+﻿@using PhotographySite.Dto.Response;
+@model MontagesResponse;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -18,7 +18,7 @@
                         {
                             <li>
                                 <div class="home-image-container">
-                                    <img class="home-image site-image" id="@image.PhotoId" src="@Model.AzureStoragePath@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true">
+                                    <img class="home-image site-image" id="@image.PhotoId" src="@Model.AzureStoragePhotosContainerUrl@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true">
                                     @if (image.IsFavourite)
                                     {
                                         <img class="home-image-favourite" src="~/images/icons8-orange-heart-48.png" class="like-icon">
@@ -36,20 +36,21 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div id="contextMenu" class="context-menu" style="display: none">
+    <div id="context-menu" class="context-menu" style="display: none">
         <ul class="menu">
             <li data-id="0"><a href="#">Add to Favourites</a></li>
         </ul>
-    </div>  
+    </div>   
 }
 
 @section Scripts
-{
-    <script type="module" src="@Url.Content("~/js/fadein/jquery.random-fade-in.min.js")"></script>
-    <script type="module" src="@Url.Content("~/js/site/home.js")"></script> 
-    
-    @if (User.Identity.IsAuthenticated)
-    {       
-        <script type="module" src="@Url.Content("~/js/site/favourites.js")"></script>        
+{  
+    @if (User.Identity.IsAuthenticated) 
+    {      
+        <script type="module" src="~/js/min/site-home-logged-in.min.js" asp-append-version="true"></script>
     }
+    else
+    {
+        <script type="module" src="~/js/min/site-home.min.js" asp-append-version="true"></script>
+    } 
 }

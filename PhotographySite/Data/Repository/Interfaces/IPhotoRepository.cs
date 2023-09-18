@@ -1,24 +1,19 @@
-﻿using PhotographySite.Areas.Admin.Dtos;
+﻿using PhotographySite.Areas.Admin.Dto.Request;
 using PhotographySite.Models;
-using PhotographySite.Models.Dto;
 
 namespace PhotographySite.Data.Repository.Interfaces;
 
-public interface IPhotoRepository : IBaseRepository<Photo>
+public interface IPhotoRepository
 {
-    new Task<List<Photo>> AllAsync();
-
+    Task<List<Photo>> AllAsync();
     Task<int> CountAsync();
-
-    List<Photo> MontagePhotos(Helpers.Enums.PhotoOrientation orientation, int numberOfPhotos, Guid userId);
-     
-    Task<List<Photo>> ByPagingAsync(PhotoFilterDto photoFilterDto);
-     
-    Task<int> ByFilterCountAsync(PhotoFilterDto photoFilterDto);
-
+    List<Photo> MontagePhotos(Helpers.Enums.PhotoOrientation orientation, int numberOfPhotos, Guid userId);     
+    Task<List<Photo>> ByPagingAsync(PhotoFilterRequest photoFilterRequest);     
+    Task<int> ByFilterCountAsync(PhotoFilterRequest photoFilterRequest);
     bool Exists(string Filename);
-
     Task<Photo> FindByFilenameAsync(string filename);
-
     Task<List<Photo>> GetLatestPhotos(int numberOfPhotos);
+    Task AddAsync(Photo photo);
+    void Update(Photo photo);
+    Task<Photo> ByIdAsync(long id); 
 }

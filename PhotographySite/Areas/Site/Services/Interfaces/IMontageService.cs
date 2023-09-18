@@ -1,8 +1,8 @@
-﻿using PhotographySite.Models.Dto;
+﻿using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Site.Services.Interfaces;
 
 public interface IMontageService
 {
-    Task<MontagesDto> GetMontageAsync(string username);
+    Task<MontagesResponse> GetMontageAsync(string username);
 }

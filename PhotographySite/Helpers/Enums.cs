@@ -13,5 +13,5 @@ public class Enums
     {
         Admin,
         User
-    }
+    }  
 }

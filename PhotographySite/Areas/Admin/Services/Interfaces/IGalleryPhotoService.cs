@@ -1,16 +1,13 @@
-﻿using PhotographySite.Areas.Admin.Dtos;
-using PhotographySite.Models;
-using PhotographySite.Models.Dto;
+﻿using PhotographySite.Models;
+using PhotographySite.Dto.Request;
+using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Services.Interfaces;
 
 public interface IGalleryPhotoService
 {      
-    Task<List<PhotoDto>> GetGalleryPhotosAsync(long id);
-
-    Task<GalleryPhoto> AddPhotoToGalleryAsync(GalleryPhotoDto galleryPhotoDto);
-
-    Task<GalleryPhoto> MovePhotoInGalleryAsync(GalleryPhotoDto galleryPhotoDto);
-
-    Task RemovePhotoFromGalleryAsync(GalleryPhotoDto galleryPhotoDto);
+    Task<List<PhotoResponse>> GetGalleryPhotosAsync(long id);
+    Task<GalleryPhoto> AddPhotoToGalleryAsync(GalleryPhotoAddRequest galleryPhotoAddRequest);
+    Task<GalleryPhoto> MovePhotoInGalleryAsync(GalleryPhotoAddRequest galleryPhotoAddRequest);
+    Task RemovePhotoFromGalleryAsync(GalleryPhotoAddRequest galleryPhotoAddRequest);
 }

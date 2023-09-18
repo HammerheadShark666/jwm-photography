@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PhotographySite.Dto.Request;
 using PhotographySite.Services.Interfaces;
-using PhotographySite.ViewModels;
 using static PhotographySite.Helpers.Enums;
 
 namespace PhotographySite.Controllers;
@@ -23,27 +23,24 @@ public class AccountController : Controller
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register(RegisterViewModel model)
+    public async Task<ActionResult> Register(RegisterRequest registerRequest)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
+        if (!ModelState.IsValid) 
+            return View(registerRequest); 
         else
         {
-            IdentityResult result = await _accountService.RegisterAsync(model.Email, model.Password);
+            IdentityResult result = await _accountService.RegisterAsync(registerRequest.Email, registerRequest.Password);
 
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            if (result.Succeeded) 
+                return RedirectToAction("Login", "Account"); 
             else
             {
                 foreach (IdentityError error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
-                return View(model);
+
+                return View(registerRequest);
             }
         }
     }
@@ -55,27 +52,22 @@ public class AccountController : Controller
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login(LoginViewModel model)
+    public async Task<ActionResult> Login(LoginRequest loginRequest)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
+        if (!ModelState.IsValid) 
+            return View(loginRequest); 
         else
         {
-            var response = await _accountService.LoginAsync(model.Email, model.Password);
-
+            var response = await _accountService.LoginAsync(loginRequest.Email, loginRequest.Password);
+             
             if(response.Item1.Succeeded)
-            {
-                if(response.Item2 == Role.Admin)
-                    return RedirectToAction("Index", "Home", new { area = "Admin" });
-                else
-                    return RedirectToAction("Index", "Home", new { area = "Site" });
+            { 
+                return RedirectToAction("Index", "Home", new { area = (response.Item2 == Role.Admin ? "Admin" : "Site") });
             }
             else
             {
                 ModelState.AddModelError("", "There is something wrong with your email or username. Please try again.");
-                return View(model);
+                return View(loginRequest);
             }
         }
     }
@@ -84,7 +76,7 @@ public class AccountController : Controller
     public async Task<ActionResult> LogOff()
     {
         await _accountService.LogOffAsync();
-        return RedirectToAction("Login");
+        return RedirectToAction("Index", "Home", new { area = "Site" });
     }
       
     [HttpGet("AccessDenied")]

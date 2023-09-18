@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PhotographySite.Areas.Admin.Dtos;
 using PhotographySite.Areas.Admin.Services.Interfaces;
+using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Controllers;
 
@@ -22,16 +22,8 @@ public class HomeController : Controller
     [HttpGet("")]
     public async Task<IActionResult> Index() 
     {
-        GalleriesDto galleriesDto = new()
-        {
+        return View("Home", new GalleriesResponse() {
             SelectGalleryPhotos = await _photoCatalogService.GetLatestPhotos(20)
-        };
-
-        return View("Home", galleriesDto); 
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
+        }); 
     } 
 }
