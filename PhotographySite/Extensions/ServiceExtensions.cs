@@ -37,6 +37,11 @@ public static class ServiceExtensions
             options => options.EnableRetryOnFailure()));
     }
 
+    public static void ConfigureApplicationInsights(this IServiceCollection services)
+    {
+        services.AddApplicationInsightsTelemetry(opt => opt.EnableAdaptiveSampling = false);
+    }     
+
     public static void ConfigureMvc(this IServiceCollection services)
     {
         services.AddControllersWithViews();
