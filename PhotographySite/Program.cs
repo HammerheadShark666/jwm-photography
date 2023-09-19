@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureSession();
 builder.Services.ConfigureDatabaseContext(builder.Configuration);
+builder.Services.ConfigureApplicationInsights();
 builder.Services.ConfigureMvc();  
 builder.Services.ConfigureControllers();
 builder.Services.ConfigureScoped();
@@ -21,8 +22,7 @@ else
     app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true);  
 
 app.Logger.LogInformation("Starting Jwm Photography Website {0}", DateTime.Now); 
-app.UseHttpsRedirection(); 
- 
+app.UseHttpsRedirection();  
 app.UseStaticFiles();
 app.UseRouting();
 app.UseResponseCaching();

@@ -15,8 +15,10 @@ public class GalleryController : BaseController
     private IMapper _mapper;
     private IGalleryService _galleryService;
     private IUserGalleryService _userGalleryService;
+    private ILogger<GalleryController> _logger;
 
-    public GalleryController(IUnitOfWork unitOfWork, 
+    public GalleryController(IUnitOfWork unitOfWork,     
+                             ILogger<GalleryController> logger,
                              IMapper mapper, 
                              IGalleryService galleryService, 
                              IUserGalleryService userGalleryService, 
@@ -26,12 +28,21 @@ public class GalleryController : BaseController
         _mapper = mapper;
         _galleryService = galleryService;
         _userGalleryService = userGalleryService;
+        _logger = logger;
     }
 
     [HttpGet("{id}")]
     [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new string[] { "id" })]
     public async Task<IActionResult> Gallery(int id)
     {
+        var iteracion = 4;
+
+        _logger.LogDebug($"Debug {iteracion}");
+        _logger.LogInformation($"Information {iteracion}");
+        _logger.LogWarning($"Warning {iteracion}");
+        _logger.LogError($"Error {iteracion}");
+        _logger.LogCritical($"Critical {iteracion}");
+
         return !IsLoggedIn()
             ? View("Gallery", await _galleryService.GetGalleryAsync(id))
             : View("Gallery", await _galleryService.GetGalleryAsync(GetUserId(), id)); 
