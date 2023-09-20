@@ -25,7 +25,7 @@ public class PhotoImportService : IPhotoImportService
 
     public async Task<SavedPhotosResponse> ImportAsync(List<IFormFile> photos)
     {
-        string directoryPath = EnvironmentVariablesHelper.TempPhotoDirectoryPath();
+        string directoryPath = EnvironmentVariablesHelper.TempPhotoDirectoryPath;
          
         var (existingPhotos, newPhotos) = await GetExistingNewPhotoListAsync(photos); 
 

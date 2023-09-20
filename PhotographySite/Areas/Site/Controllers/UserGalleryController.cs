@@ -32,17 +32,16 @@ public class UserGalleryController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> Gallery(long id)
     {
-        IsValidUser(); 
+        IsValidUser();
 
-        UserGalleriesResponse userGalleriesResponse = new()
+        try
         {
-            SelectedGallery = await _userGalleryService.GetUserGalleryAsync(GetUserId(), id),
-            SelectGalleryPhotos = await _userGalleryPhotoService.GetGalleryPhotosAsync(id),
-            LookupsResponse = await _photoCatalogService.GetLookupsAsync(),
-            GalleryResponseList = await _userGalleryService.GetUserGalleriesAsync(HttpContext)  
-        };
-
-        return View("UserGalleries", userGalleriesResponse);
+            return View("UserGalleries", await _userGalleryService.GetUserGalleryToEditAsync(GetUserId(), id));
+        }
+        catch (UserGalleryNotFoundException ugnfe)
+        {
+            return View("~/Views/Error/NotFound.cshtml", ugnfe.Message);
+        }  
     }
 
     [HttpPost("add")]
@@ -51,8 +50,7 @@ public class UserGalleryController : BaseController
         try
         {
             IsValidUser();
-            userGalleryAddRequest.UserId = GetUserId();
-         
+            userGalleryAddRequest.UserId = GetUserId();         
             return Ok(await _userGalleryService.AddAsync(userGalleryAddRequest));
         }
         catch (FailedValidationException fve)
@@ -72,7 +70,6 @@ public class UserGalleryController : BaseController
         {
             IsValidUser();
             userGalleryUpdateRequest.UserId = GetUserId();
-
             return Ok(await _userGalleryService.UpdateAsync(userGalleryUpdateRequest));
         }
         catch (FailedValidationException fve)
@@ -91,7 +88,8 @@ public class UserGalleryController : BaseController
     {
         try
         {
-            return Ok(await _userGalleryService.DeleteAsync(id));
+            IsValidUser();
+            return Ok(await _userGalleryService.DeleteAsync(GetUserId(), id));
         }
         catch (UserGalleryNotFoundException cnfe)
         {

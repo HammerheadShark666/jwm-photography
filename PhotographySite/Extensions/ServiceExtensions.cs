@@ -18,6 +18,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using PhotographySite.Models;
+using PhotographySite.Business;
 
 namespace PhotographySite.Extensions;
 
@@ -39,7 +40,13 @@ public static class ServiceExtensions
 
     public static void ConfigureApplicationInsights(this IServiceCollection services)
     {
-        services.AddApplicationInsightsTelemetry(opt => opt.EnableAdaptiveSampling = false);
+        services.AddApplicationInsightsTelemetry();
+        
+        //new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions
+        //{
+        //    EnableActiveTelemetryConfigurationSetup = true,
+        //    ConnectionString = EnvironmentVariablesHelper.ApplicationInsightsConnectionString
+        //});  // opt => opt.EnableAdaptiveSampling = false);
     }     
 
     public static void ConfigureMvc(this IServiceCollection services)

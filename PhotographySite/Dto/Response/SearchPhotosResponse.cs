@@ -9,5 +9,5 @@ public class SearchPhotosResponse
     public int NumberOfPages { get; set; }
     public List<PhotoResponse> Photos { get; set; }
     public int NumberOfPhotos { get; set; }
-    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(); }
+    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl; }
 }

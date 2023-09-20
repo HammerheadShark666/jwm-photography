@@ -8,5 +8,5 @@ public class GalleryResponse
     public string Name { get; set; }
     public string RandomPhoto { get; set; }
     public List<GalleryPhotoResponse> Photos { get; set; }
-    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(); }
+    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl; }
 }

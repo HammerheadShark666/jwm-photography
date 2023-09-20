@@ -677,3 +677,9 @@ div#lightboxed--content .lightboxed--frame img {
     padding: 5px;
     margin: 5px;
 }
+
+.not-found-message-container {
+    width:100%;
+    text-align:center;
+    padding:15%;
+}

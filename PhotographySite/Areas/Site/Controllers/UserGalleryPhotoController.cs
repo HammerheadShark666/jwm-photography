@@ -23,6 +23,7 @@ public class UserGalleryPhotoController : BaseController
     public async Task<IActionResult> AddAsync([FromBody] UserGalleryPhotoRequest userGalleryPhotoRequest)
     {
         IsValidUser();
+        userGalleryPhotoRequest.UserId = GetUserId();
         return Ok(await _userGalleryPhotoService.AddPhotoToUserGalleryAsync(userGalleryPhotoRequest));
     }
 
@@ -30,6 +31,7 @@ public class UserGalleryPhotoController : BaseController
     public async Task<IActionResult> MoveAsync([FromBody] UserGalleryMovePhotoRequest userGalleryMovePhotoRequest)
     {
         IsValidUser();
+        userGalleryMovePhotoRequest.UserId = GetUserId();
         return Ok(await _userGalleryPhotoService.MovePhotoInGalleryAsync(userGalleryMovePhotoRequest));
     }
 
@@ -37,7 +39,8 @@ public class UserGalleryPhotoController : BaseController
     public async Task<IActionResult> RemoveAsync([FromBody] UserGalleryRemoveRequest userGalleryRemoveRequest)
     {
         IsValidUser();
-        await _userGalleryPhotoService.RemovePhotoFromGalleryAsync(userGalleryRemoveRequest.UserGalleryId, userGalleryRemoveRequest.PhotoId);
+        userGalleryRemoveRequest.UserId = GetUserId();
+        await _userGalleryPhotoService.RemovePhotoFromGalleryAsync(userGalleryRemoveRequest);
         return Ok();
     }
 }

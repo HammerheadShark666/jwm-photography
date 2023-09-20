@@ -7,6 +7,8 @@ public class Constants
     public const string AzureStorageContainerName = "photos"; 
     public const string DatabaseConnectionString = "AZURE_SQL_CONNECTIONSTRING";
     public const string TempPhotoDirectoryPath = "JWM_PHOTOGRAPHY_TEMP_PHOTO_DIRECTORY_PATH";
+    public const string ApplicationInsightsInstrumentationKey = "APPLICATIONINSIGHTS_INSTRUMENTATION_KEY";
+    public const string ApplicationInsightsConnectionString = "APPLICATIONINSIGHTS_CONNECTION_STRING";
 
     public const string EnumMessageTypeNameInformation = "Information";
     public const string EnumMessageTypeNameWarning = "Warning";
@@ -23,4 +25,5 @@ public class Constants
     public const string ValidationEventAfterSave = "AfterSave";
     public const string ValidationEventBeforeDelete = "BeforeDelete";
     public const string ValidationEventAfterDelete = "AfterDelete";
+    public const string ValidationEventRecordExists = "RecordExists";
 }

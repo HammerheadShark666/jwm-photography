@@ -35,7 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Business\AdminGalleryValidator.cs" />
     <Compile Remove="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Remove="Areas\Site\Business\SiteGalleryValidator.cs" />
     <Compile Remove="Areas\Site\Controllers\AccountController.cs" />
     <Compile Remove="Helpers\Authentication.cs" />
     <Compile Remove="Helpers\AuthenticationHelper.cs" />
