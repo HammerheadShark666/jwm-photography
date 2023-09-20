@@ -134,7 +134,7 @@
   },
   {
     "outputFileName": "wwwroot/js/min/admin-home.min.js",
-    "inputFiles": [     
+    "inputFiles": [
       "wwwroot/js/axiosClient.js",
       "wwwroot/lib/lightboxed/lightboxed.js",
       "wwwroot/js/module/Gallery.js",
@@ -221,6 +221,21 @@
       "wwwroot/js/admin/admin-site.js",
       "wwwroot/js/admin/admin-menu.js",
       "wwwroot/js/admin/montage.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/site-error.min.js",
+    "inputFiles": [
+      "wwwroot/js/module/UserGallery.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/site/site.js",
+      "wwwroot/js/site/home.js"
     ],
     "minify": {
       "enabled": true,

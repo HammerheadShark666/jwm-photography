@@ -18,14 +18,14 @@ public class MontageService : IMontageService
         _mapper = mapper;
     }
 
-    public async Task<MontagesResponse> GetMontageAsync(string username)
+    public async Task<MontagesResponse> GetMontageAsync(Guid userId)
     {            
-        return await GetMontagePhotos(username);
+        return await GetMontagePhotos(userId);
     } 
 
-    public async Task<MontagesResponse> GetMontagePhotos(string username)
+    public async Task<MontagesResponse> GetMontagePhotos(Guid userId)
     {
-        Guid userId = _unitOfWork.Users.GetUserId(username);
+        //Guid userId = _unitOfWork.Users.GetUserId(username);
         var montages = await _unitOfWork.Montages.AllSortedAsync();
         var squarePhotos = GetPhotos(montages, Helpers.Enums.PhotoOrientation.square, userId);
         var landscapePhotos = GetPhotos(montages, Helpers.Enums.PhotoOrientation.landscape, userId);

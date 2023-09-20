@@ -1,33 +1,28 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Site.Services.Interfaces;
-using PhotographySite.Data.UnitOfWork.Interfaces;
+using PhotographySite.Services.Interfaces;
 
 namespace PhotographySite.Areas.Site.Controllers;
 
 [Area("site")]
 [Route("")]
-public class HomeController : Controller
-{
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-    private IMontageService _montageService;
-    private ILogger<HomeController> _logger;
+public class HomeController : BaseController
+{ 
+    private IMontageService _montageService; 
 
-    public HomeController(IUnitOfWork unitOfWork, 
-                          IMapper mapper, 
-                          IMontageService montageService, 
-                          ILogger<HomeController> logger)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
+    public HomeController(IMontageService montageService, IUserService userService) : base(userService)
+    {         
         _montageService = montageService;
-        _logger = logger;   
     }
 
     [HttpGet("")]
     public async Task<IActionResult> Index()
-    {  
-        return View(await _montageService.GetMontageAsync(HttpContext.User.Identity.Name));
+    {
+        Guid userId = Guid.Empty;
+
+        if (IsLoggedIn())
+            userId = GetUserId();
+
+        return View(await _montageService.GetMontageAsync(userId));
     } 
 }

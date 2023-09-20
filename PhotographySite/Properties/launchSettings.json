@@ -13,10 +13,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "https://localhost:7166/",
-      "environmentVariables": {
-        "APPLICATIONINSIGHTS_CONNECTION_STRING": "InstrumentationKey=8930c3a8-577d-4a14-977c-66e2d1cccdd2;IngestionEndpoint=https://ukwest-0.in.applicationinsights.azure.com/;LiveEndpoint=https://ukwest.livediagnostics.monitor.azure.com/",
+      "environmentVariables": {         
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "AZURE_SQL_CONNECTIONSTRING": "Server=LAPTOP-QG1GTJV1\\SQLEXPRESS;Database=jwm-photography-db;Integrated Security=true;Encrypt=False;MultipleActiveResultSets=true;",
         "AZURE_STORAGE_URL": "http://127.0.0.1:10000/devstoreaccount1",
         "JWM_PHOTOGRAPHY_AZURE_STORAGE_CONNECTION_STRING": "AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;DefaultEndpointsProtocol=http;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1",
         "JWM_PHOTOGRAPHY_TEMP_PHOTO_DIRECTORY_PATH": "D:\\Software Development\\Training\\PhotographySite\\PhotographySite\\wwwroot\\photos\\"

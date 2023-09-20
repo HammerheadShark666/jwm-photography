@@ -24,14 +24,14 @@
 <body>	
 	<div class="h-100 d-flex align-items-center justify-content-center">        	 
         <div class="container">
-			@await Html.PartialAsync("Menubar", menuBarRequest) 
-		    @RenderBody()	 
+			@await Html.PartialAsync("~/Areas/Site/Views/Shared/Menubar.cshtml", menuBarRequest)
+			@RenderBody()	 
 		</div>
 	</div>
 
 	@*@if (User.Identity.IsAuthenticated)
 	{ *@
-		@await Html.PartialAsync("_ModalMessage")
+	@await Html.PartialAsync("~/Areas/Site/Views/Shared/_ModalMessage.cshtml")
 	@*}*@
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>

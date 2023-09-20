@@ -10,5 +10,5 @@ public class GalleriesResponse
     public PhotoPageResponse Photos { get; set; }
     public GalleryResponse SelectedGallery { get; set; }
     public List<PhotoResponse> SelectGalleryPhotos { get; set; }
-    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(); }
+    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl; }
 }

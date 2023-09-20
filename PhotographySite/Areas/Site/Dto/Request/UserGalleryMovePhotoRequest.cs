@@ -2,6 +2,7 @@
 
 public class UserGalleryMovePhotoRequest
 {
+    public Guid UserId { get; set; }
     public long UserGalleryId { get; set; }
     public long PhotoId { get; set; }
     public int Order { get; set; }

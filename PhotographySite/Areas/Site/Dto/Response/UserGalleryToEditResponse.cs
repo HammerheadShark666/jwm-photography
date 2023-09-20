@@ -4,12 +4,12 @@ using PhotographySite.Helpers;
 
 namespace PhotographySite.Areas.Site.Dto.Response;
 
-public class UserGalleriesResponse
+public class UserGalleryToEditResponse
 {
     public LookupsResponse LookupsResponse { get; set; }
     public List<UserGalleryResponse> GalleryResponseList { get; set; }
     public PhotoPageResponse Photos { get; set; }
     public UserGalleryResponse SelectedGallery { get; set; }
     public List<PhotoResponse> SelectGalleryPhotos { get; set; }
-    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(); }
+    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl; }
 }

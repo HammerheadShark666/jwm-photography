@@ -12,6 +12,7 @@ using SwanSong.Service.Helpers.Exceptions;
 using System.Security.Authentication;
 using PhotographySite.Dto.Request;
 using PhotographySite.Dto.Response;
+using PhotographySite.Areas.Admin.Services.Interfaces;
 
 namespace PhotographySite.Areas.Site.Services;
 
@@ -21,25 +22,44 @@ public class UserGalleryService : IUserGalleryService
     private readonly IMapper _mapper;
     private readonly IMemoryCache _memoryCache;
     private readonly IValidatorHelper<UserGallery> _validatorHelper;
+    private IPhotoCatalogService _photoCatalogService; 
+    private IUserGalleryPhotoService _userGalleryPhotoService;
 
     public UserGalleryService(IUnitOfWork unitOfWork,
                               IMapper mapper,
                               IValidatorHelper<UserGallery> validatorHelper,
-                              IMemoryCache memoryCache)
+                              IMemoryCache memoryCache,
+                              IPhotoCatalogService photoCatalogService, 
+                              IUserGalleryPhotoService userGalleryPhotoService)
     {
         _unitOfWork = unitOfWork;
         _validatorHelper = validatorHelper;
         _memoryCache = memoryCache;
         _mapper = mapper;
+        _photoCatalogService = photoCatalogService; 
+        _userGalleryPhotoService = userGalleryPhotoService;
+    }
+
+    public async Task<UserGalleryToEditResponse> GetUserGalleryToEditAsync(Guid userId, long id)
+    {
+        if (!await UserGalleryExists(userId, id))
+            throw new UserGalleryNotFoundException("User Gallary not found.");
+
+        return new UserGalleryToEditResponse()
+        {
+            SelectedGallery = await GetUserGalleryAsync(userId, id),
+            SelectGalleryPhotos = await _userGalleryPhotoService.GetGalleryPhotosAsync(userId, id),
+            LookupsResponse = await _photoCatalogService.GetLookupsAsync(),
+            GalleryResponseList = await GetUserGalleriesAsync(userId)
+        };
     }
 
     public async Task<UserGalleryResponse> GetUserGalleryAsync(Guid userId, long id)
     {
-        UserGallery userGallery = await _unitOfWork.UserGalleries.GetFullGalleryAsync(userId, id);
-        if (userGallery == null) 
-            return new UserGalleryResponse(); 
+        if (!await UserGalleryExists(userId, id))
+            throw new UserGalleryNotFoundException("User Gallary not found."); 
 
-		return _mapper.Map<UserGalleryResponse>(userGallery);  
+		return _mapper.Map<UserGalleryResponse>(await _unitOfWork.UserGalleries.GetFullGalleryAsync(userId, id));  
     }
 
     public async Task<List<UserGalleryResponse>> GetUserGalleriesAsync(HttpContext httpContext)
@@ -51,10 +71,15 @@ public class UserGalleryService : IUserGalleryService
 
         return null;
     }
+     
+    private async Task<List<UserGalleryResponse>> GetUserGalleriesAsync(Guid userId)
+    {        
+        return _mapper.Map<List<UserGalleryResponse>>(await _unitOfWork.UserGalleries.AllSortedAsync(userId));        
+    }
 
-    public async Task<SearchPhotosResponse> SearchPhotosAsync(SearchPhotosRequest searchPhotosRequest)
+    public async Task<SearchPhotosResponse> SearchPhotosAsync(SearchPhotosRequest request)
     {
-        PhotoFilterRequest photoFilterRequest = PhotoFilterRequest.Create(searchPhotosRequest);
+        PhotoFilterRequest photoFilterRequest = PhotoFilterRequest.Create(request);
          
         List<PhotoResponse> photos = _mapper.Map<List<PhotoResponse>>(await _unitOfWork.Photos.ByPagingAsync(photoFilterRequest));
         int numberOfPhotos = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterRequest);
@@ -63,16 +88,16 @@ public class UserGalleryService : IUserGalleryService
         return new SearchPhotosResponse()
         {
             NumberOfPhotos = numberOfPhotos,
-            PageIndex = searchPhotosRequest.PageIndex + 1,
-            PageSize = searchPhotosRequest.PageSize,
+            PageIndex = request.PageIndex + 1,
+            PageSize = request.PageSize,
             NumberOfPages = numberOfPages,
             Photos = photos
         };
     }
      
-    public async Task<UserGalleryActionResponse> AddAsync(UserGalleryAddRequest userGalleryAddRequest)
+    public async Task<UserGalleryActionResponse> AddAsync(UserGalleryAddRequest request)
     {
-        var userGallery = _mapper.Map<UserGallery>(userGalleryAddRequest);
+        var userGallery = _mapper.Map<UserGallery>(request);
 
         await _validatorHelper.ValidateAsync(userGallery, Constants.ValidationEventBeforeSave);
         await SaveAdd(userGallery, CacheKeys.UserGallery);
@@ -80,11 +105,11 @@ public class UserGalleryService : IUserGalleryService
         return new UserGalleryActionResponse(userGallery.Id, await _validatorHelper.AfterEventAsync(userGallery, Constants.ValidationEventAfterSave));
     }
 
-    public async Task<UserGalleryActionResponse> UpdateAsync(UserGalleryUpdateRequest galleryUpdateRequest)
+    public async Task<UserGalleryActionResponse> UpdateAsync(UserGalleryUpdateRequest request)
     {
-        var userGallery = await GetUserGallery(galleryUpdateRequest.Id);
+        var userGallery = await GetUserGallery(request.UserId, request.Id);
 
-        userGallery.Name = galleryUpdateRequest.Name;
+        userGallery.Name = request.Name;
 
         await _validatorHelper.ValidateAsync(userGallery, Constants.ValidationEventBeforeSave);
         await SaveUpdate(userGallery, CacheKeys.Gallery);
@@ -92,9 +117,9 @@ public class UserGalleryService : IUserGalleryService
         return new UserGalleryActionResponse(userGallery.Id, await _validatorHelper.AfterEventAsync(userGallery, Constants.ValidationEventAfterSave));
     }
 
-    public async Task<UserGalleryActionResponse> DeleteAsync(long id)
+    public async Task<UserGalleryActionResponse> DeleteAsync(Guid userId, long id)
     {
-        var userGallery = await GetUserGallery(id);
+        var userGallery = await GetUserGallery(userId, id);
 
         await _validatorHelper.ValidateAsync(userGallery, Constants.ValidationEventBeforeDelete);
         await Delete(userGallery, CacheKeys.Gallery);
@@ -128,16 +153,16 @@ public class UserGalleryService : IUserGalleryService
             _memoryCache.Remove(cacheKey);
     }
 
-    private async Task<UserGallery> GetUserGallery(long id)
+    private async Task<UserGallery> GetUserGallery(Guid userId, long id)
     {
-        var userGallery = await _unitOfWork.UserGalleries.ByIdAsync(id);
+        var userGallery = await _unitOfWork.UserGalleries.GetAsync(userId, id);
         if (userGallery == null)
             throw new UserGalleryNotFoundException("User gallery not found.");
 
         return userGallery;
     }
 
-    public Guid GetUserId(string username)
+    private Guid GetUserId(string username)
     {
         if (username != null)
         {
@@ -154,5 +179,10 @@ public class UserGalleryService : IUserGalleryService
     private int GetNumberOfPages(int numberOfPhotos, int pageSize)
     {
         return (numberOfPhotos / pageSize) + ((numberOfPhotos % pageSize > 0) ? 1 : 0);
-    } 
+    }
+
+    private async Task<bool> UserGalleryExists(Guid userId, long id)
+    {
+        return await _unitOfWork.UserGalleries.GetAsync(userId, id) != null;
+    }
 }

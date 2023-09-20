@@ -9,5 +9,5 @@ public class LookupsResponse
     public List<CategoryResponse> Categories { get; set; }
     public List<PaletteResponse> Palettes { get; set; }
     public List<CameraResponse> Cameras { get; set; }
-    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(); }
+    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl; }
 }

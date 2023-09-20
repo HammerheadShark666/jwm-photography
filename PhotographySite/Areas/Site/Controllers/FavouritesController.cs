@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PhotographySite.Areas.Site.Dto.Request;
 using PhotographySite.Areas.Site.Services.Interfaces;
-using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Dto.Request;
 using PhotographySite.Services.Interfaces;
 
@@ -12,19 +11,13 @@ namespace PhotographySite.Areas.Site.Controllers;
 [Area("site")]
 [Route("favourites")]
 public class FavouritesController : BaseController
-{
-    private IUnitOfWork _unitOfWork; 
-	private IFavouriteService _favouriteService;
-	private ILogger<FavouritesController> _logger; 
+{ 
+	private IFavouriteService _favouriteService; 
 
-	public FavouritesController(IUnitOfWork unitOfWork, 
-                                IFavouriteService favouriteService, 
-                                ILogger<FavouritesController> logger, 
+	public FavouritesController(IFavouriteService favouriteService, 
                                 IUserService userService) : base(userService)
-	{
-		_unitOfWork = unitOfWork;
-		_favouriteService = favouriteService;
-		_logger = logger;
+	{ 
+		_favouriteService = favouriteService; 
 	}
 
 	[HttpGet("")]

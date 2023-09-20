@@ -6,8 +6,8 @@ namespace PhotographySite.Areas.Site.Services.Interfaces;
 
 public interface IUserGalleryPhotoService
 {      
-    Task<List<PhotoResponse>> GetGalleryPhotosAsync(long id);
+    Task<List<PhotoResponse>> GetGalleryPhotosAsync(Guid userId, long galleryId);
     Task<UserGalleryPhoto> AddPhotoToUserGalleryAsync(UserGalleryPhotoRequest userGalleryPhotoRequest);
     Task<UserGalleryPhoto> MovePhotoInGalleryAsync(UserGalleryMovePhotoRequest userGalleryMovePhotoRequest);
-    Task RemovePhotoFromGalleryAsync(long userGalleryId, long photoId);
+    Task RemovePhotoFromGalleryAsync(UserGalleryRemoveRequest userGalleryRemoveRequest);
 }

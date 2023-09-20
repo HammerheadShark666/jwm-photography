@@ -8,6 +8,6 @@ public class Base
 
     public string GetStorageConnection()
     {
-        return EnvironmentVariablesHelper.AzureStorageConnectionString();
+        return EnvironmentVariablesHelper.AzureStorageConnectionString;
     }
 }

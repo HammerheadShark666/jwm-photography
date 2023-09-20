@@ -2,7 +2,7 @@
 using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Models;
 
-namespace PhotographySite.Areas.Admin.Business;
+namespace PhotographySite.Business;
 
 public class GalleryValidator : AbstractValidator<Gallery>
 {       
@@ -22,7 +22,15 @@ public class GalleryValidator : AbstractValidator<Gallery>
             {
                 return await GalleryNameExists(gallery);
             }).WithMessage(gallery => $"The gallery '{gallery.Name}' already exists.");
-        });                
+        });
+
+        RuleSet("RecordExists", () =>
+        {
+            RuleFor(gallery => gallery).MustAsync(async (gallery, cancellation) =>
+            {
+                return await GalleryExists(gallery.Id);
+            }).WithMessage(gallery => $"Gallery not found.");
+        });
     }
 
     protected async Task<bool> GalleryNameExists(Gallery gallery)
@@ -30,5 +38,10 @@ public class GalleryValidator : AbstractValidator<Gallery>
         return gallery.Id == 0
             ? !(await _unitOfWork.Galleries.ExistsAsync(gallery.Name))
             : !(await _unitOfWork.Galleries.ExistsAsync(gallery.Id, gallery.Name));
+    }
+
+    protected async Task<bool> GalleryExists(long id)
+    {
+        return (await _unitOfWork.Galleries.ByIdAsync(id) != null);
     }
 }

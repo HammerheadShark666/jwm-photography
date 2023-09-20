@@ -7,5 +7,5 @@ public class PhotoPageResponse
 {
     public int ItemsCount { get; set; }
     public List<PhotoResponse> Data { get; set; }
-    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl(); }
+    public string AzureStoragePhotosContainerUrl { get => EnvironmentVariablesHelper.AzureStoragePhotosContainerUrl; }
 }
