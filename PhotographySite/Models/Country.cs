@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PhotographySite.Models;
 
+[Table("PHOTO_Country")]
+
 public class Country
 {
     [Key]

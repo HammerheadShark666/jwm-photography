@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PhotographySite.Models;
 
+[Table("PHOTO_Palette")]
 public class Palette
 {
     [Key]

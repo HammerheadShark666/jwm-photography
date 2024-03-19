@@ -12,15 +12,15 @@ using PhotographySite.Data.Contexts;
 namespace PhotographySite.Migrations
 {
     [DbContext(typeof(PhotographySiteDbContext))]
-    [Migration("20230531125033_add-favorite-table")]
-    partial class addfavoritetable
+    [Migration("20240319174051_add-photo-tables")]
+    partial class addphototables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -237,44 +237,7 @@ namespace PhotographySite.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Landscape"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Travel"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Wildlife"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Underwater"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Portrait"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Macro"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Miscellaneous"
-                        });
+                    b.ToTable("PHOTO_Category");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Country", b =>
@@ -291,143 +254,22 @@ namespace PhotographySite.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Country");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "England"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Scotland"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Wales"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "India"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Australia"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Nepal"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Tibet"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "China"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Vietnam"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Cambodia"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Thailand"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Malaysia"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "Borneo"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "Philippines"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "Egypt"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "Indonesia"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Peru"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Bolivia"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Chile"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Name = "Argentina"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Name = "Germany"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Name = "Spain"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Name = "Myanmar"
-                        });
+                    b.ToTable("PHOTO_Country");
                 });
 
-            modelBuilder.Entity("PhotographySite.Models.Gallery", b =>
+            modelBuilder.Entity("PhotographySite.Models.Favourite", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuids");
+                        .HasColumnType("UNIQUEIDENTIFIER");
 
                     b.Property<long>("PhotoId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.HasKey("UserId", "PhotoId");
 
-                    b.ToTable("Gallery");
+                    b.HasIndex("PhotoId");
+
+                    b.ToTable("PHOTO_Favourite");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Gallery", b =>
@@ -447,44 +289,7 @@ namespace PhotographySite.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gallery");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Landscape"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Travel"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Wildlife"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Underwater"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Portraits"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Black & White"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Macro"
-                        });
+                    b.ToTable("PHOTO_Gallery");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.GalleryPhoto", b =>
@@ -510,7 +315,7 @@ namespace PhotographySite.Migrations
 
                     b.HasIndex("PhotoId");
 
-                    b.ToTable("GalleryPhoto");
+                    b.ToTable("PHOTO_GalleryPhoto");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Montage", b =>
@@ -532,121 +337,7 @@ namespace PhotographySite.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Montage");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Column = (byte)1,
-                            Order = (byte)1,
-                            Orientation = (byte)1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Column = (byte)1,
-                            Order = (byte)2,
-                            Orientation = (byte)0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Column = (byte)1,
-                            Order = (byte)3,
-                            Orientation = (byte)2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Column = (byte)1,
-                            Order = (byte)4,
-                            Orientation = (byte)2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Column = (byte)2,
-                            Order = (byte)1,
-                            Orientation = (byte)0
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Column = (byte)2,
-                            Order = (byte)2,
-                            Orientation = (byte)1
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Column = (byte)2,
-                            Order = (byte)3,
-                            Orientation = (byte)2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Column = (byte)2,
-                            Order = (byte)4,
-                            Orientation = (byte)2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Column = (byte)2,
-                            Order = (byte)5,
-                            Orientation = (byte)0
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Column = (byte)2,
-                            Order = (byte)6,
-                            Orientation = (byte)0
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Column = (byte)3,
-                            Order = (byte)1,
-                            Orientation = (byte)2
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Column = (byte)3,
-                            Order = (byte)2,
-                            Orientation = (byte)0
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Column = (byte)4,
-                            Order = (byte)1,
-                            Orientation = (byte)1
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Column = (byte)4,
-                            Order = (byte)2,
-                            Orientation = (byte)1
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Column = (byte)4,
-                            Order = (byte)3,
-                            Orientation = (byte)2
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Column = (byte)4,
-                            Order = (byte)4,
-                            Orientation = (byte)0
-                        });
+                    b.ToTable("PHOTO_Montage");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Orientation", b =>
@@ -663,24 +354,7 @@ namespace PhotographySite.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orientation");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Landscape"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Portrait"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Square"
-                        });
+                    b.ToTable("PHOTO_Orientation");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Palette", b =>
@@ -697,24 +371,7 @@ namespace PhotographySite.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Palette");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Colour"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Black & White"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Infrared"
-                        });
+                    b.ToTable("PHOTO_Palette");
                 });
 
             modelBuilder.Entity("PhotographySite.Models.Photo", b =>
@@ -785,50 +442,33 @@ namespace PhotographySite.Migrations
 
                     b.HasIndex("PaletteId");
 
-                    b.ToTable("Photo");
+                    b.ToTable("PHOTO_Photo");
                 });
 
-            modelBuilder.Entity("PhotographySite.Models.Showcase", b =>
+            modelBuilder.Entity("PhotographySite.Models.UserGallery", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateFrom")
-                        .HasColumnType("datetime2(7)");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("UNIQUEIDENTIFIER");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Showcase");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            DateFrom = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Black & White"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            DateFrom = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Mountains"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            DateFrom = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Atacama Desert"
-                        });
+                    b.ToTable("UserGallery");
                 });
 
-            modelBuilder.Entity("PhotographySite.Models.ShowcasePhoto", b =>
+            modelBuilder.Entity("PhotographySite.Models.UserGalleryPhoto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -839,15 +479,19 @@ namespace PhotographySite.Migrations
                     b.Property<byte>("Order")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("PhotoId")
-                        .HasColumnType("int");
+                    b.Property<long>("PhotoId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("ShowcaseId")
+                    b.Property<int>("UserGalleryId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShowcasePhoto");
+                    b.HasIndex("PhotoId");
+
+                    b.HasIndex("UserGalleryId");
+
+                    b.ToTable("UserGalleryPhoto");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -901,6 +545,17 @@ namespace PhotographySite.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PhotographySite.Models.Favourite", b =>
+                {
+                    b.HasOne("PhotographySite.Models.Photo", "Photo")
+                        .WithMany("Favourites")
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Photo");
+                });
+
             modelBuilder.Entity("PhotographySite.Models.GalleryPhoto", b =>
                 {
                     b.HasOne("PhotographySite.Models.Gallery", null)
@@ -939,7 +594,34 @@ namespace PhotographySite.Migrations
                     b.Navigation("Palette");
                 });
 
+            modelBuilder.Entity("PhotographySite.Models.UserGalleryPhoto", b =>
+                {
+                    b.HasOne("PhotographySite.Models.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PhotographySite.Models.UserGallery", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("UserGalleryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Photo");
+                });
+
             modelBuilder.Entity("PhotographySite.Models.Gallery", b =>
+                {
+                    b.Navigation("Photos");
+                });
+
+            modelBuilder.Entity("PhotographySite.Models.Photo", b =>
+                {
+                    b.Navigation("Favourites");
+                });
+
+            modelBuilder.Entity("PhotographySite.Models.UserGallery", b =>
                 {
                     b.Navigation("Photos");
                 });
