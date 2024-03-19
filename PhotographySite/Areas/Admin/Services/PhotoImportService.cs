@@ -35,7 +35,7 @@ public class PhotoImportService : IPhotoImportService
         var photosWithDetails = GetPhotoDetails(fileNames, directoryPath);
 
         var savedPhotosResponse = await GetLookUpsAsync(new SavedPhotosResponse()); 
-        savedPhotosResponse.SavedPhotos = SavePhotos(photosWithDetails);
+        savedPhotosResponse.SavedPhotos = await SavePhotosAsync(photosWithDetails);
         savedPhotosResponse.ExistingPhotos = existingPhotos; 
 
         FileHelper.DeleteAllFilesInDirectory(directoryPath);
@@ -91,7 +91,7 @@ public class PhotoImportService : IPhotoImportService
         return photos;
     }
 
-    private List<Photo> SavePhotos(List<Photo> photos)
+    private async Task<List<Photo>> SavePhotosAsync(List<Photo> photos)
     {
         var savedPhotos = new List<Photo>();
 
@@ -99,13 +99,12 @@ public class PhotoImportService : IPhotoImportService
         {
             if (photo.Id == 0)
             {
-                _unitOfWork.Photos.AddAsync(photo);
+                await _unitOfWork.Photos.AddAsync(photo);
                 savedPhotos.Add(photo);
             }
-               
         }
-            
-        _unitOfWork.Complete();
+
+        await _unitOfWork.Complete();
 
         return savedPhotos;
     }
