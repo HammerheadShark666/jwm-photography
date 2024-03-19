@@ -52,7 +52,7 @@ public class AccountController : Controller
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login(LoginRequest loginRequest)
+    public async Task<ActionResult> Login(LoginRequest loginRequest, string returnUrl)
     {
         if (!ModelState.IsValid) 
             return View(loginRequest); 
@@ -61,8 +61,11 @@ public class AccountController : Controller
             var response = await _accountService.LoginAsync(loginRequest.Email, loginRequest.Password);
              
             if(response.Item1.Succeeded)
-            { 
-                return RedirectToAction("Index", "Home", new { area = (response.Item2 == Role.Admin ? "Admin" : "Site") });
+            {
+                if (!string.IsNullOrEmpty(returnUrl))  
+                    return LocalRedirect(returnUrl);
+                else                
+                    return RedirectToAction("Index", "Home", new { area = (response.Item2 == Role.Admin ? "Admin" : "Site") });
             }
             else
             {

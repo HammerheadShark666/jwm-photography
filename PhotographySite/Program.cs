@@ -1,4 +1,3 @@
-using Microsoft.ApplicationInsights.Extensibility;
 using PhotographySite.Extensions;
 using PhotographySite.Middleware;
 
@@ -31,11 +30,6 @@ app.UseAuthentication();
 app.UseAuthorization(); 
 app.UseSession(); 
 app.ConfigureRoutes();
-
- 
-
 app.UseStatusCodePagesWithRedirects("/error/http/{0}");
-
-
 
 app.Run();

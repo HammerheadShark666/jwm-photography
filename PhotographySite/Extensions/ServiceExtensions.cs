@@ -1,24 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
-using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Areas.Admin.Services;
-using PhotographySite.Areas.Site.Services.Interfaces;
+using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Areas.Site.Services;
+using PhotographySite.Areas.Site.Services.Interfaces;
+using PhotographySite.Business;
 using PhotographySite.Data.Contexts;
-using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Data.UnitOfWork;
+using PhotographySite.Data.UnitOfWork.Interfaces;
 using PhotographySite.Helper;
 using PhotographySite.Helpers;
 using PhotographySite.Helpers.Interface;
-using PhotographySite.Services.Interfaces;
-using PhotographySite.Services;
-using System.Reflection;
-using PhotographySite.Areas.Admin.Business;
-using FluentValidation;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using PhotographySite.Models;
-using PhotographySite.Business;
+using PhotographySite.Services;
+using PhotographySite.Services.Interfaces;
+using System.Reflection;
 
 namespace PhotographySite.Extensions;
 
@@ -40,13 +39,7 @@ public static class ServiceExtensions
 
     public static void ConfigureApplicationInsights(this IServiceCollection services)
     {
-        services.AddApplicationInsightsTelemetry();
-        
-        //new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions
-        //{
-        //    EnableActiveTelemetryConfigurationSetup = true,
-        //    ConnectionString = EnvironmentVariablesHelper.ApplicationInsightsConnectionString
-        //});  // opt => opt.EnableAdaptiveSampling = false);
+        services.AddApplicationInsightsTelemetry(); 
     }     
 
     public static void ConfigureMvc(this IServiceCollection services)

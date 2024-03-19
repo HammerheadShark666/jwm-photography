@@ -19,7 +19,7 @@
         <div style="width: 26rem;">
             <div class="tab-content">
                 <div aria-labelledby="tab-login">
-                    @using (Html.BeginForm("LogIn", "Account", new { @class = "row g-4" }, FormMethod.Post))
+                    @using (Html.BeginForm("LogIn", "Account", new { @class = "row g-4", returnUrl = Context.Request.Query["ReturnUrl"] }, FormMethod.Post))
                     {
                         <!-- Email input -->
                         <div class="form-outline mb-4">

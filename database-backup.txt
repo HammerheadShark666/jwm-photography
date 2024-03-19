@@ -1,0 +1,7 @@
+MigrationId,ProductVersion
+20230215181339_create-db,7.0.5
+20230330131825_add-description2-to-gallery,7.0.5
+20230330132003_remove-description2-from-gallery,7.0.5
+20230531125033_add-favorite-table,7.0.5
+20230531125354_favourite-remove-id,7.0.5
+20230606150907_add-user-gallery-tables,7.0.5
