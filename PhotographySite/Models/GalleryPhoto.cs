@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhotographySite.Models;
 
+[Table("PHOTO_GalleryPhoto")]
 public class GalleryPhoto
 {
     [Key]

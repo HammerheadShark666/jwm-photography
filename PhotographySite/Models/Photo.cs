@@ -4,6 +4,7 @@ using static PhotographySite.Helpers.Enums;
 
 namespace PhotographySite.Models;
 
+[Table("PHOTO_Photo")]
 public class Photo
 {
     private PhotoOrientation orientation;              

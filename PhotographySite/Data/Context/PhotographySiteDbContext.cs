@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PhotographySite.Areas.Site.Dto.Response;
-using PhotographySite.Data.Context; 
+using PhotographySite.Data.Context;
 using PhotographySite.Models;
 
 namespace PhotographySite.Data.Contexts;
@@ -27,12 +26,12 @@ public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser>
 
 		modelBuilder.Entity<Favourite>().HasKey(fv => new { fv.UserId, fv.PhotoId });
 
-		modelBuilder.Entity<Category>().HasData(DefaultData.GetCategoryDefaultData());
+        modelBuilder.Entity<Category>().HasData(DefaultData.GetCategoryDefaultData());
         modelBuilder.Entity<Country>().HasData(DefaultData.GetCountryDefaultData());
         modelBuilder.Entity<Gallery>().HasData(DefaultData.GetGalleryDefaultData());
         modelBuilder.Entity<Montage>().HasData(DefaultData.GetMontageDefaultData());
         modelBuilder.Entity<Orientation>().HasData(DefaultData.GetOrientationDefaultData());
-        modelBuilder.Entity<Palette>().HasData(DefaultData.GetPaletteDefaultData());      
+        modelBuilder.Entity<Palette>().HasData(DefaultData.GetPaletteDefaultData());
     }
 }
 
