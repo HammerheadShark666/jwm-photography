@@ -16,11 +16,7 @@ builder.Services.ConfigureApplicationInsights();
 
 var app = builder.Build();
 
-//if (builder.Environment.IsDevelopment())
-//    app.UseDeveloperExceptionPage();
-//else
-    app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true);  
-
+app.UseGlobalExceptionHandler(app.Logger, errorPagePath: "/error", respondWithJsonErrorDetails: true);  
 app.Logger.LogInformation("Starting Jwm Photography Website {0}", DateTime.Now); 
 app.UseHttpsRedirection();  
 app.UseStaticFiles();
@@ -30,6 +26,6 @@ app.UseAuthentication();
 app.UseAuthorization(); 
 app.UseSession(); 
 app.ConfigureRoutes();
-app.UseStatusCodePagesWithRedirects("/error/http/{0}");
+app.UseStatusCodePagesWithRedirects("/error/{0}"); ///http
 
 app.Run();

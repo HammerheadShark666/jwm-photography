@@ -12,6 +12,16 @@
     }
   },
   {
+    "outputFileName": "wwwroot/css/min/error.min.css",
+    "inputFiles": [
+      "wwwroot/css/error.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
     "outputFileName": "wwwroot/css/min/admin.min.css",
     "inputFiles": [
       "wwwroot/css/admin/admin-site.css",
@@ -236,6 +246,18 @@
       "wwwroot/js/main.js",
       "wwwroot/js/site/site.js",
       "wwwroot/js/site/home.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/min/error.min.js",
+    "inputFiles": [ 
+      "wwwroot/js/error.js" 
     ],
     "minify": {
       "enabled": true,
