@@ -104,6 +104,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\css\min\" />
     <Folder Include="wwwroot\js\min\" />
+    <Folder Include="wwwroot\photos\" />
   </ItemGroup>
 
   <ItemGroup>
