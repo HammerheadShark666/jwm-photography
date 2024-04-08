@@ -21,14 +21,17 @@ public class FileHelper
         return fileNames;
     }
 
-    public static void DeleteAllFilesInDirectory(string directoryPath)
+    public static void DeleteAllFilesInDirectory(string directoryPath, List<string> filenames)
     {
         DirectoryInfo di = new DirectoryInfo(directoryPath);
         FileInfo[] files = di.GetFiles();
 
         foreach (FileInfo file in files)
         {
-            file.Delete();
+            if(filenames.Contains(file.Name))
+            {
+                file.Delete();
+            }
         }
     }
 }
