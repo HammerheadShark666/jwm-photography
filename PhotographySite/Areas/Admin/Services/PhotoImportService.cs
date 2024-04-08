@@ -38,7 +38,7 @@ public class PhotoImportService : IPhotoImportService
         savedPhotosResponse.SavedPhotos = await SavePhotosAsync(photosWithDetails);
         savedPhotosResponse.ExistingPhotos = existingPhotos; 
 
-        FileHelper.DeleteAllFilesInDirectory(directoryPath);
+        FileHelper.DeleteAllFilesInDirectory(directoryPath, fileNames);
 
         return savedPhotosResponse;
     }
