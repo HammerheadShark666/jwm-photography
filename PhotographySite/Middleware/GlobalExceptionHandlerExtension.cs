@@ -12,9 +12,9 @@ public static class GlobalExceptionHandlerExtension
     //This method will globally handle logging unhandled execeptions.
     //It will respond json response for ajax calls that send the json accept header
     //otherwise it will redirect to an error page
-    public static void UseGlobalExceptionHandler(this IApplicationBuilder app, 
-                                                 ILogger logger, 
-                                                 string errorPagePath, 
+    public static void UseGlobalExceptionHandler(this IApplicationBuilder app,
+                                                 ILogger logger,
+                                                 string errorPagePath,
                                                  bool respondWithJsonErrorDetails = false)
     {
         app.UseExceptionHandler(appBuilder =>
@@ -34,29 +34,29 @@ public static class GlobalExceptionHandlerExtension
 
                 context.Response.StatusCode = statusCode;
 
-                BaseResponse baseResponse = new BaseResponse()
+                BaseResponse baseResponse = new()
                 {
                     Messages = new List<Message>  {
-                        new Message() { Severity = "error", Text = exception.Message}
+                        new() { Severity = "error", Text = exception.Message}
                     }
-                }; 
+                };
 
-                var json = JsonConvert.SerializeObject(baseResponse); 
+                var json = JsonConvert.SerializeObject(baseResponse);
 
-				logger.LogError(json);
+                logger.LogError(json);
 
-				var matchText = "JSON";
+                var matchText = "JSON";
 
-				bool requiresJsonResponse = context.Request
-													.GetTypedHeaders()
-													.Accept
-													.Any(t => t.Suffix.Value?.ToUpper() == matchText
-															  || t.SubTypeWithoutSuffix.Value?.ToUpper() == matchText);  
+                bool requiresJsonResponse = context.Request
+                                                    .GetTypedHeaders()
+                                                    .Accept
+                                                    .Any(t => t.Suffix.Value?.ToUpper() == matchText
+                                                              || t.SubTypeWithoutSuffix.Value?.ToUpper() == matchText);
 
-				if (requiresJsonResponse)
+                if (requiresJsonResponse)
                 {
-                    context.Response.ContentType = "application/json; charset=utf-8"; 
-					await context.Response
+                    context.Response.ContentType = "application/json; charset=utf-8";
+                    await context.Response
                                     .WriteAsync(json, Encoding.UTF8);
                 }
                 else
@@ -66,5 +66,5 @@ public static class GlobalExceptionHandlerExtension
                 }
             });
         });
-    } 
+    }
 }

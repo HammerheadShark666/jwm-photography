@@ -8,14 +8,14 @@ namespace PhotographySite.Controllers;
 
 [Route("")]
 public class AccountController : Controller
-{   
+{
     private readonly IAccountService _accountService;
 
     public AccountController(IAccountService accountService)
     {
         _accountService = accountService;
     }
-  
+
     [HttpGet("register")]
     public IActionResult Register()
     {
@@ -25,14 +25,14 @@ public class AccountController : Controller
     [HttpPost("register")]
     public async Task<ActionResult> Register(RegisterRequest registerRequest)
     {
-        if (!ModelState.IsValid) 
-            return View(registerRequest); 
+        if (!ModelState.IsValid)
+            return View(registerRequest);
         else
         {
             IdentityResult result = await _accountService.RegisterAsync(registerRequest.Email, registerRequest.Password);
 
-            if (result.Succeeded) 
-                return RedirectToAction("Login", "Account"); 
+            if (result.Succeeded)
+                return RedirectToAction("Login", "Account");
             else
             {
                 foreach (IdentityError error in result.Errors)
@@ -54,17 +54,17 @@ public class AccountController : Controller
     [HttpPost("login")]
     public async Task<ActionResult> Login(LoginRequest loginRequest, string returnUrl)
     {
-        if (!ModelState.IsValid) 
-            return View(loginRequest); 
+        if (!ModelState.IsValid)
+            return View(loginRequest);
         else
         {
             var response = await _accountService.LoginAsync(loginRequest.Email, loginRequest.Password);
-             
-            if(response.Item1.Succeeded)
+
+            if (response.Item1.Succeeded)
             {
-                if (!string.IsNullOrEmpty(returnUrl))  
+                if (!string.IsNullOrEmpty(returnUrl))
                     return LocalRedirect(returnUrl);
-                else                
+                else
                     return RedirectToAction("Index", "Home", new { area = (response.Item2 == Role.Admin ? "Admin" : "Site") });
             }
             else
@@ -81,7 +81,7 @@ public class AccountController : Controller
         await _accountService.LogOffAsync();
         return RedirectToAction("Index", "Home", new { area = "Site" });
     }
-      
+
     [HttpGet("AccessDenied")]
     public IActionResult AccessDenied()
     {

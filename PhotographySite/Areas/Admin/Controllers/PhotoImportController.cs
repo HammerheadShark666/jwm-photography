@@ -12,12 +12,12 @@ namespace PhotographySite.Areas.Admin.Controllers;
 [Route("admin/photo")]
 [AutoValidateAntiforgeryToken]
 public class PhotoImportController : Controller
-{   
+{
     private IPhotoImportService _photoImportService;
 
     public PhotoImportController(IPhotoImportService photoImportService)
     {
-        _photoImportService = photoImportService; 
+        _photoImportService = photoImportService;
     }
 
     [HttpGet("import")]
@@ -26,19 +26,19 @@ public class PhotoImportController : Controller
         return View("Import");
     }
 
-    [HttpPost("import")] 
-	public async Task<IActionResult> Import(List<IFormFile> files)
-    {       
-        if(files == null || files.Count() == 0)         
+    [HttpPost("import")]
+    public async Task<IActionResult> Import(List<IFormFile> files)
+    {
+        if (files == null || files.Count() == 0)
             return BadRequest(new BaseResponse()
             {
                 IsValid = false,
 
                 Messages = new List<Message>  {
-                    new Message() { Severity = "error", Text = ConstantMessages.NoPhotosToImport}
+                    new() { Severity = "error", Text = ConstantMessages.NoPhotosToImport}
                 }
-            });        
-         
-        return PartialView("_ImportedPhotosGrid", await _photoImportService.ImportAsync(files)); 
-    }     
+            });
+
+        return PartialView("_ImportedPhotosGrid", await _photoImportService.ImportAsync(files));
+    }
 }

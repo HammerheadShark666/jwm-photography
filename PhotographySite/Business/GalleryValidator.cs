@@ -5,15 +5,15 @@ using PhotographySite.Models;
 namespace PhotographySite.Business;
 
 public class GalleryValidator : AbstractValidator<Gallery>
-{       
+{
     private readonly IUnitOfWork _unitOfWork;
 
     public GalleryValidator(IUnitOfWork unitOfWork)
-    {   
-        _unitOfWork= unitOfWork;    
+    {
+        _unitOfWork = unitOfWork;
 
         RuleSet("BeforeSave", () =>
-        {              
+        {
             RuleFor(gallery => gallery.Name)
                 .NotEmpty().WithMessage("Gallery name is required.")
                 .Length(1, 150).WithMessage("Gallery name must have a length between 1 and 150.");
@@ -34,7 +34,7 @@ public class GalleryValidator : AbstractValidator<Gallery>
     }
 
     protected async Task<bool> GalleryNameExists(Gallery gallery)
-    { 
+    {
         return gallery.Id == 0
             ? !(await _unitOfWork.Galleries.ExistsAsync(gallery.Name))
             : !(await _unitOfWork.Galleries.ExistsAsync(gallery.Id, gallery.Name));

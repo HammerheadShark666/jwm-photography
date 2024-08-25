@@ -7,11 +7,11 @@ namespace PhotographySite.Areas.Site.Controllers;
 [Area("site")]
 [Route("")]
 public class HomeController : BaseController
-{ 
-    private IMontageService _montageService; 
+{
+    private IMontageService _montageService;
 
     public HomeController(IMontageService montageService, IUserService userService) : base(userService)
-    {         
+    {
         _montageService = montageService;
     }
 
@@ -24,5 +24,5 @@ public class HomeController : BaseController
             userId = GetUserId();
 
         return View(await _montageService.GetMontageAsync(userId));
-    } 
+    }
 }

@@ -6,10 +6,10 @@ using static PhotographySite.Helpers.Enums;
 namespace PhotographySite.Services;
 
 public class AccountService : IAccountService
-{ 
+{
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private RoleManager<IdentityRole> _roleManager; 
+    private RoleManager<IdentityRole> _roleManager;
 
     public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
     {
@@ -20,7 +20,7 @@ public class AccountService : IAccountService
 
     public async Task<IdentityResult> RegisterAsync(string email, string password)
     {
-        ApplicationUser user = new ApplicationUser { UserName = email, Email = email };
+        ApplicationUser user = new() { UserName = email, Email = email };
 
         IdentityResult result = await _userManager.CreateAsync(user, password);
         if (result.Succeeded)
@@ -29,13 +29,13 @@ public class AccountService : IAccountService
             if (defaultrole != null)
             {
                 IdentityResult roleresult = await _userManager.AddToRoleAsync(user, defaultrole.Name);
-            }             
+            }
         }
 
         return result;
     }
 
-    public async Task<Tuple<Microsoft.AspNetCore.Identity.SignInResult, Role> > LoginAsync(string email, string password)
+    public async Task<Tuple<Microsoft.AspNetCore.Identity.SignInResult, Role>> LoginAsync(string email, string password)
     {
         Role role = Role.User;
 
@@ -43,20 +43,20 @@ public class AccountService : IAccountService
         if (result.Succeeded)
         {
             var user = await _userManager.FindByNameAsync(email);
-            if(user != null)
+            if (user != null)
             {
                 List<string> roles = (List<string>)await _userManager.GetRolesAsync(user);
 
                 if (roles.Contains("Admin"))
-                    role = Role.Admin; 
-            }            
-        } 
+                    role = Role.Admin;
+            }
+        }
 
-        return new Tuple<SignInResult, Role>(result, role); 
+        return new Tuple<SignInResult, Role>(result, role);
     }
 
     public async Task LogOffAsync()
     {
-        await _signInManager.SignOutAsync(); 
+        await _signInManager.SignOutAsync();
     }
 }

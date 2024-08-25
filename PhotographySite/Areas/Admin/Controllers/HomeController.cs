@@ -7,7 +7,7 @@ namespace PhotographySite.Areas.Admin.Controllers;
 
 [Authorize(Roles = "Admin")]
 [Area("Admin")]
-[Route("admin")] 
+[Route("admin")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -20,10 +20,11 @@ public class HomeController : Controller
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index() 
+    public async Task<IActionResult> Index()
     {
-        return View("Home", new GalleriesResponse() {
+        return View("Home", new GalleriesResponse()
+        {
             SelectGalleryPhotos = await _photoCatalogService.GetLatestPhotos(20)
-        }); 
-    } 
+        });
+    }
 }

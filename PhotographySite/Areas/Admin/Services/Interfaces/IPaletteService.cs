@@ -4,5 +4,5 @@ namespace PhotographySite.Areas.Admin.Services.Interfaces;
 
 public interface IPaletteService
 {
-	Task<List<PaletteResponse>> GetPalettesAsync();
+    Task<List<PaletteResponse>> GetPalettesAsync();
 }

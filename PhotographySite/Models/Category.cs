@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhotographySite.Models;
 
@@ -12,5 +12,5 @@ public class Category
 
     [Column(TypeName = "nvarchar(75)")]
     [Required]
-    public string Name { get; set; } 
+    public string Name { get; set; }
 }

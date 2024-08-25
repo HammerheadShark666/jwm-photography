@@ -4,12 +4,12 @@ namespace PhotographySite.Data.UnitOfWork.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {
-    IPhotoRepository Photos { get; } 
+    IPhotoRepository Photos { get; }
     ICountryRepository Countries { get; }
     ICategoryRepository Categories { get; }
     IMontageRepository Montages { get; }
     IPaletteRepository Palettes { get; }
-    IGalleryRepository Galleries { get; } 
+    IGalleryRepository Galleries { get; }
     IGalleryPhotoRepository GalleryPhotos { get; }
     IUserGalleryRepository UserGalleries { get; }
     IUserGalleryPhotoRepository UserGalleryPhotos { get; }

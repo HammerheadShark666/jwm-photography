@@ -1,7 +1,7 @@
 ﻿namespace PhotographySite.Areas.Admin.Dto.Request;
 
 public class UpdatePhotoRequest
-{ 
+{
     public long Id { get; set; }
     public string Title { get; set; }
     public int CountryId { get; set; }

@@ -7,7 +7,7 @@ public class ExifHelper
 {
     public static Photo GetExifData(string path)
     {
-        Photo photo = new Photo();
+        Photo photo = new();
         IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(path);
 
         Parallel.ForEach(directories, directory =>
@@ -17,22 +17,22 @@ public class ExifHelper
                 switch (directory.Name)
                 {
                     case "Exif IFD0":
-                        {                            
+                        {
                             photo = GetExifIFD0(photo, tag);
                             break;
                         }
                     case "Exif SubIFD":
-                        {                            
+                        {
                             photo = GetExifSubIFD(photo, tag);
                             break;
                         }
                     case "JPEG":
-                        {   
-                            photo = GetJPEG(photo, tag);   
+                        {
+                            photo = GetJPEG(photo, tag);
                             break;
                         }
                     case "File":
-                        {    
+                        {
                             photo = GetFile(photo, tag);
                             break;
                         }
@@ -43,7 +43,7 @@ public class ExifHelper
         return photo;
     }
 
-    private static Photo GetFile(Photo photo , Tag tag)
+    private static Photo GetFile(Photo photo, Tag tag)
     {
         switch (tag.Name)
         {
@@ -112,7 +112,7 @@ public class ExifHelper
                 }
             case "ISO Speed Ratings":
                 {
-                    if(int.Parse(tag.Description) > 0)
+                    if (int.Parse(tag.Description) > 0)
                         photo.Iso = int.Parse(tag.Description);
                     break;
                 }
@@ -122,7 +122,7 @@ public class ExifHelper
                     {
                         photo.DateTaken = DateTime.ParseExact(tag.Description, "yyyy:MM:dd HH:mm:ss", null);
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                     break;
                 }
             case "Focal Length":

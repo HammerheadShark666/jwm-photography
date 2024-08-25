@@ -11,40 +11,40 @@ namespace PhotographySite.Areas.Site.Controllers;
 [Area("site")]
 [Route("favourites")]
 public class FavouritesController : BaseController
-{ 
-	private IFavouriteService _favouriteService; 
+{
+    private IFavouriteService _favouriteService;
 
-	public FavouritesController(IFavouriteService favouriteService, 
+    public FavouritesController(IFavouriteService favouriteService,
                                 IUserService userService) : base(userService)
-	{ 
-		_favouriteService = favouriteService; 
-	}
+    {
+        _favouriteService = favouriteService;
+    }
 
-	[HttpGet("")]
-	public async Task<IActionResult> Index()
-	{
-        IsValidUser();  
-		return View("Favourites", await _favouriteService.AllAsync(GetUserId()));
-	}
+    [HttpGet("")]
+    public async Task<IActionResult> Index()
+    {
+        IsValidUser();
+        return View("Favourites", await _favouriteService.AllAsync(GetUserId()));
+    }
 
     [HttpPost("add-photo/{photoId}")]
-	public async Task<IActionResult> AddPhoto(long photoId)
+    public async Task<IActionResult> AddPhoto(long photoId)
     {
-        IsValidUser();         
-        return Ok(await _favouriteService.AddAsync(new FavouriteAddRequest() { UserId = GetUserId(), PhotoId = photoId })); 
+        IsValidUser();
+        return Ok(await _favouriteService.AddAsync(new FavouriteAddRequest() { UserId = GetUserId(), PhotoId = photoId }));
     }
 
     [HttpDelete("delete-photo/{photoId}")]
     public async Task DeletePhoto(long photoId)
     {
-        IsValidUser();         
+        IsValidUser();
         await _favouriteService.DeleteAsync(GetUserId(), photoId);
     }
 
     [HttpPost("search")]
     public async Task<IActionResult> SearchPhotosAsync([FromBody] SearchPhotosRequest searchPhotosRequest)
-    { 
-        IsValidUser(); 
+    {
+        IsValidUser();
         return Ok(await _favouriteService.SearchPhotosAsync(GetUserId(), searchPhotosRequest));
     }
 }

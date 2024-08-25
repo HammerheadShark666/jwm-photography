@@ -17,8 +17,8 @@ public class UserRepository : IUserRepository
     {
         ApplicationUser user = _context.Users.FirstOrDefault(user => user.UserName == userName);
 
-        if((user != null) && (user.Id != null))            
-            return new Guid(user.Id);         
+        if ((user != null) && (user.Id != null))
+            return new Guid(user.Id);
 
         return Guid.Empty;
     }

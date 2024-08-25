@@ -14,7 +14,7 @@ public class UserGalleryRepository : IUserGalleryRepository
     {
         _context = context;
     }
- 
+
     public async Task<List<UserGallery>> AllSortedAsync()
     {
         return await _context.UserGallery.OrderBy(userGallery => userGallery.Name).ToListAsync();
@@ -46,11 +46,11 @@ public class UserGalleryRepository : IUserGalleryRepository
 
     public async Task<UserGallery> GetFullGalleryAsync(Guid userId, long id)
     {
-		return await _context.UserGallery
+        return await _context.UserGallery
                                 .Include(userGallery => userGallery.Photos)
-                                .ThenInclude(photos => photos.Photo)          
+                                .ThenInclude(photos => photos.Photo)
                                 .ThenInclude(photo => photo.Country)
-                                .SingleOrDefaultAsync(userGallery => userGallery.UserId == userId && userGallery.Id == id); 
+                                .SingleOrDefaultAsync(userGallery => userGallery.UserId == userId && userGallery.Id == id);
     }
 
     public async Task AddAsync(UserGallery gallery)

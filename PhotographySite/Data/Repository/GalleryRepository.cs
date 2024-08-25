@@ -13,7 +13,7 @@ public class GalleryRepository : IGalleryRepository
     {
         _context = context;
     }
- 
+
     public async Task<List<Gallery>> AllSortedAsync()
     {
         return await _context.Gallery.OrderBy(gallery => gallery.Name).ToListAsync();
@@ -35,11 +35,11 @@ public class GalleryRepository : IGalleryRepository
 
     public async Task<Gallery> GetFullGalleryAsync(long id)
     {
-		return await _context.Gallery
+        return await _context.Gallery
                 .Include(gallery => gallery.Photos)
-                .ThenInclude(photos => photos.Photo) 
-                .ThenInclude(photo => photo.Country)                
-                .SingleAsync(gallery => gallery.Id == id); 
+                .ThenInclude(photos => photos.Photo)
+                .ThenInclude(photo => photo.Country)
+                .SingleAsync(gallery => gallery.Id == id);
     }
 
     public async Task<Gallery> GetFullGalleryAsync(Guid userId, long id)

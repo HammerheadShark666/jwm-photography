@@ -14,7 +14,7 @@ public class ErrorController : Controller
         {
             case 401:
                 {
-                    return View("Error401"); 
+                    return View("Error401");
                 }
             case 404:
                 {
@@ -22,7 +22,7 @@ public class ErrorController : Controller
                 }
             default:
                 return View();
-        }  
+        }
     }
 
     [HttpGet("")]

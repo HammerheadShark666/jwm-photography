@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhotographySite.Models;
 
@@ -8,8 +8,8 @@ public class UserGallery
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-	[Column(TypeName = "int")]
-	public long Id { get; set; }
+    [Column(TypeName = "int")]
+    public long Id { get; set; }
 
     [Required]
     [Column(TypeName = "UNIQUEIDENTIFIER")]
@@ -19,8 +19,8 @@ public class UserGallery
     [Required]
     public string Name { get; set; }
 
-	public ICollection<UserGalleryPhoto> Photos { get; set; }
+    public ICollection<UserGalleryPhoto> Photos { get; set; }
 
-	[Column(TypeName = "nvarchar(1000)")]
-	public string Description { get; set; } 
+    [Column(TypeName = "nvarchar(1000)")]
+    public string Description { get; set; }
 }

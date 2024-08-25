@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PhotographySite.Data.Contexts;
 using PhotographySite.Data.Repository.Interfaces;
 using PhotographySite.Helpers;
-using PhotographySite.Models; 
+using PhotographySite.Models;
 
 namespace PhotographySite.Data.Repository;
 
@@ -19,18 +19,18 @@ public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
     public async Task<List<Photo>> GetGalleryPhotosAsync(long galleryId)
     {
         return await (from galleryPhoto in _context.UserGalleryPhoto
-                      join photo in _context.Photo 
+                      join photo in _context.Photo
                             on galleryPhoto.PhotoId equals photo.Id
                       where galleryPhoto.UserGalleryId == galleryId
-                      orderby(galleryPhoto.Order)
+                      orderby (galleryPhoto.Order)
                       select photo).ToListAsync();
     }
 
     public async Task<UserGalleryPhoto> GetGalleryPhotoAsync(long galleryId, long photoId)
     {
         return await (from galleryPhoto in _context.UserGalleryPhoto
-                      where galleryPhoto.UserGalleryId == galleryId 
-                        && galleryPhoto.PhotoId == photoId                      
+                      where galleryPhoto.UserGalleryId == galleryId
+                        && galleryPhoto.PhotoId == photoId
                       select galleryPhoto).SingleOrDefaultAsync();
     }
 
@@ -61,19 +61,19 @@ public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
                                     && galleryPhoto.Photo.Orientation == (int)Enums.PhotoOrientation.landscape
                                  select galleryPhoto).CountAsync();
 
-        if(gallerySize == 0) return null;
+        if (gallerySize == 0) return null;
 
-		Random rand = new Random();
-		int toSkip = rand.Next(0, gallerySize);
+        Random rand = new();
+        int toSkip = rand.Next(0, gallerySize);
 
-		return await (from galleryPhoto in _context.UserGalleryPhoto
+        return await (from galleryPhoto in _context.UserGalleryPhoto
                       join photo in _context.Photo
-					  on galleryPhoto.PhotoId equals photo.Id
-				where galleryPhoto.UserGalleryId == galleryId
-                    && galleryPhoto.Photo.Orientation == (int)Enums.PhotoOrientation.landscape
-                orderby (galleryPhoto.Order)
-				select photo).Skip(toSkip).FirstOrDefaultAsync(); 
-	}
+                      on galleryPhoto.PhotoId equals photo.Id
+                      where galleryPhoto.UserGalleryId == galleryId
+                          && galleryPhoto.Photo.Orientation == (int)Enums.PhotoOrientation.landscape
+                      orderby (galleryPhoto.Order)
+                      select photo).Skip(toSkip).FirstOrDefaultAsync();
+    }
 
     public async Task<UserGalleryPhoto> AddAsync(UserGalleryPhoto userGalleryPhoto)
     {

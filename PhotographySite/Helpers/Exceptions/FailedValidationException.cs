@@ -4,7 +4,7 @@ namespace PhotographySite.Helpers.Exceptions;
 
 public class FailedValidationException : Exception
 {
-    public FailedValidationException(FailedValidationResponse failedValidationResponse) 
+    public FailedValidationException(FailedValidationResponse failedValidationResponse)
     {
         FailedValidationResponse = failedValidationResponse;
     }

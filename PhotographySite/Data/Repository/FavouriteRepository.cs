@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PhotographySite.Areas.Admin.Dto.Request;
 using PhotographySite.Data.Contexts;
 using PhotographySite.Data.Repository.Interfaces;
-using PhotographySite.Models; 
+using PhotographySite.Models;
 
 namespace PhotographySite.Data.Repository;
 
@@ -19,16 +19,16 @@ public class FavouriteRepository : IFavouriteRepository
     public async Task<List<Photo>> GetFavouritePhotosAsync(Guid userId)
     {
         return await (from favourite in _context.Favourite
-                      join photo in _context.Photo                        
-                            on favourite.PhotoId equals photo.Id 
-                      where favourite.UserId == userId 
+                      join photo in _context.Photo
+                            on favourite.PhotoId equals photo.Id
+                      where favourite.UserId == userId
                       select photo).ToListAsync();
-    } 
+    }
 
     public async Task<Favourite> GetFavouritePhotoAsync(Guid userId, long photoId)
     {
         return await (from favourite in _context.Favourite
-                      where favourite.UserId == userId 
+                      where favourite.UserId == userId
                         && favourite.PhotoId == photoId
                       select favourite).SingleOrDefaultAsync();
     }
@@ -36,7 +36,7 @@ public class FavouriteRepository : IFavouriteRepository
     public async Task<Boolean> PhotoIsAlreadyAFavourite(Favourite favourite)
     {
         return await GetFavouritePhotoAsync(favourite.UserId, favourite.PhotoId) != null;
-    } 
+    }
 
     public async Task<List<Photo>> GetFavouritePhotoByPagingAsync(Guid userId, PhotoFilterRequest photoFilterRequest)
     {
@@ -50,14 +50,14 @@ public class FavouriteRepository : IFavouriteRepository
             .Skip((photoFilterRequest.PageIndex - 1) * photoFilterRequest.PageSize).Take(photoFilterRequest.PageSize)
             .Select(favourite => favourite.Photo)
             .ToListAsync();
-    } 
+    }
 
     public async Task<int> ByFilterCountAsync(Guid userId, PhotoFilterRequest photoFilterRequest)
     {
         return await _context.Favourite
            .Where(GetPredicateWhereClause(userId, photoFilterRequest))
            .CountAsync();
-    } 
+    }
 
     private ExpressionStarter<Favourite> GetPredicateWhereClause(Guid userId, PhotoFilterRequest photoFilterRequest)
     {

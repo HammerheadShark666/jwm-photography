@@ -9,7 +9,7 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly PhotographySiteDbContext _context;
 
-    public IPhotoRepository Photos { get; private set; } 
+    public IPhotoRepository Photos { get; private set; }
     public ICountryRepository Countries { get; private set; }
     public ICategoryRepository Categories { get; private set; }
     public IPaletteRepository Palettes { get; private set; }
@@ -21,17 +21,17 @@ public class UnitOfWork : IUnitOfWork
     public IFavouriteRepository Favourites { get; private set; }
     public IUserRepository Users { get; private set; }
 
-	public UnitOfWork(PhotographySiteDbContext context)
+    public UnitOfWork(PhotographySiteDbContext context)
     {
         _context = context;
-        Photos = new PhotoRepository(_context); 
+        Photos = new PhotoRepository(_context);
         Countries = new CountryRepository(_context);
-        Categories = new CategoryRepository(_context);  
+        Categories = new CategoryRepository(_context);
         Montages = new MontageRepository(_context);
-        Palettes = new PaletteRepository(_context); 
+        Palettes = new PaletteRepository(_context);
         Galleries = new GalleryRepository(_context);
         GalleryPhotos = new GalleryPhotoRepository(_context);
-        Favourites = new FavouriteRepository(_context); 
+        Favourites = new FavouriteRepository(_context);
         Users = new UserRepository(_context);
         UserGalleries = new UserGalleryRepository(_context);
         UserGalleryPhotos = new UserGalleryPhotoRepository(_context);

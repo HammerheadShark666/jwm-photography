@@ -17,7 +17,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-    } 
+    }
 
     public async Task<List<PhotoResponse>> GetGalleryPhotosAsync(Guid userId, long galleryId)
     {
@@ -36,7 +36,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
         //if (!await UserGalleryExists(userGalleryPhotoRequest.UserId, userGalleryPhotoRequest.UserGalleryId))
         //    throw new UserGalleryNotFoundException("User Gallary not found.");
 
-        var galleryPhoto = _mapper.Map<UserGalleryPhoto>(request);  
+        var galleryPhoto = _mapper.Map<UserGalleryPhoto>(request);
 
         galleryPhoto = await _unitOfWork.UserGalleryPhotos.AddAsync(galleryPhoto);
         await UpdatePhotosOrderAsync(galleryPhoto, (galleryPhoto.Order + 1));
@@ -53,10 +53,10 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
         //    throw new UserGalleryNotFoundException("User Gallary not found.");
 
         var currentGalleryPhoto = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(request.UserGalleryId, request.PhotoId);
-        
-        if(currentGalleryPhoto != null)
+
+        if (currentGalleryPhoto != null)
         {
-            int newOrder = request.Order; 
+            int newOrder = request.Order;
             await UpdatePhotosAfterMovingPhotosAsync(currentGalleryPhoto, newOrder);
             currentGalleryPhoto.Order = newOrder;
             await _unitOfWork.Complete();
@@ -73,16 +73,16 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
         //    throw new UserGalleryNotFoundException("User Gallary not found.");
 
         var currentGalleryPhoto = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(request.UserGalleryId, request.PhotoId);
-        
+
         if (currentGalleryPhoto != null)
-        {           
+        {
             _unitOfWork.UserGalleryPhotos.Delete(currentGalleryPhoto);
             await UpdatePhotosOrderAsync(currentGalleryPhoto, currentGalleryPhoto.Order);
             await _unitOfWork.Complete();
         }
 
         return;
-    } 
+    }
 
     private async Task UpdatePhotosOrderAsync(UserGalleryPhoto galleryPhoto, int newOrder)
     {
@@ -94,11 +94,11 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
             newOrder++;
         }
     }
-     
+
     private async Task UpdatePhotosAfterMovingPhotosAsync(UserGalleryPhoto galleryPhoto, int newOrder)
     {
-        if (newOrder > galleryPhoto.Order)         
-            await MovePhotoInGalleryForwardAsync(galleryPhoto, newOrder);  
+        if (newOrder > galleryPhoto.Order)
+            await MovePhotoInGalleryForwardAsync(galleryPhoto, newOrder);
         else if (newOrder < galleryPhoto.Order)
             await MovePhotoInGalleryBackwardAsync(galleryPhoto, newOrder);
     }
@@ -135,7 +135,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
 
     private async Task UserGalleryExists(Guid userId, long id)
     {
-      //  return await _unitOfWork.UserGalleries.GetAsync(userId, id) != null;
+        //  return await _unitOfWork.UserGalleries.GetAsync(userId, id) != null;
 
         if (!(await _unitOfWork.UserGalleries.GetAsync(userId, id) != null))
             throw new UserGalleryNotFoundException("User Gallary not found.");
