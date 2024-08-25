@@ -4,17 +4,17 @@ using PhotographySite.Models;
 namespace PhotographySite.Helpers;
 
 public class MontageHelper
-{ 
+{
     public static List<MontageResponse> AddMontageTemplateImages(List<MontageResponse> montageImagesColumn)
     {
         foreach (MontageResponse montageResponse in montageImagesColumn)
-        {                
-            if(IsPortrait(montageResponse.Orientation)) 
-                montageResponse.Path = Constants.TemplatePath + Constants.PortraitTemplate; 
-            else if (IsSquare(montageResponse.Orientation)) 
-                montageResponse.Path = Constants.TemplatePath + Constants.SquareTemplate; 
-            else if (IsLandscape(montageResponse.Orientation)) 
-                montageResponse.Path = Constants.TemplatePath + Constants.LandscapeTemplate; 
+        {
+            if (IsPortrait(montageResponse.Orientation))
+                montageResponse.Path = Constants.TemplatePath + Constants.PortraitTemplate;
+            else if (IsSquare(montageResponse.Orientation))
+                montageResponse.Path = Constants.TemplatePath + Constants.SquareTemplate;
+            else if (IsLandscape(montageResponse.Orientation))
+                montageResponse.Path = Constants.TemplatePath + Constants.LandscapeTemplate;
         };
 
         return montageImagesColumn;
@@ -24,12 +24,12 @@ public class MontageHelper
     {
         foreach (MontageResponse montageResponse in montageImagesColumn)
         {
-            if (IsPortrait(montageResponse.Orientation))  
-                portraitPhotos = UpdateMontageList(portraitPhotos, montageResponse); 
-            else if (IsSquare(montageResponse.Orientation)) 
-                squarePhotos = UpdateMontageList(squarePhotos, montageResponse);  
-            else if (IsLandscape(montageResponse.Orientation)) 
-                landscapePhotos = UpdateMontageList(landscapePhotos, montageResponse); 
+            if (IsPortrait(montageResponse.Orientation))
+                portraitPhotos = UpdateMontageList(portraitPhotos, montageResponse);
+            else if (IsSquare(montageResponse.Orientation))
+                squarePhotos = UpdateMontageList(squarePhotos, montageResponse);
+            else if (IsLandscape(montageResponse.Orientation))
+                landscapePhotos = UpdateMontageList(landscapePhotos, montageResponse);
         };
 
         return montageImagesColumn;
@@ -53,7 +53,7 @@ public class MontageHelper
         montageResponse.IsFavourite = photo.Favourites != null & photo.Favourites.Count() > 0 ? true : false;
         montageResponse.Title = photo.Title + (photo.Country != null ? " - " + photo.Country.Name : "");
     }
- 
+
     private static bool IsPortrait(int orientation)
     {
         return (Helpers.Enums.PhotoOrientation)orientation == Helpers.Enums.PhotoOrientation.portrait;
@@ -68,4 +68,4 @@ public class MontageHelper
     {
         return (Helpers.Enums.PhotoOrientation)orientation == Helpers.Enums.PhotoOrientation.square;
     }
-}    
+}

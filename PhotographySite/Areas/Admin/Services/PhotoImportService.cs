@@ -11,14 +11,14 @@ using PhotographySite.Models;
 namespace PhotographySite.Areas.Admin.Services;
 
 public class PhotoImportService : IPhotoImportService
-{ 
+{
     private IUnitOfWork _unitOfWork;
     private IMapper _mapper;
     private IAzureStorageBlobHelper _azureStorageBlobHelper;
 
     public PhotoImportService(IUnitOfWork unitOfWork, IMapper mapper, IAzureStorageBlobHelper azureStorageBlobHelper)
     {
-        _unitOfWork = unitOfWork; 
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _azureStorageBlobHelper = azureStorageBlobHelper;
     }
@@ -26,17 +26,17 @@ public class PhotoImportService : IPhotoImportService
     public async Task<SavedPhotosResponse> ImportAsync(List<IFormFile> photos)
     {
         string directoryPath = EnvironmentVariablesHelper.TempPhotoDirectoryPath;
-         
-        var (existingPhotos, newPhotos) = await GetExistingNewPhotoListAsync(photos); 
+
+        var (existingPhotos, newPhotos) = await GetExistingNewPhotoListAsync(photos);
 
         await _azureStorageBlobHelper.SaveBlobsToAzureStorageContainerAsync(newPhotos, Constants.AzureStorageContainerName);
 
         var fileNames = await FileHelper.SaveFilesToDirectoryAsync(newPhotos, directoryPath);
         var photosWithDetails = GetPhotoDetails(fileNames, directoryPath);
 
-        var savedPhotosResponse = await GetLookUpsAsync(new SavedPhotosResponse()); 
+        var savedPhotosResponse = await GetLookUpsAsync(new SavedPhotosResponse());
         savedPhotosResponse.SavedPhotos = await SavePhotosAsync(photosWithDetails);
-        savedPhotosResponse.ExistingPhotos = existingPhotos; 
+        savedPhotosResponse.ExistingPhotos = existingPhotos;
 
         FileHelper.DeleteAllFilesInDirectory(directoryPath, fileNames);
 
@@ -48,7 +48,7 @@ public class PhotoImportService : IPhotoImportService
         savedPhotosResponse.Lookups.Categories = _mapper.Map<List<CategoryResponse>>(await _unitOfWork.Categories.AllSortedAsync());
         savedPhotosResponse.Lookups.Countries = _mapper.Map<List<CountryResponse>>(await _unitOfWork.Countries.AllSortedAsync());
         savedPhotosResponse.Lookups.Palettes = _mapper.Map<List<PaletteResponse>>(await _unitOfWork.Palettes.AllSortedAsync());
-       
+
         return savedPhotosResponse;
     }
 
@@ -69,13 +69,13 @@ public class PhotoImportService : IPhotoImportService
                     DateTaken = existingPhoto.DateTaken
                 });
             }
-            else 
-                newPhotos.Add(photo); 
+            else
+                newPhotos.Add(photo);
         }
 
         return (existingPhotos, newPhotos);
     }
-  
+
     private List<Photo> GetPhotoDetails(List<string> fileNames, string directoryPath)
     {
         var photos = new List<Photo>();

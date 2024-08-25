@@ -28,8 +28,8 @@ public class GalleryController : Controller
     public async Task<IActionResult> Gallery(long id)
     {
         GalleriesResponse galleriesResponse = new()
-        {			
-			SelectedGallery = await _galleryService.GetGalleryAsync(id),
+        {
+            SelectedGallery = await _galleryService.GetGalleryAsync(id),
             SelectGalleryPhotos = await _galleryPhotoService.GetGalleryPhotosAsync(id),
             LookupsResponse = await _photoCatalogService.GetLookupsAsync(),
             Galleries = await _galleryService.GetGalleriesAsync(),
@@ -43,27 +43,27 @@ public class GalleryController : Controller
         return View("Galleries", galleriesResponse);
     }
 
-    [HttpPost("search")] 
-	public async Task<IActionResult> SearchPhotosAsync([FromBody] SearchPhotosRequest searchPhotosRequest)
-    { 
-        return Ok(await _galleryService.SearchPhotosAsync(searchPhotosRequest)); 
-    }
-
-    [HttpPost("save/name")] 
-	public async Task<IActionResult> UpdateGallery([FromBody] GalleryUpdateRequest galleryUpdateRequest)
-    {  
-        return Ok(await _galleryService.UpdateAsync(galleryUpdateRequest)); 
-    }
-
-    [HttpPost("new/save")] 
-	public async Task<IActionResult> SaveNewGallery([FromBody] GalleryUpdateRequest galleryUpdateRequest)
+    [HttpPost("search")]
+    public async Task<IActionResult> SearchPhotosAsync([FromBody] SearchPhotosRequest searchPhotosRequest)
     {
-        return Ok(await _galleryService.AddAsync(galleryUpdateRequest)); 
+        return Ok(await _galleryService.SearchPhotosAsync(searchPhotosRequest));
+    }
+
+    [HttpPost("save/name")]
+    public async Task<IActionResult> UpdateGallery([FromBody] GalleryUpdateRequest galleryUpdateRequest)
+    {
+        return Ok(await _galleryService.UpdateAsync(galleryUpdateRequest));
+    }
+
+    [HttpPost("new/save")]
+    public async Task<IActionResult> SaveNewGallery([FromBody] GalleryUpdateRequest galleryUpdateRequest)
+    {
+        return Ok(await _galleryService.AddAsync(galleryUpdateRequest));
     }
 
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteGallery(int id)
-    { 
+    {
         return Ok(await _galleryService.DeleteAsync(id));
     }
 }

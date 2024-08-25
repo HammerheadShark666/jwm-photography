@@ -20,5 +20,5 @@ public class GalleryPhoto
     [Column(TypeName = "tinyint")]
     public int Order { get; set; }
 
-    public Photo Photo { get; set;}
+    public Photo Photo { get; set; }
 }

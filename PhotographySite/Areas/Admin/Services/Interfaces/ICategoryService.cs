@@ -4,5 +4,5 @@ namespace PhotographySite.Areas.Admin.Services.Interfaces;
 
 public interface ICategoryService
 {
-	Task<List<CategoryResponse>> GetCategoriesAsync();
+    Task<List<CategoryResponse>> GetCategoriesAsync();
 }

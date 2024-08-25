@@ -6,12 +6,12 @@ using PhotographySite.Helpers.Interface;
 namespace PhotographySite.Helpers;
 public class ValidatorHelper<T> : IValidatorHelper<T>
 {
-    private readonly IValidator<T> _validator; 
+    private readonly IValidator<T> _validator;
 
     public ValidatorHelper(IValidator<T> validator)
     {
-        _validator = validator; 
-    } 
+        _validator = validator;
+    }
 
     public async Task ValidateAsync(T itemToValidate, string ruleSet)
     {

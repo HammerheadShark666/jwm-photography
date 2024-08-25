@@ -10,14 +10,14 @@ namespace PhotographySite.Areas.Site.Controllers;
 [Area("site")]
 [Route("user/gallery-photos")]
 public class UserGalleryPhotoController : BaseController
-{ 
-    private IUserGalleryPhotoService _userGalleryPhotoService; 
+{
+    private IUserGalleryPhotoService _userGalleryPhotoService;
 
-    public UserGalleryPhotoController(IUserGalleryPhotoService userGalleryPhotoService, 
+    public UserGalleryPhotoController(IUserGalleryPhotoService userGalleryPhotoService,
                                       IUserService userService) : base(userService)
-    { 
+    {
         _userGalleryPhotoService = userGalleryPhotoService;
-    } 
+    }
 
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] UserGalleryPhotoRequest userGalleryPhotoRequest)

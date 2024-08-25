@@ -25,7 +25,8 @@ public static class ServiceExtensions
 {
     public static void ConfigureSession(this IServiceCollection services)
     {
-        services.AddSession(options => {
+        services.AddSession(options =>
+        {
             options.IdleTimeout = TimeSpan.FromMinutes(60);
         });
     }
@@ -39,13 +40,13 @@ public static class ServiceExtensions
 
     public static void ConfigureApplicationInsights(this IServiceCollection services)
     {
-        services.AddApplicationInsightsTelemetry(); 
-    }     
+        services.AddApplicationInsightsTelemetry();
+    }
 
     public static void ConfigureMvc(this IServiceCollection services)
     {
         services.AddControllersWithViews();
-        services.AddMvc(options => options.EnableEndpointRouting = false);  
+        services.AddMvc(options => options.EnableEndpointRouting = false);
     }
 
     public static void ConfigureControllers(this IServiceCollection services)
@@ -64,7 +65,7 @@ public static class ServiceExtensions
         services.AddScoped<Areas.Admin.Services.Interfaces.IGalleryService, Areas.Admin.Services.GalleryService>();
         services.AddScoped<Areas.Site.Services.Interfaces.IGalleryService, Areas.Site.Services.GalleryService>();
         services.AddScoped<Areas.Admin.Services.Interfaces.IMontageService, Areas.Admin.Services.MontageService>();
-        services.AddScoped<Areas.Site.Services.Interfaces.IMontageService, Areas.Site.Services.MontageService>(); 
+        services.AddScoped<Areas.Site.Services.Interfaces.IMontageService, Areas.Site.Services.MontageService>();
         services.AddScoped<IFavouriteService, FavouriteService>();
         services.AddScoped<IPhotoCatalogService, PhotoCatalogService>();
         services.AddScoped<IPhotoImportService, PhotoImportService>();
@@ -77,8 +78,8 @@ public static class ServiceExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IAzureStorageBlobHelper, AzureStorageBlobHelper>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();          
-        services.AddTransient(typeof(IValidatorHelper<>), typeof(ValidatorHelper<>));        
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddTransient(typeof(IValidatorHelper<>), typeof(ValidatorHelper<>));
     }
 
     public static void ConfigureAutoMapper(this IServiceCollection services)
@@ -117,5 +118,5 @@ public static class ServiceExtensions
     public static void ConfigureResponseCaching(this IServiceCollection services)
     {
         services.AddResponseCaching();
-    } 
+    }
 }

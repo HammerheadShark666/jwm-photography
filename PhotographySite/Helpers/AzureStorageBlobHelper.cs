@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using PhotographySite.Helpers; 
+using PhotographySite.Helpers;
 using PhotographySite.Helpers.Interface;
 
 namespace PhotographySite.Helper;
@@ -15,15 +15,16 @@ public class AzureStorageBlobHelper : Base, IAzureStorageBlobHelper
         Stream fileStream = new MemoryStream();
         fileStream = file.OpenReadStream();
         var blobClient = new BlobContainerClient(GetStorageConnection(), containerName);
-        var blob = blobClient.GetBlobClient(fileName);            
-		await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = Constants.FileContentType });
+        var blob = blobClient.GetBlobClient(fileName);
+        await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = Constants.FileContentType });
 
         return;
     }
 
     public async Task SaveBlobsToAzureStorageContainerAsync(List<IFormFile> files, string containerName)
-    { 
-        foreach (IFormFile file in files) {          
+    {
+        foreach (IFormFile file in files)
+        {
             await SaveBlobToAzureStorageContainerAsync(file, containerName, file.FileName);
         }
 
@@ -34,7 +35,7 @@ public class AzureStorageBlobHelper : Base, IAzureStorageBlobHelper
     {
         if (fileName == null) return;
 
-        BlobServiceClient blobServiceClient = new BlobServiceClient(GetStorageConnection()); 
+        BlobServiceClient blobServiceClient = new(GetStorageConnection());
         BlobContainerClient container = blobServiceClient.GetBlobContainerClient(containerName);
         await container.DeleteBlobIfExistsAsync(fileName);
 

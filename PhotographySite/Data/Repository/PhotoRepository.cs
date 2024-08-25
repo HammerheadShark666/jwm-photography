@@ -20,13 +20,13 @@ public class PhotoRepository : IPhotoRepository
     public async Task<List<Photo>> AllAsync()
     {
         return await _context.Photo
-            .Include(photo => photo.Country) 
+            .Include(photo => photo.Country)
             .ToListAsync();
     }
 
     public async Task<int> CountAsync()
     {
-        return await _context.Photo.CountAsync();                 
+        return await _context.Photo.CountAsync();
     }
 
     public async Task<List<Photo>> ByPagingAsync(PhotoFilterRequest photoFilterRequest)
@@ -43,9 +43,9 @@ public class PhotoRepository : IPhotoRepository
 
     public async Task<int> ByFilterCountAsync(PhotoFilterRequest photoFilterRequest)
     {
-        return await _context.Photo                 
+        return await _context.Photo
            .Where(GetPredicateWhereClause(photoFilterRequest))
-           .CountAsync(); 
+           .CountAsync();
     }
 
     public List<Photo> MontagePhotos(Helpers.Enums.PhotoOrientation orientation, int numberOfPhotos, Guid userId)
@@ -62,7 +62,7 @@ public class PhotoRepository : IPhotoRepository
 
     public bool Exists(string filename)
     {
-        return _context.Photo.Count(photo => photo.FileName == filename) > 0; 
+        return _context.Photo.Count(photo => photo.FileName == filename) > 0;
     }
 
     public async Task<Photo> FindByFilenameAsync(string filename)
@@ -71,12 +71,12 @@ public class PhotoRepository : IPhotoRepository
     }
 
     public async Task<List<Photo>> GetLatestPhotos(int numberOfPhotos)
-    { 
+    {
         return await (from photo in _context.Photo
                       orderby photo.Id descending
                       select photo)
                       .Take(numberOfPhotos)
-                      .ToListAsync(); 
+                      .ToListAsync();
     }
 
     private string GetOrderByStatement(PhotoFilterRequest photoFilterRequest)

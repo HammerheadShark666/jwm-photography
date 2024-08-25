@@ -4,12 +4,12 @@ using PhotographySite.Areas.Admin.Dto.Request;
 using PhotographySite.Areas.Admin.Dto.Response;
 using PhotographySite.Areas.Admin.Services.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;
+using PhotographySite.Dto.Request;
+using PhotographySite.Dto.Response;
 using PhotographySite.Helpers;
 using PhotographySite.Helpers.Interface;
 using PhotographySite.Models;
 using SwanSong.Service.Helpers.Exceptions;
-using PhotographySite.Dto.Request;
-using PhotographySite.Dto.Response;
 
 namespace PhotographySite.Areas.Admin.Services;
 
@@ -20,15 +20,15 @@ public class GalleryService : IGalleryService
     private readonly IMemoryCache _memoryCache;
     private readonly IValidatorHelper<Gallery> _validatorHelper;
 
-    public GalleryService(IUnitOfWork unitOfWork, 
+    public GalleryService(IUnitOfWork unitOfWork,
                           IMapper mapper,
-                          IValidatorHelper<Gallery> validatorHelper, 
-                          IMemoryCache memoryCache)  
+                          IValidatorHelper<Gallery> validatorHelper,
+                          IMemoryCache memoryCache)
     {
         _unitOfWork = unitOfWork;
         _validatorHelper = validatorHelper;
         _memoryCache = memoryCache;
-        _mapper = mapper; 
+        _mapper = mapper;
     }
 
     public async Task<GalleryResponse> GetGalleryAsync(long id)
@@ -38,8 +38,8 @@ public class GalleryService : IGalleryService
 
     public async Task<List<GalleryResponse>> GetGalleriesAsync()
     {
-        return _mapper.Map<List<GalleryResponse>>(await _unitOfWork.Galleries.AllSortedAsync());        
-    } 
+        return _mapper.Map<List<GalleryResponse>>(await _unitOfWork.Galleries.AllSortedAsync());
+    }
 
     public async Task<SearchPhotosResponse> SearchPhotosAsync(SearchPhotosRequest searchPhotosRequest)
     {
@@ -55,9 +55,9 @@ public class GalleryService : IGalleryService
             PageIndex = searchPhotosRequest.PageIndex + 1,
             PageSize = searchPhotosRequest.PageSize,
             NumberOfPages = numberOfPages,
-            Photos = photos 
-        };  
-    } 
+            Photos = photos
+        };
+    }
 
     public async Task<GalleryActionResponse> AddAsync(GalleryUpdateRequest galleryAddRequest)
     {
@@ -95,7 +95,7 @@ public class GalleryService : IGalleryService
     {
         _unitOfWork.Galleries.Delete(gallery);
         await CompleteContextAction(cacheKey);
-    } 
+    }
 
     private async Task SaveAdd(Gallery gallery, string cacheKey)
     {
@@ -124,7 +124,7 @@ public class GalleryService : IGalleryService
             throw new GalleryNotFoundException("Gallery not found.");
 
         return gallery;
-    } 
+    }
 
     private int GetNumberOfPages(int numberOfPhotos, int pageSize)
     {

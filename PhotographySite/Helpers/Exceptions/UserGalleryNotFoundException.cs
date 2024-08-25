@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SwanSong.Service.Helpers.Exceptions;
+﻿namespace SwanSong.Service.Helpers.Exceptions;
 
 public class UserGalleryNotFoundException : Exception
 {

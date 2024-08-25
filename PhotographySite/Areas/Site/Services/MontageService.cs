@@ -19,9 +19,9 @@ public class MontageService : IMontageService
     }
 
     public async Task<MontagesResponse> GetMontageAsync(Guid userId)
-    {            
+    {
         return await GetMontagePhotos(userId);
-    } 
+    }
 
     public async Task<MontagesResponse> GetMontagePhotos(Guid userId)
     {
@@ -30,7 +30,7 @@ public class MontageService : IMontageService
         var squarePhotos = GetPhotos(montages, Helpers.Enums.PhotoOrientation.square, userId);
         var landscapePhotos = GetPhotos(montages, Helpers.Enums.PhotoOrientation.landscape, userId);
         var portraitPhotos = GetPhotos(montages, Helpers.Enums.PhotoOrientation.portrait, userId);
-          
+
         return new MontagesResponse()
         {
             MontageImagesColumns = new List<List<MontageResponse>>()
@@ -52,10 +52,10 @@ public class MontageService : IMontageService
     {
         return montages.FindAll(i => i.Column == column).OrderBy(i => i.Order).ToList();
     }
-     
+
     private List<Photo> GetPhotos(List<Montage> montages, Helpers.Enums.PhotoOrientation orientation, Guid userId)
     {
         int numberOfPhotos = montages.Where(m => m.Orientation == orientation).Count();
-        return _unitOfWork.Photos.MontagePhotos(orientation, numberOfPhotos, userId); 
+        return _unitOfWork.Photos.MontagePhotos(orientation, numberOfPhotos, userId);
     }
 }

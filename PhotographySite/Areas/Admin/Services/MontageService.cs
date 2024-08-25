@@ -20,14 +20,14 @@ public class MontageService : IMontageService
 
     public async Task<Montage> AddImageTemplateAsync(int column, int order, int orientation)
     {
-        Montage montage = new ()
+        Montage montage = new()
         {
             Column = column,
             Order = order,
             Orientation = (Enums.PhotoOrientation)orientation
         };
 
-        montage = await _unitOfWork.Montages.AddAsync(montage);        
+        montage = await _unitOfWork.Montages.AddAsync(montage);
         await UpdateMontageColumnOrderAsync(column, order, montage);
         await _unitOfWork.Complete();
 
@@ -69,7 +69,7 @@ public class MontageService : IMontageService
 
     public async Task<MontagesResponse> GetMontageTemplatesAsync()
     {
-        var montages = await _unitOfWork.Montages.AllSortedAsync(); 
+        var montages = await _unitOfWork.Montages.AllSortedAsync();
 
         return new MontagesResponse()
         {
@@ -91,11 +91,11 @@ public class MontageService : IMontageService
 
             var newColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montage.Column && m.Order >= montage.Order)).OrderBy(m => m.Order).ToList<Montage>();
             UpdateMontagesOrder(newColumnMontages, montage.Order + 1, null);
-        } 
-        else if(montage.Id == 0)
+        }
+        else if (montage.Id == 0)
         {
             var allColumnMontages = (await _unitOfWork.Montages.FindAsync(m => m.Column == montage.Column)).OrderBy(m => m.Order).ToList<Montage>();
-            
+
             UpdateMontagesOrder(allColumnMontages, 1, montage.Order);
             allColumnMontages.Insert(montage.Order - 1, montage);
         }
@@ -105,18 +105,18 @@ public class MontageService : IMontageService
             allColumnMontages.RemoveAt(allColumnMontages.FindIndex(m => m.Id == montage.Id));
             allColumnMontages.Insert(montage.Order - 1, montage);
             UpdateMontagesOrder(allColumnMontages, 1, null);
-        } 
+        }
     }
 
     private void UpdateMontagesOrder(List<Montage> montages, int baseOrder, int? ignoreOrder)
     {
         foreach (Montage m in montages)
-        { 
-            if ((ignoreOrder.HasValue && ignoreOrder == m.Order)) 
-                baseOrder++;  
+        {
+            if ((ignoreOrder.HasValue && ignoreOrder == m.Order))
+                baseOrder++;
 
             m.Order = baseOrder;
-            _unitOfWork.Montages.Update(m); 
+            _unitOfWork.Montages.Update(m);
 
             baseOrder++;
         }

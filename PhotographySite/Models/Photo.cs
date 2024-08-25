@@ -7,7 +7,7 @@ namespace PhotographySite.Models;
 [Table("PHOTO_Photo")]
 public class Photo
 {
-    private PhotoOrientation orientation;              
+    private PhotoOrientation orientation;
 
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,8 +17,8 @@ public class Photo
     [Required]
     public string FileName { get; set; }
 
-    [Column(TypeName = "nvarchar(150)")]        
-    public string Title { get; set; }         
+    [Column(TypeName = "nvarchar(150)")]
+    public string Title { get; set; }
 
     [Column(TypeName = "nvarchar(100)")]
     public string Camera { get; set; }
@@ -52,15 +52,15 @@ public class Photo
 
     [Column(TypeName = "int")]
     public int Width { get; set; }
-          
+
     [Column(TypeName = "bit")]
     public Boolean UseInMontage { get; set; }
 
     public Country Country { get; set; }
- 
-    public Category Category { get; set; }  
 
-    public Palette Palette { get; set; } 
+    public Category Category { get; set; }
+
+    public Palette Palette { get; set; }
 
     public List<Favourite> Favourites { get; set; }
 }

@@ -5,9 +5,9 @@ using PhotographySite.Models;
 
 namespace PhotographySite.Data.Contexts;
 public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser>
-{ 
+{
     public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options) { }
- 
+
     public DbSet<Category> Category { get; set; }
     public DbSet<Country> Country { get; set; }
     public DbSet<Gallery> Gallery { get; set; }
@@ -15,7 +15,7 @@ public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Montage> Montage { get; set; }
     public DbSet<Orientation> Orientation { get; set; }
     public DbSet<Palette> Palette { get; set; }
-    public DbSet<Photo> Photo { get; set; } 
+    public DbSet<Photo> Photo { get; set; }
     public DbSet<Favourite> Favourite { get; set; }
     public DbSet<UserGallery> UserGallery { get; set; }
     public DbSet<UserGalleryPhoto> UserGalleryPhoto { get; set; }
@@ -24,7 +24,7 @@ public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder);
 
-		modelBuilder.Entity<Favourite>().HasKey(fv => new { fv.UserId, fv.PhotoId });
+        modelBuilder.Entity<Favourite>().HasKey(fv => new { fv.UserId, fv.PhotoId });
 
         modelBuilder.Entity<Category>().HasData(DefaultData.GetCategoryDefaultData());
         modelBuilder.Entity<Country>().HasData(DefaultData.GetCountryDefaultData());

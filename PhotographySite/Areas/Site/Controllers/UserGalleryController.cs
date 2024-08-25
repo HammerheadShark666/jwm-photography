@@ -17,16 +17,16 @@ public class UserGalleryController : BaseController
 {
     private IPhotoCatalogService _photoCatalogService;
     private IUserGalleryService _userGalleryService;
-    private IUserGalleryPhotoService _userGalleryPhotoService; 
+    private IUserGalleryPhotoService _userGalleryPhotoService;
 
-    public UserGalleryController(IPhotoCatalogService photoCatalogService, 
-                                 IUserGalleryService userGalleryService, 
-                                 IUserGalleryPhotoService userGalleryPhotoService, 
+    public UserGalleryController(IPhotoCatalogService photoCatalogService,
+                                 IUserGalleryService userGalleryService,
+                                 IUserGalleryPhotoService userGalleryPhotoService,
                                  IUserService userService) : base(userService)
     {
         _photoCatalogService = photoCatalogService;
         _userGalleryService = userGalleryService;
-        _userGalleryPhotoService = userGalleryPhotoService; 
+        _userGalleryPhotoService = userGalleryPhotoService;
     }
 
     [HttpGet("{id}")]
@@ -41,16 +41,16 @@ public class UserGalleryController : BaseController
         catch (UserGalleryNotFoundException ugnfe)
         {
             return View("~/Views/Error/NotFound.cshtml", ugnfe.Message);
-        }  
+        }
     }
 
     [HttpPost("add")]
-    public async Task<ActionResult<UserGalleryActionResponse>>  Add([FromBody] UserGalleryAddRequest userGalleryAddRequest)
+    public async Task<ActionResult<UserGalleryActionResponse>> Add([FromBody] UserGalleryAddRequest userGalleryAddRequest)
     {
         try
         {
             IsValidUser();
-            userGalleryAddRequest.UserId = GetUserId();         
+            userGalleryAddRequest.UserId = GetUserId();
             return Ok(await _userGalleryService.AddAsync(userGalleryAddRequest));
         }
         catch (FailedValidationException fve)
@@ -58,9 +58,9 @@ public class UserGalleryController : BaseController
             return BadRequest(fve.FailedValidationResponse);
         }
         catch (Exception ex)
-        { 
+        {
             return Problem(ex.Message);
-        } 
+        }
     }
 
     [HttpPost("update")]
@@ -77,9 +77,9 @@ public class UserGalleryController : BaseController
             return BadRequest(fve.FailedValidationResponse);
         }
         catch (Exception ex)
-        { 
+        {
             return Problem(ex.Message);
-        } 
+        }
     }
 
 
@@ -100,8 +100,8 @@ public class UserGalleryController : BaseController
             return BadRequest(fve.FailedValidationResponse);
         }
         catch (Exception ex)
-        { 
+        {
             return Problem(ex.Message);
-        } 
+        }
     }
 }

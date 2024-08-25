@@ -5,7 +5,7 @@ namespace PhotographySite.Data.Repository.Interfaces;
 
 public interface IFavouriteRepository
 {
-	Task<List<Photo>> GetFavouritePhotosAsync(Guid userId);
+    Task<List<Photo>> GetFavouritePhotosAsync(Guid userId);
 
     Task<Favourite> GetFavouritePhotoAsync(Guid userId, long photoId);
 

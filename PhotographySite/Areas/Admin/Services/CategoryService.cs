@@ -7,17 +7,17 @@ namespace PhotographySite.Areas.Admin.Services;
 
 public class CategoryService : ICategoryService
 {
-	private IUnitOfWork _unitOfWork;
-	private IMapper _mapper;
+    private IUnitOfWork _unitOfWork;
+    private IMapper _mapper;
 
-	public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
-	{
-		_unitOfWork = unitOfWork;
-		_mapper = mapper;
-	}
+    public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+    {
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
 
-	public async Task<List<CategoryResponse>> GetCategoriesAsync()
-	{
-		return _mapper.Map<List<CategoryResponse>>(await _unitOfWork.Categories.AllSortedAsync());
-	}
+    public async Task<List<CategoryResponse>> GetCategoriesAsync()
+    {
+        return _mapper.Map<List<CategoryResponse>>(await _unitOfWork.Categories.AllSortedAsync());
+    }
 }

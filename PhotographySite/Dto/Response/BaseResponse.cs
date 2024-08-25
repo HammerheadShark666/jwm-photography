@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-
-namespace PhotographySite.Dto.Response;
+﻿namespace PhotographySite.Dto.Response;
 
 public class BaseResponse : FailedValidationResponse
 {

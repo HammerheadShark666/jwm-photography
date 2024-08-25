@@ -5,12 +5,12 @@ using PhotographySite.Models;
 namespace PhotographySite.Areas.Site.Business;
 
 public class UserGalleryValidator : AbstractValidator<UserGallery>
-{       
+{
     private readonly IUnitOfWork _unitOfWork;
 
     public UserGalleryValidator(IUnitOfWork unitOfWork)
-    {   
-        _unitOfWork= unitOfWork;    
+    {
+        _unitOfWork = unitOfWork;
 
         RuleSet("BeforeSave", () =>
         {
@@ -25,13 +25,13 @@ public class UserGalleryValidator : AbstractValidator<UserGallery>
             {
                 return await UserGalleryNameExists(userGallery);
             }).WithMessage(gallery => $"The user gallery '{gallery.Name}' already exists.");
-        });                
+        });
     }
 
     protected async Task<bool> UserGalleryNameExists(UserGallery userGallery)
-    { 
+    {
         return userGallery.Id == 0
             ? !(await _unitOfWork.UserGalleries.ExistsAsync(userGallery.UserId, userGallery.Name))
             : !(await _unitOfWork.UserGalleries.ExistsAsync(userGallery.UserId, userGallery.Id, userGallery.Name));
-    } 
+    }
 }
