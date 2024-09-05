@@ -50,7 +50,7 @@ public class MontageHelper
     {
         montageResponse.Path = photo.FileName;
         montageResponse.PhotoId = photo.Id;
-        montageResponse.IsFavourite = photo.Favourites != null & photo.Favourites.Count() > 0 ? true : false;
+        montageResponse.IsFavourite = photo.Favourites != null & photo.Favourites.Count > 0;
         montageResponse.Title = photo.Title + (photo.Country != null ? " - " + photo.Country.Name : "");
     }
 

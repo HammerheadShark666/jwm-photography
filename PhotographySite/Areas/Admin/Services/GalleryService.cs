@@ -13,40 +13,27 @@ using SwanSong.Service.Helpers.Exceptions;
 
 namespace PhotographySite.Areas.Admin.Services;
 
-public class GalleryService : IGalleryService
+public class GalleryService(IUnitOfWork unitOfWork,
+                      IMapper mapper,
+                      IValidatorHelper<Gallery> validatorHelper,
+                      IMemoryCache memoryCache) : IGalleryService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    private readonly IMemoryCache _memoryCache;
-    private readonly IValidatorHelper<Gallery> _validatorHelper;
-
-    public GalleryService(IUnitOfWork unitOfWork,
-                          IMapper mapper,
-                          IValidatorHelper<Gallery> validatorHelper,
-                          IMemoryCache memoryCache)
-    {
-        _unitOfWork = unitOfWork;
-        _validatorHelper = validatorHelper;
-        _memoryCache = memoryCache;
-        _mapper = mapper;
-    }
-
     public async Task<GalleryResponse> GetGalleryAsync(long id)
     {
-        return _mapper.Map<GalleryResponse>(await _unitOfWork.Galleries.ByIdAsync(id));
+        return mapper.Map<GalleryResponse>(await unitOfWork.Galleries.ByIdAsync(id));
     }
 
     public async Task<List<GalleryResponse>> GetGalleriesAsync()
     {
-        return _mapper.Map<List<GalleryResponse>>(await _unitOfWork.Galleries.AllSortedAsync());
+        return mapper.Map<List<GalleryResponse>>(await unitOfWork.Galleries.AllSortedAsync());
     }
 
     public async Task<SearchPhotosResponse> SearchPhotosAsync(SearchPhotosRequest searchPhotosRequest)
     {
         var photoFilterRequest = PhotoFilterRequest.Create(searchPhotosRequest);
 
-        var photos = _mapper.Map<List<PhotoResponse>>(await _unitOfWork.Photos.ByPagingAsync(photoFilterRequest));
-        int numberOfPhotos = await _unitOfWork.Photos.ByFilterCountAsync(photoFilterRequest);
+        var photos = mapper.Map<List<PhotoResponse>>(await unitOfWork.Photos.ByPagingAsync(photoFilterRequest));
+        int numberOfPhotos = await unitOfWork.Photos.ByFilterCountAsync(photoFilterRequest);
         int numberOfPages = GetNumberOfPages(numberOfPhotos, photoFilterRequest.PageSize);
 
         return new SearchPhotosResponse()
@@ -61,12 +48,12 @@ public class GalleryService : IGalleryService
 
     public async Task<GalleryActionResponse> AddAsync(GalleryUpdateRequest galleryAddRequest)
     {
-        var gallery = _mapper.Map<Gallery>(galleryAddRequest);
+        var gallery = mapper.Map<Gallery>(galleryAddRequest);
 
-        await _validatorHelper.ValidateAsync(gallery, Constants.ValidationEventBeforeSave);
+        await validatorHelper.ValidateAsync(gallery, Constants.ValidationEventBeforeSave);
         await SaveAdd(gallery, CacheKeys.Gallery);
 
-        return new GalleryActionResponse(gallery.Id, await _validatorHelper.AfterEventAsync(gallery, Constants.ValidationEventAfterSave));
+        return new GalleryActionResponse(gallery.Id, await validatorHelper.AfterEventAsync(gallery, Constants.ValidationEventAfterSave));
     }
 
     public async Task<GalleryActionResponse> UpdateAsync(GalleryUpdateRequest galleryUpdateRequest)
@@ -75,58 +62,55 @@ public class GalleryService : IGalleryService
 
         gallery.Name = galleryUpdateRequest.Name;
 
-        await _validatorHelper.ValidateAsync(gallery, Constants.ValidationEventBeforeSave);
+        await validatorHelper.ValidateAsync(gallery, Constants.ValidationEventBeforeSave);
         await SaveUpdate(gallery, CacheKeys.Gallery);
 
-        return new GalleryActionResponse(gallery.Id, await _validatorHelper.AfterEventAsync(gallery, Constants.ValidationEventAfterSave));
+        return new GalleryActionResponse(gallery.Id, await validatorHelper.AfterEventAsync(gallery, Constants.ValidationEventAfterSave));
     }
 
     public async Task<GalleryActionResponse> DeleteAsync(int id)
     {
         var gallery = await GetGallery(id);
 
-        await _validatorHelper.ValidateAsync(gallery, Constants.ValidationEventBeforeDelete);
+        await validatorHelper.ValidateAsync(gallery, Constants.ValidationEventBeforeDelete);
         await Delete(gallery, CacheKeys.Gallery);
 
-        return new GalleryActionResponse(gallery.Id, await _validatorHelper.AfterEventAsync(gallery, Constants.ValidationEventAfterDelete));
+        return new GalleryActionResponse(gallery.Id, await validatorHelper.AfterEventAsync(gallery, Constants.ValidationEventAfterDelete));
     }
 
     private async Task Delete(Gallery gallery, string cacheKey)
     {
-        _unitOfWork.Galleries.Delete(gallery);
+        unitOfWork.Galleries.Delete(gallery);
         await CompleteContextAction(cacheKey);
     }
 
     private async Task SaveAdd(Gallery gallery, string cacheKey)
     {
-        await _unitOfWork.Galleries.AddAsync(gallery);
+        await unitOfWork.Galleries.AddAsync(gallery);
         await CompleteContextAction(cacheKey);
     }
 
     private async Task SaveUpdate(Gallery gallery, string cacheKey)
     {
-        _unitOfWork.Galleries.Update(gallery);
+        unitOfWork.Galleries.Update(gallery);
         await CompleteContextAction(cacheKey);
     }
 
     private async Task CompleteContextAction(string cacheKey)
     {
-        await _unitOfWork.Complete();
+        await unitOfWork.Complete();
 
         if (cacheKey != null)
-            _memoryCache.Remove(cacheKey);
+            memoryCache.Remove(cacheKey);
     }
 
     private async Task<Gallery> GetGallery(long id)
     {
-        var gallery = await _unitOfWork.Galleries.ByIdAsync(id);
-        if (gallery == null)
-            throw new GalleryNotFoundException("Gallery not found.");
-
+        var gallery = await unitOfWork.Galleries.ByIdAsync(id) ?? throw new GalleryNotFoundException("Gallery not found.");
         return gallery;
     }
 
-    private int GetNumberOfPages(int numberOfPhotos, int pageSize)
+    private static int GetNumberOfPages(int numberOfPhotos, int pageSize)
     {
         return (numberOfPhotos / pageSize) + ((numberOfPhotos % pageSize > 0) ? 1 : 0);
     }

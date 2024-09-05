@@ -7,17 +7,8 @@ using PhotographySite.Models;
 
 namespace PhotographySite.Areas.Site.Services;
 
-public class MontageService : IMontageService
+public class MontageService(IUnitOfWork unitOfWork, IMapper mapper) : IMontageService
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-
-    public MontageService(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
-
     public async Task<MontagesResponse> GetMontageAsync(Guid userId)
     {
         return await GetMontagePhotos(userId);
@@ -26,36 +17,36 @@ public class MontageService : IMontageService
     public async Task<MontagesResponse> GetMontagePhotos(Guid userId)
     {
         //Guid userId = _unitOfWork.Users.GetUserId(username);
-        var montages = await _unitOfWork.Montages.AllSortedAsync();
+        var montages = await unitOfWork.Montages.AllSortedAsync();
         var squarePhotos = GetPhotos(montages, Helpers.Enums.PhotoOrientation.square, userId);
         var landscapePhotos = GetPhotos(montages, Helpers.Enums.PhotoOrientation.landscape, userId);
         var portraitPhotos = GetPhotos(montages, Helpers.Enums.PhotoOrientation.portrait, userId);
 
         return new MontagesResponse()
         {
-            MontageImagesColumns = new List<List<MontageResponse>>()
-            {
+            MontageImagesColumns =
+            [
                 GetMontageTemplatesForColumn(montages, 1, squarePhotos, portraitPhotos, landscapePhotos),
                 GetMontageTemplatesForColumn(montages, 2, squarePhotos, portraitPhotos, landscapePhotos),
                 GetMontageTemplatesForColumn(montages, 3, squarePhotos, portraitPhotos, landscapePhotos),
                 GetMontageTemplatesForColumn(montages, 4, squarePhotos, portraitPhotos, landscapePhotos)
-            }
+            ]
         };
     }
 
     private List<MontageResponse> GetMontageTemplatesForColumn(List<Montage> montages, int column, List<Photo> squarePhotos, List<Photo> portraitPhotos, List<Photo> landscapePhotos)
     {
-        return MontageHelper.AddMontagePhotos(_mapper.Map<List<MontageResponse>>(GetColumnMontages(montages, column)), squarePhotos, portraitPhotos, landscapePhotos);
+        return MontageHelper.AddMontagePhotos(mapper.Map<List<MontageResponse>>(GetColumnMontages(montages, column)), squarePhotos, portraitPhotos, landscapePhotos);
     }
 
-    private List<Montage> GetColumnMontages(List<Montage> montages, int column)
+    private static List<Montage> GetColumnMontages(List<Montage> montages, int column)
     {
-        return montages.FindAll(i => i.Column == column).OrderBy(i => i.Order).ToList();
+        return [.. montages.FindAll(i => i.Column == column).OrderBy(i => i.Order)];
     }
 
     private List<Photo> GetPhotos(List<Montage> montages, Helpers.Enums.PhotoOrientation orientation, Guid userId)
     {
         int numberOfPhotos = montages.Where(m => m.Orientation == orientation).Count();
-        return _unitOfWork.Photos.MontagePhotos(orientation, numberOfPhotos, userId);
+        return unitOfWork.Photos.MontagePhotos(orientation, numberOfPhotos, userId);
     }
 }

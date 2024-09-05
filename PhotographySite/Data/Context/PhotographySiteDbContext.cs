@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PhotographySite.Data.Context;
 using PhotographySite.Models;
 
-namespace PhotographySite.Data.Contexts;
-public class PhotographySiteDbContext : IdentityDbContext<ApplicationUser>
+namespace PhotographySite.Data.Context;
+public class PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
-    public PhotographySiteDbContext(DbContextOptions<PhotographySiteDbContext> options) : base(options) { }
-
     public DbSet<Category> Category { get; set; }
     public DbSet<Country> Country { get; set; }
     public DbSet<Gallery> Gallery { get; set; }

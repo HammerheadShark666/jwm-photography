@@ -6,8 +6,8 @@ public class DefaultData
 {
     public static List<Country> GetCountryDefaultData()
     {
-        return new List<Country>()
-        {
+        return
+        [
             new() { Id = 1, Name = "England" },
             new() { Id = 2, Name = "Scotland" },
             new() { Id = 3, Name = "Wales" },
@@ -31,13 +31,13 @@ public class DefaultData
             new() { Id = 22, Name = "Germany" },
             new() { Id = 23, Name = "Spain" },
             new() { Id = 24, Name = "Myanmar" },
-        };
+        ];
     }
 
     public static List<Category> GetCategoryDefaultData()
     {
-        return new List<Category>()
-        {
+        return
+        [
             new() { Id = 1, Name = "Landscape" },
             new() { Id = 2, Name = "Travel" },
             new() { Id = 3, Name = "Wildlife" },
@@ -45,13 +45,13 @@ public class DefaultData
             new() { Id = 5, Name = "Portrait" },
             new() { Id = 6, Name = "Macro" },
             new() { Id = 7, Name = "Miscellaneous" },
-        };
+        ];
     }
 
     public static List<Gallery> GetGalleryDefaultData()
     {
-        return new List<Gallery>()
-        {
+        return
+        [
             new() { Id = 1, Name = "Landscape" },
             new() { Id = 2, Name = "Travel" },
             new() { Id = 3, Name = "Wildlife" },
@@ -60,13 +60,13 @@ public class DefaultData
             new() { Id = 6, Name = "Black & White" },
             new() { Id = 7, Name = "Macro" }
 
-        };
+        ];
     }
 
     public static List<GalleryPhoto> GetGalleryPhotoDefaultData()
     {
-        return new List<GalleryPhoto>()
-        {
+        return
+        [
             new() { Id = 1, GalleryId= 4, PhotoId = 731, Order = 8 },
             new() { Id = 2, GalleryId= 4, PhotoId = 493, Order = 3 },
             new() { Id = 3, GalleryId= 4, PhotoId = 496, Order = 7 },
@@ -90,13 +90,13 @@ public class DefaultData
             new() { Id = 21, GalleryId= 3, PhotoId = 20, Order = 4 },
             new() { Id = 22, GalleryId= 3, PhotoId = 134, Order = 6 },
             new() { Id = 23, GalleryId= 3, PhotoId = 161, Order = 5 }
-        };
+        ];
     }
 
     public static List<Montage> GetMontageDefaultData()
     {
-        return new List<Montage>()
-        {
+        return
+        [
             new() { Id = 1, Column = 1, Order = 1, Orientation = Helpers.Enums.PhotoOrientation.portrait },
             new() { Id = 2, Column = 1, Order = 2, Orientation = Helpers.Enums.PhotoOrientation.landscape },
             new() { Id = 3, Column = 1, Order = 3, Orientation = Helpers.Enums.PhotoOrientation.square },
@@ -113,26 +113,26 @@ public class DefaultData
             new() { Id = 14, Column = 4, Order = 2, Orientation = Helpers.Enums.PhotoOrientation.portrait },
             new() { Id = 15, Column = 4, Order = 3, Orientation = Helpers.Enums.PhotoOrientation.square },
             new() { Id = 16, Column = 4, Order = 4, Orientation = Helpers.Enums.PhotoOrientation.landscape },
-        };
+        ];
     }
 
     public static List<Orientation> GetOrientationDefaultData()
     {
-        return new List<Orientation>()
-        {
+        return
+        [
             new() { Id = 1, Name = "Landscape" },
             new() { Id = 2, Name = "Portrait" },
             new() { Id = 3, Name = "Square" }
-        };
+        ];
     }
 
     public static List<Palette> GetPaletteDefaultData()
     {
-        return new List<Palette>()
-        {
+        return
+        [
             new() { Id = 1, Name = "Colour" },
             new() { Id = 2, Name = "Black & White" },
             new() { Id = 3, Name = "Infrared" }
-        };
+        ];
     }
 }

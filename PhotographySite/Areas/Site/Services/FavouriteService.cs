@@ -13,70 +13,56 @@ using SwanSong.Service.Helpers.Exceptions;
 
 namespace PhotographySite.Areas.Site.Services;
 
-public class FavouriteService : IFavouriteService
+public class FavouriteService(IUnitOfWork unitOfWork, IMapper mapper, IValidatorHelper<Favourite> validatorHelper) : IFavouriteService
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-    private readonly IValidatorHelper<Favourite> _validatorHelper;
-
-    public FavouriteService(IUnitOfWork unitOfWork, IMapper mapper, IValidatorHelper<Favourite> validatorHelper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _validatorHelper = validatorHelper;
-    }
-
     public async Task<FavouritesResponse> AllAsync(Guid userId)
     {
         return new FavouritesResponse()
         {
-            Favourites = _mapper.Map<List<FavouriteResponse>>(await _unitOfWork.Favourites.GetFavouritePhotosAsync(userId))
+            Favourites = mapper.Map<List<FavouriteResponse>>(await unitOfWork.Favourites.GetFavouritePhotosAsync(userId))
         };
     }
 
     public async Task<FavouriteActionResponse> AddAsync(FavouriteAddRequest favouriteAddRequest)
     {
-        var favourite = _mapper.Map<Favourite>(favouriteAddRequest);
+        var favourite = mapper.Map<Favourite>(favouriteAddRequest);
 
-        await _validatorHelper.ValidateAsync(favourite, Constants.ValidationEventBeforeSave);
+        await validatorHelper.ValidateAsync(favourite, Constants.ValidationEventBeforeSave);
         await SaveAdd(favourite);
 
-        return new FavouriteActionResponse(await _validatorHelper.AfterEventAsync(favourite, Constants.ValidationEventAfterSave));
+        return new FavouriteActionResponse(await validatorHelper.AfterEventAsync(favourite, Constants.ValidationEventAfterSave));
     }
 
     public async Task<FavouriteActionResponse> DeleteAsync(Guid userId, long photoId)
     {
         var favourite = await GetFavourite(userId, photoId);
 
-        await _validatorHelper.ValidateAsync(favourite, Constants.ValidationEventBeforeDelete);
+        await validatorHelper.ValidateAsync(favourite, Constants.ValidationEventBeforeDelete);
         await Delete(favourite);
 
-        return new FavouriteActionResponse(await _validatorHelper.AfterEventAsync(favourite, Constants.ValidationEventAfterDelete));
+        return new FavouriteActionResponse(await validatorHelper.AfterEventAsync(favourite, Constants.ValidationEventAfterDelete));
     }
 
     private async Task Delete(Favourite favourite)
     {
-        _unitOfWork.Favourites.Delete(favourite);
+        unitOfWork.Favourites.Delete(favourite);
         await CompleteContextAction();
     }
 
     private async Task SaveAdd(Favourite favourite)
     {
-        await _unitOfWork.Favourites.AddAsync(favourite);
+        await unitOfWork.Favourites.AddAsync(favourite);
         await CompleteContextAction();
     }
 
     private async Task CompleteContextAction()
     {
-        await _unitOfWork.Complete();
+        await unitOfWork.Complete();
     }
 
     private async Task<Favourite> GetFavourite(Guid userId, long photoId)
     {
-        var favourite = await _unitOfWork.Favourites.GetFavouritePhotoAsync(userId, photoId);
-        if (favourite == null)
-            throw new FavouriteNotFoundException("Favourite not found.");
-
+        var favourite = await unitOfWork.Favourites.GetFavouritePhotoAsync(userId, photoId) ?? throw new FavouriteNotFoundException("Favourite not found.");
         return favourite;
     }
 
@@ -84,8 +70,8 @@ public class FavouriteService : IFavouriteService
     {
         PhotoFilterRequest photoFilterRequest = PhotoFilterRequest.Create(searchPhotosRequest);
 
-        var photos = _mapper.Map<List<PhotoResponse>>(await _unitOfWork.Favourites.GetFavouritePhotoByPagingAsync(userId, photoFilterRequest));
-        int numberOfPhotos = await _unitOfWork.Favourites.ByFilterCountAsync(userId, photoFilterRequest);
+        var photos = mapper.Map<List<PhotoResponse>>(await unitOfWork.Favourites.GetFavouritePhotoByPagingAsync(userId, photoFilterRequest));
+        int numberOfPhotos = await unitOfWork.Favourites.ByFilterCountAsync(userId, photoFilterRequest);
         int numberOfPages = GetNumberOfPages(numberOfPhotos, photoFilterRequest.PageSize);
 
         return new SearchPhotosResponse()
@@ -98,7 +84,7 @@ public class FavouriteService : IFavouriteService
         };
     }
 
-    private int GetNumberOfPages(int numberOfPhotos, int pageSize)
+    private static int GetNumberOfPages(int numberOfPhotos, int pageSize)
     {
         return (numberOfPhotos / pageSize) + ((numberOfPhotos % pageSize > 0) ? 1 : 0);
     }

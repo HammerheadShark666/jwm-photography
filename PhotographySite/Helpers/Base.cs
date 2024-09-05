@@ -1,6 +1,4 @@
-﻿using PhotographySite.Helpers;
-
-namespace PhotographySite.Helper;
+﻿namespace PhotographySite.Helpers;
 
 public class Base
 {

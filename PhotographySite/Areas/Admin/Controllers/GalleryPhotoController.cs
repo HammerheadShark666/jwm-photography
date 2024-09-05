@@ -9,31 +9,24 @@ namespace PhotographySite.Areas.Admin.Controllers;
 [Area("Admin")]
 [Route("admin/gallery-photos")]
 [AutoValidateAntiforgeryToken]
-public class GalleryPhotoController : Controller
+public class GalleryPhotoController(IGalleryPhotoService galleryPhotoService) : Controller
 {
-    private IGalleryPhotoService _galleryPhotoService;
-
-    public GalleryPhotoController(IGalleryPhotoService galleryPhotoService)
-    {
-        _galleryPhotoService = galleryPhotoService;
-    }
-
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] GalleryPhotoAddRequest galleryPhotoAddRequest)
     {
-        return Ok(await _galleryPhotoService.AddPhotoToGalleryAsync(galleryPhotoAddRequest));
+        return Ok(await galleryPhotoService.AddPhotoToGalleryAsync(galleryPhotoAddRequest));
     }
 
     [HttpPost("move")]
     public async Task<IActionResult> MoveAsync([FromBody] GalleryPhotoAddRequest galleryPhotoAddRequest)
     {
-        return Ok(await _galleryPhotoService.MovePhotoInGalleryAsync(galleryPhotoAddRequest));
+        return Ok(await galleryPhotoService.MovePhotoInGalleryAsync(galleryPhotoAddRequest));
     }
 
     [HttpPost("remove")]
     public async Task<IActionResult> RemoveAsync([FromBody] GalleryPhotoAddRequest galleryPhotoAddRequest)
     {
-        await _galleryPhotoService.RemovePhotoFromGalleryAsync(galleryPhotoAddRequest);
+        await galleryPhotoService.RemovePhotoFromGalleryAsync(galleryPhotoAddRequest);
         return Ok();
     }
 }

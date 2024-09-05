@@ -1,25 +1,18 @@
 ﻿using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using PhotographySite.Areas.Admin.Dto.Request;
-using PhotographySite.Data.Contexts;
+using PhotographySite.Data.Context;
 using PhotographySite.Data.Repository.Interfaces;
 using PhotographySite.Models;
 
 namespace PhotographySite.Data.Repository;
 
-public class FavouriteRepository : IFavouriteRepository
+public class FavouriteRepository(PhotographySiteDbContext context) : IFavouriteRepository
 {
-    private readonly PhotographySiteDbContext _context;
-
-    public FavouriteRepository(PhotographySiteDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<List<Photo>> GetFavouritePhotosAsync(Guid userId)
     {
-        return await (from favourite in _context.Favourite
-                      join photo in _context.Photo
+        return await (from favourite in context.Favourite
+                      join photo in context.Photo
                             on favourite.PhotoId equals photo.Id
                       where favourite.UserId == userId
                       select photo).ToListAsync();
@@ -27,7 +20,7 @@ public class FavouriteRepository : IFavouriteRepository
 
     public async Task<Favourite> GetFavouritePhotoAsync(Guid userId, long photoId)
     {
-        return await (from favourite in _context.Favourite
+        return await (from favourite in context.Favourite
                       where favourite.UserId == userId
                         && favourite.PhotoId == photoId
                       select favourite).SingleOrDefaultAsync();
@@ -40,7 +33,7 @@ public class FavouriteRepository : IFavouriteRepository
 
     public async Task<List<Photo>> GetFavouritePhotoByPagingAsync(Guid userId, PhotoFilterRequest photoFilterRequest)
     {
-        return await _context.Favourite
+        return await context.Favourite
             .Include(favourite => favourite.Photo)
             .ThenInclude(photo => photo.Country)
             .Include(photo => photo.Photo.Category)
@@ -54,12 +47,12 @@ public class FavouriteRepository : IFavouriteRepository
 
     public async Task<int> ByFilterCountAsync(Guid userId, PhotoFilterRequest photoFilterRequest)
     {
-        return await _context.Favourite
+        return await context.Favourite
            .Where(GetPredicateWhereClause(userId, photoFilterRequest))
            .CountAsync();
     }
 
-    private ExpressionStarter<Favourite> GetPredicateWhereClause(Guid userId, PhotoFilterRequest photoFilterRequest)
+    private static ExpressionStarter<Favourite> GetPredicateWhereClause(Guid userId, PhotoFilterRequest photoFilterRequest)
     {
         var predicate = PredicateBuilder.New<Favourite>(true);
 
@@ -108,11 +101,11 @@ public class FavouriteRepository : IFavouriteRepository
     }
     public void Delete(Favourite favourite)
     {
-        _context.Favourite.Remove(favourite);
+        context.Favourite.Remove(favourite);
     }
 
     public async Task AddAsync(Favourite favourite)
     {
-        await _context.Favourite.AddAsync(favourite);
+        await context.Favourite.AddAsync(favourite);
     }
 }

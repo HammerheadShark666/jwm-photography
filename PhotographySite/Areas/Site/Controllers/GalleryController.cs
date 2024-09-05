@@ -8,27 +8,18 @@ namespace PhotographySite.Areas.Site.Controllers;
 
 [Area("site")]
 [Route("gallery")]
-public class GalleryController : BaseController
+public class GalleryController(IGalleryService galleryService,
+                         IUserGalleryService userGalleryService,
+                         IUserService userService) : BaseController(userService)
 {
-    private IGalleryService _galleryService;
-    private IUserGalleryService _userGalleryService;
-
-    public GalleryController(IGalleryService galleryService,
-                             IUserGalleryService userGalleryService,
-                             IUserService userService) : base(userService)
-    {
-        _galleryService = galleryService;
-        _userGalleryService = userGalleryService;
-    }
-
     [HttpGet("{id}")]
     public async Task<IActionResult> Gallery(int id)
     {
         try
         {
             return !IsLoggedIn()
-            ? View("Gallery", await _galleryService.GetGalleryAsync(id))
-            : View("Gallery", await _galleryService.GetGalleryAsync(GetUserId(), id));
+            ? View("Gallery", await galleryService.GetGalleryAsync(id))
+            : View("Gallery", await galleryService.GetGalleryAsync(GetUserId(), id));
         }
         catch (GalleryNotFoundException gnfe)
         {
@@ -38,12 +29,12 @@ public class GalleryController : BaseController
 
     [Authorize(Roles = "User, Admin")]
     [HttpGet("user/{id}")]
-    [ResponseCache(Duration = 300, VaryByQueryKeys = new string[] { "id" })]
+    [ResponseCache(Duration = 300, VaryByQueryKeys = ["id"])]
     public async Task<IActionResult> UserGallery(int id)
     {
         try
         {
-            return View("UserGallery", await _userGalleryService.GetUserGalleryAsync(GetUserId(), id));
+            return View("UserGallery", await userGalleryService.GetUserGalleryAsync(GetUserId(), id));
         }
         catch (UserGalleryNotFoundException ugnfe)
         {

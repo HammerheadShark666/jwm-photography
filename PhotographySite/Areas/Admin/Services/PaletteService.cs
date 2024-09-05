@@ -5,19 +5,10 @@ using PhotographySite.Data.UnitOfWork.Interfaces;
 
 namespace PhotographySite.Areas.Admin.Services;
 
-public class PaletteService : IPaletteService
+public class PaletteService(IUnitOfWork unitOfWork, IMapper mapper) : IPaletteService
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-
-    public PaletteService(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
-
     public async Task<List<PaletteResponse>> GetPalettesAsync()
     {
-        return _mapper.Map<List<PaletteResponse>>(await _unitOfWork.Palettes.AllSortedAsync());
+        return mapper.Map<List<PaletteResponse>>(await unitOfWork.Palettes.AllSortedAsync());
     }
 }

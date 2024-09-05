@@ -1,9 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using PhotographySite.Helpers;
 using PhotographySite.Helpers.Interface;
 
-namespace PhotographySite.Helper;
+namespace PhotographySite.Helpers;
 
 public class AzureStorageBlobHelper : Base, IAzureStorageBlobHelper
 {
@@ -12,7 +11,7 @@ public class AzureStorageBlobHelper : Base, IAzureStorageBlobHelper
 
     public async Task SaveBlobToAzureStorageContainerAsync(IFormFile file, string containerName, string fileName)
     {
-        Stream fileStream = new MemoryStream();
+        Stream fileStream;
         fileStream = file.OpenReadStream();
         var blobClient = new BlobContainerClient(GetStorageConnection(), containerName);
         var blob = blobClient.GetBlobClient(fileName);

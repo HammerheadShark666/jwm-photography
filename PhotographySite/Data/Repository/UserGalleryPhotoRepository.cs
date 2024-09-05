@@ -1,25 +1,18 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using PhotographySite.Data.Contexts;
+using PhotographySite.Data.Context;
 using PhotographySite.Data.Repository.Interfaces;
 using PhotographySite.Helpers;
 using PhotographySite.Models;
 
 namespace PhotographySite.Data.Repository;
 
-public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
+public class UserGalleryPhotoRepository(PhotographySiteDbContext context) : IUserGalleryPhotoRepository
 {
-    private readonly PhotographySiteDbContext _context;
-
-    public UserGalleryPhotoRepository(PhotographySiteDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<List<Photo>> GetGalleryPhotosAsync(long galleryId)
     {
-        return await (from galleryPhoto in _context.UserGalleryPhoto
-                      join photo in _context.Photo
+        return await (from galleryPhoto in context.UserGalleryPhoto
+                      join photo in context.Photo
                             on galleryPhoto.PhotoId equals photo.Id
                       where galleryPhoto.UserGalleryId == galleryId
                       orderby (galleryPhoto.Order)
@@ -28,7 +21,7 @@ public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
 
     public async Task<UserGalleryPhoto> GetGalleryPhotoAsync(long galleryId, long photoId)
     {
-        return await (from galleryPhoto in _context.UserGalleryPhoto
+        return await (from galleryPhoto in context.UserGalleryPhoto
                       where galleryPhoto.UserGalleryId == galleryId
                         && galleryPhoto.PhotoId == photoId
                       select galleryPhoto).SingleOrDefaultAsync();
@@ -36,7 +29,7 @@ public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
 
     public async Task<List<UserGalleryPhoto>> GetGalleryPhotosAfterOrderPositionAsync(long galleryId, long photoId, int order)
     {
-        return await (from galleryPhotos in _context.UserGalleryPhoto
+        return await (from galleryPhotos in context.UserGalleryPhoto
                       where galleryPhotos.UserGalleryId == galleryId
                         && galleryPhotos.PhotoId != photoId
                             && galleryPhotos.Order >= order
@@ -46,7 +39,7 @@ public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
 
     public async Task<List<UserGalleryPhoto>> GetGalleryPhotosBeforeOrderPositionAsync(long galleryId, long photoId, int order)
     {
-        return await (from galleryPhotos in _context.UserGalleryPhoto
+        return await (from galleryPhotos in context.UserGalleryPhoto
                       where galleryPhotos.UserGalleryId == galleryId
                         && galleryPhotos.PhotoId != photoId
                             && galleryPhotos.Order <= order
@@ -56,7 +49,7 @@ public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
 
     public async Task<Photo> GetRandomGalleryPhotoAsync(long galleryId)
     {
-        int gallerySize = await (from galleryPhoto in _context.UserGalleryPhoto
+        int gallerySize = await (from galleryPhoto in context.UserGalleryPhoto
                                  where galleryPhoto.UserGalleryId == galleryId
                                     && galleryPhoto.Photo.Orientation == (int)Enums.PhotoOrientation.landscape
                                  select galleryPhoto).CountAsync();
@@ -66,8 +59,8 @@ public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
         Random rand = new();
         int toSkip = rand.Next(0, gallerySize);
 
-        return await (from galleryPhoto in _context.UserGalleryPhoto
-                      join photo in _context.Photo
+        return await (from galleryPhoto in context.UserGalleryPhoto
+                      join photo in context.Photo
                       on galleryPhoto.PhotoId equals photo.Id
                       where galleryPhoto.UserGalleryId == galleryId
                           && galleryPhoto.Photo.Orientation == (int)Enums.PhotoOrientation.landscape
@@ -77,12 +70,12 @@ public class UserGalleryPhotoRepository : IUserGalleryPhotoRepository
 
     public async Task<UserGalleryPhoto> AddAsync(UserGalleryPhoto userGalleryPhoto)
     {
-        await _context.UserGalleryPhoto.AddAsync(userGalleryPhoto);
+        await context.UserGalleryPhoto.AddAsync(userGalleryPhoto);
         return userGalleryPhoto;
     }
 
     public void Delete(UserGalleryPhoto userGalleryPhoto)
     {
-        _context.UserGalleryPhoto.Remove(userGalleryPhoto);
+        context.UserGalleryPhoto.Remove(userGalleryPhoto);
     }
 }

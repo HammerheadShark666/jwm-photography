@@ -9,31 +9,24 @@ namespace PhotographySite.Areas.Admin.Controllers;
 [Area("Admin")]
 [Route("admin/photo/catalog")]
 [AutoValidateAntiforgeryToken]
-public class PhotoCatalogController : Controller
+public class PhotoCatalogController(IPhotoCatalogService photoCatalogService) : Controller
 {
-    private IPhotoCatalogService _photoCatalogService;
-
-    public PhotoCatalogController(IPhotoCatalogService photoCatalogService)
-    {
-        _photoCatalogService = photoCatalogService;
-    }
-
     [HttpGet("")]
     public async Task<IActionResult> Catalog()
     {
-        return View("PhotoCatalogue", await _photoCatalogService.GetLookupsAsync());
+        return View("PhotoCatalogue", await photoCatalogService.GetLookupsAsync());
     }
 
     [HttpPost("")]
     public async Task<IActionResult> PhotoCatalogAsync([FromBody] PhotoFilterRequest photoFilterRequest)
     {
-        return Ok(await _photoCatalogService.GetPhotosPageAsync(photoFilterRequest));
+        return Ok(await photoCatalogService.GetPhotosPageAsync(photoFilterRequest));
     }
 
     [HttpPost("update-photo")]
     public async Task<IActionResult> AddUpdatePhotoAsync([FromBody] UpdatePhotoRequest updatePhotoRequest)
     {
-        await _photoCatalogService.UpdatePhotoAsync(updatePhotoRequest);
+        await photoCatalogService.UpdatePhotoAsync(updatePhotoRequest);
         return Ok();
     }
 }

@@ -1,37 +1,30 @@
 ﻿using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using PhotographySite.Areas.Admin.Dto.Request;
-using PhotographySite.Data.Contexts;
+using PhotographySite.Data.Context;
 using PhotographySite.Data.Repository.Interfaces;
 using PhotographySite.Models;
 using System.Linq.Dynamic.Core;
 
 namespace PhotographySite.Data.Repository;
 
-public class PhotoRepository : IPhotoRepository
+public class PhotoRepository(PhotographySiteDbContext context) : IPhotoRepository
 {
-    private readonly PhotographySiteDbContext _context;
-
-    public PhotoRepository(PhotographySiteDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<List<Photo>> AllAsync()
     {
-        return await _context.Photo
+        return await context.Photo
             .Include(photo => photo.Country)
             .ToListAsync();
     }
 
     public async Task<int> CountAsync()
     {
-        return await _context.Photo.CountAsync();
+        return await context.Photo.CountAsync();
     }
 
     public async Task<List<Photo>> ByPagingAsync(PhotoFilterRequest photoFilterRequest)
     {
-        return await _context.Photo
+        return await context.Photo
             .Include(photo => photo.Country)
             .Include(photo => photo.Category)
             .Include(photo => photo.Palette)
@@ -43,43 +36,42 @@ public class PhotoRepository : IPhotoRepository
 
     public async Task<int> ByFilterCountAsync(PhotoFilterRequest photoFilterRequest)
     {
-        return await _context.Photo
+        return await context.Photo
            .Where(GetPredicateWhereClause(photoFilterRequest))
            .CountAsync();
     }
 
     public List<Photo> MontagePhotos(Helpers.Enums.PhotoOrientation orientation, int numberOfPhotos, Guid userId)
     {
-        return _context.Photo
+        return [.. context.Photo
             .Include(photo => photo.Country)
             .Include(photo => photo.Favourites.Where(favourite => favourite.UserId == userId))
             .Where(p => p.UseInMontage == true && (int)orientation == p.Orientation)
             .Distinct()
             .OrderBy(x => Guid.NewGuid())
-            .Take(numberOfPhotos)
-            .ToList();
+            .Take(numberOfPhotos)];
     }
 
     public bool Exists(string filename)
     {
-        return _context.Photo.Count(photo => photo.FileName == filename) > 0;
+        return context.Photo.Any(photo => photo.FileName == filename);
     }
 
     public async Task<Photo> FindByFilenameAsync(string filename)
     {
-        return await _context.Photo.FirstOrDefaultAsync(photo => photo.FileName == filename);
+        return await context.Photo.FirstOrDefaultAsync(photo => photo.FileName == filename);
     }
 
     public async Task<List<Photo>> GetLatestPhotos(int numberOfPhotos)
     {
-        return await (from photo in _context.Photo
+        return await (from photo in context.Photo
                       orderby photo.Id descending
                       select photo)
                       .Take(numberOfPhotos)
                       .ToListAsync();
     }
 
-    private string GetOrderByStatement(PhotoFilterRequest photoFilterRequest)
+    private static string GetOrderByStatement(PhotoFilterRequest photoFilterRequest)
     {
         string orderByStatement = "FileName asc";
 
@@ -89,7 +81,7 @@ public class PhotoRepository : IPhotoRepository
         return orderByStatement;
     }
 
-    private ExpressionStarter<Photo> GetPredicateWhereClause(PhotoFilterRequest photoFilterRequest)
+    private static ExpressionStarter<Photo> GetPredicateWhereClause(PhotoFilterRequest photoFilterRequest)
     {
         var predicate = PredicateBuilder.New<Photo>(true);
 
@@ -137,16 +129,16 @@ public class PhotoRepository : IPhotoRepository
 
     public async Task AddAsync(Photo photo)
     {
-        await _context.Photo.AddAsync(photo);
+        await context.Photo.AddAsync(photo);
     }
 
     public void Update(Photo photo)
     {
-        _context.Photo.Update(photo);
+        context.Photo.Update(photo);
     }
 
     public async Task<Photo> ByIdAsync(long id)
     {
-        return await _context.Photo.FindAsync(id);
+        return await context.Photo.FindAsync(id);
     }
 }

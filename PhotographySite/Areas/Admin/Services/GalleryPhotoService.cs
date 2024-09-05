@@ -7,54 +7,45 @@ using PhotographySite.Models;
 
 namespace PhotographySite.Areas.Admin.Services;
 
-public class GalleryPhotoService : IGalleryPhotoService
+public class GalleryPhotoService(IUnitOfWork unitOfWork, IMapper mapper) : IGalleryPhotoService
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-
-    public GalleryPhotoService(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
-
     public async Task<List<PhotoResponse>> GetGalleryPhotosAsync(long id)
     {
-        return _mapper.Map<List<PhotoResponse>>(await _unitOfWork.GalleryPhotos.GetGalleryPhotosAsync(id));
+        return mapper.Map<List<PhotoResponse>>(await unitOfWork.GalleryPhotos.GetGalleryPhotosAsync(id));
     }
 
     public async Task<GalleryPhoto> AddPhotoToGalleryAsync(GalleryPhotoAddRequest galleryPhotoAddRequest)
     {
-        var galleryPhoto = _mapper.Map<GalleryPhoto>(galleryPhotoAddRequest);
-        galleryPhoto = await _unitOfWork.GalleryPhotos.AddAsync(galleryPhoto);
+        var galleryPhoto = mapper.Map<GalleryPhoto>(galleryPhotoAddRequest);
+        galleryPhoto = await unitOfWork.GalleryPhotos.AddAsync(galleryPhoto);
 
         await UpdatePhotosOrderAsync(galleryPhoto, (galleryPhoto.Order + 1));
-        await _unitOfWork.Complete();
+        await unitOfWork.Complete();
 
         return galleryPhoto;
     }
 
     public async Task<GalleryPhoto> MovePhotoInGalleryAsync(GalleryPhotoAddRequest galleryPhotoAddRequest)
     {
-        var currentGalleryPhoto = await _unitOfWork.GalleryPhotos.GetGalleryPhotoAsync(galleryPhotoAddRequest.GalleryId, galleryPhotoAddRequest.PhotoId);
+        var currentGalleryPhoto = await unitOfWork.GalleryPhotos.GetGalleryPhotoAsync(galleryPhotoAddRequest.GalleryId, galleryPhotoAddRequest.PhotoId);
         if (currentGalleryPhoto != null)
         {
             int newOrder = galleryPhotoAddRequest.Order;
             await UpdatePhotosAfterMovingPhotosAsync(currentGalleryPhoto, newOrder);
             currentGalleryPhoto.Order = newOrder;
-            await _unitOfWork.Complete();
+            await unitOfWork.Complete();
         }
         return currentGalleryPhoto;
     }
 
     public async Task RemovePhotoFromGalleryAsync(GalleryPhotoAddRequest galleryPhotoAddRequest)
     {
-        var currentGalleryPhoto = await _unitOfWork.GalleryPhotos.GetGalleryPhotoAsync(galleryPhotoAddRequest.GalleryId, galleryPhotoAddRequest.PhotoId);
+        var currentGalleryPhoto = await unitOfWork.GalleryPhotos.GetGalleryPhotoAsync(galleryPhotoAddRequest.GalleryId, galleryPhotoAddRequest.PhotoId);
         if (currentGalleryPhoto != null)
         {
-            _unitOfWork.GalleryPhotos.Delete(currentGalleryPhoto);
+            unitOfWork.GalleryPhotos.Delete(currentGalleryPhoto);
             await UpdatePhotosOrderAsync(currentGalleryPhoto, currentGalleryPhoto.Order);
-            await _unitOfWork.Complete();
+            await unitOfWork.Complete();
         }
 
         return;
@@ -62,7 +53,7 @@ public class GalleryPhotoService : IGalleryPhotoService
 
     private async Task UpdatePhotosOrderAsync(GalleryPhoto galleryPhoto, int newOrder)
     {
-        var galleryPhotosAfterOrderPosition = await _unitOfWork.GalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.GalleryId, galleryPhoto.PhotoId, galleryPhoto.Order);
+        var galleryPhotosAfterOrderPosition = await unitOfWork.GalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.GalleryId, galleryPhoto.PhotoId, galleryPhoto.Order);
 
         foreach (var galleryPhotoAfterOrderPosition in galleryPhotosAfterOrderPosition)
         {
@@ -83,7 +74,7 @@ public class GalleryPhotoService : IGalleryPhotoService
     {
         int order = 1;
 
-        var galleryPhotosBeforeOrderPosition = await _unitOfWork.GalleryPhotos.GetGalleryPhotosBeforeOrderPositionAsync(galleryPhoto.GalleryId, galleryPhoto.PhotoId, newOrder);
+        var galleryPhotosBeforeOrderPosition = await unitOfWork.GalleryPhotos.GetGalleryPhotosBeforeOrderPositionAsync(galleryPhoto.GalleryId, galleryPhoto.PhotoId, newOrder);
 
         foreach (var galleryPhotoBeforeOrderPosition in galleryPhotosBeforeOrderPosition)
         {
@@ -96,7 +87,7 @@ public class GalleryPhotoService : IGalleryPhotoService
 
     private async Task MovePhotoInGalleryBackwardAsync(GalleryPhoto galleryPhoto, int newOrder)
     {
-        var galleryPhotosAfterOrderPosition = await _unitOfWork.GalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.GalleryId, galleryPhoto.PhotoId, newOrder);
+        var galleryPhotosAfterOrderPosition = await unitOfWork.GalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.GalleryId, galleryPhoto.PhotoId, newOrder);
 
         newOrder++; ;
 
