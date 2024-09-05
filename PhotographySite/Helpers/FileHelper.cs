@@ -4,7 +4,7 @@ public class FileHelper
 {
     public static async Task<List<string>> SaveFilesToDirectoryAsync(List<IFormFile> files, string directoryPath)
     {
-        List<string> fileNames = new();
+        List<string> fileNames = [];
 
         foreach (var formFile in files)
         {

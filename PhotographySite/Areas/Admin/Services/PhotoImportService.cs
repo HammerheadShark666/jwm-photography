@@ -10,26 +10,15 @@ using PhotographySite.Models;
 
 namespace PhotographySite.Areas.Admin.Services;
 
-public class PhotoImportService : IPhotoImportService
+public class PhotoImportService(IUnitOfWork unitOfWork, IMapper mapper, IAzureStorageBlobHelper azureStorageBlobHelper) : IPhotoImportService
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-    private IAzureStorageBlobHelper _azureStorageBlobHelper;
-
-    public PhotoImportService(IUnitOfWork unitOfWork, IMapper mapper, IAzureStorageBlobHelper azureStorageBlobHelper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _azureStorageBlobHelper = azureStorageBlobHelper;
-    }
-
     public async Task<SavedPhotosResponse> ImportAsync(List<IFormFile> photos)
     {
         string directoryPath = EnvironmentVariablesHelper.TempPhotoDirectoryPath;
 
         var (existingPhotos, newPhotos) = await GetExistingNewPhotoListAsync(photos);
 
-        await _azureStorageBlobHelper.SaveBlobsToAzureStorageContainerAsync(newPhotos, Constants.AzureStorageContainerName);
+        await azureStorageBlobHelper.SaveBlobsToAzureStorageContainerAsync(newPhotos, Constants.AzureStorageContainerName);
 
         var fileNames = await FileHelper.SaveFilesToDirectoryAsync(newPhotos, directoryPath);
         var photosWithDetails = GetPhotoDetails(fileNames, directoryPath);
@@ -45,9 +34,9 @@ public class PhotoImportService : IPhotoImportService
 
     public async Task<SavedPhotosResponse> GetLookUpsAsync(SavedPhotosResponse savedPhotosResponse)
     {
-        savedPhotosResponse.Lookups.Categories = _mapper.Map<List<CategoryResponse>>(await _unitOfWork.Categories.AllSortedAsync());
-        savedPhotosResponse.Lookups.Countries = _mapper.Map<List<CountryResponse>>(await _unitOfWork.Countries.AllSortedAsync());
-        savedPhotosResponse.Lookups.Palettes = _mapper.Map<List<PaletteResponse>>(await _unitOfWork.Palettes.AllSortedAsync());
+        savedPhotosResponse.Lookups.Categories = mapper.Map<List<CategoryResponse>>(await unitOfWork.Categories.AllSortedAsync());
+        savedPhotosResponse.Lookups.Countries = mapper.Map<List<CountryResponse>>(await unitOfWork.Countries.AllSortedAsync());
+        savedPhotosResponse.Lookups.Palettes = mapper.Map<List<PaletteResponse>>(await unitOfWork.Palettes.AllSortedAsync());
 
         return savedPhotosResponse;
     }
@@ -59,7 +48,7 @@ public class PhotoImportService : IPhotoImportService
 
         foreach (IFormFile photo in photos)
         {
-            var existingPhoto = await _unitOfWork.Photos.FindByFilenameAsync(photo.FileName);
+            var existingPhoto = await unitOfWork.Photos.FindByFilenameAsync(photo.FileName);
             if (existingPhoto != null)
             {
                 existingPhotos.Add(new ExistingPhotoRequest()
@@ -76,7 +65,7 @@ public class PhotoImportService : IPhotoImportService
         return (existingPhotos, newPhotos);
     }
 
-    private List<Photo> GetPhotoDetails(List<string> fileNames, string directoryPath)
+    private static List<Photo> GetPhotoDetails(List<string> fileNames, string directoryPath)
     {
         var photos = new List<Photo>();
 
@@ -99,12 +88,12 @@ public class PhotoImportService : IPhotoImportService
         {
             if (photo.Id == 0)
             {
-                await _unitOfWork.Photos.AddAsync(photo);
+                await unitOfWork.Photos.AddAsync(photo);
                 savedPhotos.Add(photo);
             }
         }
 
-        await _unitOfWork.Complete();
+        await unitOfWork.Complete();
 
         return savedPhotos;
     }

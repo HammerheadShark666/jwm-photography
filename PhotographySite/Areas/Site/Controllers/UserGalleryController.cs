@@ -13,22 +13,11 @@ namespace PhotographySite.Areas.Site.Controllers;
 [Authorize(Roles = "User, Admin")]
 [Area("site")]
 [Route("user/gallery")]
-public class UserGalleryController : BaseController
+public class UserGalleryController(IPhotoCatalogService photoCatalogService,
+                             IUserGalleryService userGalleryService,
+                             IUserGalleryPhotoService userGalleryPhotoService,
+                             IUserService userService) : BaseController(userService)
 {
-    private IPhotoCatalogService _photoCatalogService;
-    private IUserGalleryService _userGalleryService;
-    private IUserGalleryPhotoService _userGalleryPhotoService;
-
-    public UserGalleryController(IPhotoCatalogService photoCatalogService,
-                                 IUserGalleryService userGalleryService,
-                                 IUserGalleryPhotoService userGalleryPhotoService,
-                                 IUserService userService) : base(userService)
-    {
-        _photoCatalogService = photoCatalogService;
-        _userGalleryService = userGalleryService;
-        _userGalleryPhotoService = userGalleryPhotoService;
-    }
-
     [HttpGet("{id}")]
     public async Task<IActionResult> Gallery(long id)
     {
@@ -36,7 +25,7 @@ public class UserGalleryController : BaseController
 
         try
         {
-            return View("UserGalleries", await _userGalleryService.GetUserGalleryToEditAsync(GetUserId(), id));
+            return View("UserGalleries", await userGalleryService.GetUserGalleryToEditAsync(GetUserId(), id));
         }
         catch (UserGalleryNotFoundException ugnfe)
         {
@@ -51,7 +40,7 @@ public class UserGalleryController : BaseController
         {
             IsValidUser();
             userGalleryAddRequest.UserId = GetUserId();
-            return Ok(await _userGalleryService.AddAsync(userGalleryAddRequest));
+            return Ok(await userGalleryService.AddAsync(userGalleryAddRequest));
         }
         catch (FailedValidationException fve)
         {
@@ -70,7 +59,7 @@ public class UserGalleryController : BaseController
         {
             IsValidUser();
             userGalleryUpdateRequest.UserId = GetUserId();
-            return Ok(await _userGalleryService.UpdateAsync(userGalleryUpdateRequest));
+            return Ok(await userGalleryService.UpdateAsync(userGalleryUpdateRequest));
         }
         catch (FailedValidationException fve)
         {
@@ -89,7 +78,7 @@ public class UserGalleryController : BaseController
         try
         {
             IsValidUser();
-            return Ok(await _userGalleryService.DeleteAsync(GetUserId(), id));
+            return Ok(await userGalleryService.DeleteAsync(GetUserId(), id));
         }
         catch (UserGalleryNotFoundException cnfe)
         {

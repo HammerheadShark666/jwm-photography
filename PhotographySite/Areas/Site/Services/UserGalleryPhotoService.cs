@@ -8,17 +8,8 @@ using SwanSong.Service.Helpers.Exceptions;
 
 namespace PhotographySite.Areas.Site.Services;
 
-public class UserGalleryPhotoService : IUserGalleryPhotoService
+public class UserGalleryPhotoService(IUnitOfWork unitOfWork, IMapper mapper) : IUserGalleryPhotoService
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-
-    public UserGalleryPhotoService(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
-
     public async Task<List<PhotoResponse>> GetGalleryPhotosAsync(Guid userId, long galleryId)
     {
         await UserGalleryExists(userId, galleryId);
@@ -26,7 +17,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
         //if (!await UserGalleryExists(userId, galleryId))
         //    throw new UserGalleryNotFoundException("User Gallary not found.");
 
-        return _mapper.Map<List<PhotoResponse>>(await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAsync(galleryId));
+        return mapper.Map<List<PhotoResponse>>(await unitOfWork.UserGalleryPhotos.GetGalleryPhotosAsync(galleryId));
     }
 
     public async Task<UserGalleryPhoto> AddPhotoToUserGalleryAsync(UserGalleryPhotoRequest request)
@@ -36,11 +27,11 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
         //if (!await UserGalleryExists(userGalleryPhotoRequest.UserId, userGalleryPhotoRequest.UserGalleryId))
         //    throw new UserGalleryNotFoundException("User Gallary not found.");
 
-        var galleryPhoto = _mapper.Map<UserGalleryPhoto>(request);
+        var galleryPhoto = mapper.Map<UserGalleryPhoto>(request);
 
-        galleryPhoto = await _unitOfWork.UserGalleryPhotos.AddAsync(galleryPhoto);
+        galleryPhoto = await unitOfWork.UserGalleryPhotos.AddAsync(galleryPhoto);
         await UpdatePhotosOrderAsync(galleryPhoto, (galleryPhoto.Order + 1));
-        await _unitOfWork.Complete();
+        await unitOfWork.Complete();
 
         return galleryPhoto;
     }
@@ -52,14 +43,14 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
         //if (!await UserGalleryExists(userGalleryMovePhotoRequest.UserId, userGalleryMovePhotoRequest.UserGalleryId))
         //    throw new UserGalleryNotFoundException("User Gallary not found.");
 
-        var currentGalleryPhoto = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(request.UserGalleryId, request.PhotoId);
+        var currentGalleryPhoto = await unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(request.UserGalleryId, request.PhotoId);
 
         if (currentGalleryPhoto != null)
         {
             int newOrder = request.Order;
             await UpdatePhotosAfterMovingPhotosAsync(currentGalleryPhoto, newOrder);
             currentGalleryPhoto.Order = newOrder;
-            await _unitOfWork.Complete();
+            await unitOfWork.Complete();
         }
 
         return currentGalleryPhoto;
@@ -72,13 +63,13 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
         //if (!await UserGalleryExists(userGalleryRemoveRequest.UserId, userGalleryRemoveRequest.UserGalleryId))
         //    throw new UserGalleryNotFoundException("User Gallary not found.");
 
-        var currentGalleryPhoto = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(request.UserGalleryId, request.PhotoId);
+        var currentGalleryPhoto = await unitOfWork.UserGalleryPhotos.GetGalleryPhotoAsync(request.UserGalleryId, request.PhotoId);
 
         if (currentGalleryPhoto != null)
         {
-            _unitOfWork.UserGalleryPhotos.Delete(currentGalleryPhoto);
+            unitOfWork.UserGalleryPhotos.Delete(currentGalleryPhoto);
             await UpdatePhotosOrderAsync(currentGalleryPhoto, currentGalleryPhoto.Order);
-            await _unitOfWork.Complete();
+            await unitOfWork.Complete();
         }
 
         return;
@@ -86,7 +77,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
 
     private async Task UpdatePhotosOrderAsync(UserGalleryPhoto galleryPhoto, int newOrder)
     {
-        var galleryPhotosAfterOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, galleryPhoto.Order);
+        var galleryPhotosAfterOrderPosition = await unitOfWork.UserGalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, galleryPhoto.Order);
 
         foreach (var galleryPhotoAfterOrderPosition in galleryPhotosAfterOrderPosition)
         {
@@ -107,7 +98,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
     {
         int order = 1;
 
-        var galleryPhotosBeforeOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosBeforeOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, newOrder);
+        var galleryPhotosBeforeOrderPosition = await unitOfWork.UserGalleryPhotos.GetGalleryPhotosBeforeOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, newOrder);
 
         foreach (var galleryPhotoBeforeOrderPosition in galleryPhotosBeforeOrderPosition)
         {
@@ -120,7 +111,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
 
     private async Task MovePhotoInGalleryBackwardAsync(UserGalleryPhoto galleryPhoto, int newOrder)
     {
-        var galleryPhotosAfterOrderPosition = await _unitOfWork.UserGalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, newOrder);
+        var galleryPhotosAfterOrderPosition = await unitOfWork.UserGalleryPhotos.GetGalleryPhotosAfterOrderPositionAsync(galleryPhoto.UserGalleryId, galleryPhoto.PhotoId, newOrder);
 
         newOrder++; ;
 
@@ -137,7 +128,7 @@ public class UserGalleryPhotoService : IUserGalleryPhotoService
     {
         //  return await _unitOfWork.UserGalleries.GetAsync(userId, id) != null;
 
-        if (!(await _unitOfWork.UserGalleries.GetAsync(userId, id) != null))
+        if (!(await unitOfWork.UserGalleries.GetAsync(userId, id) != null))
             throw new UserGalleryNotFoundException("User Gallary not found.");
 
         return;

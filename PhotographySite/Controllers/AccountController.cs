@@ -7,15 +7,8 @@ using static PhotographySite.Helpers.Enums;
 namespace PhotographySite.Controllers;
 
 [Route("")]
-public class AccountController : Controller
+public class AccountController(IAccountService accountService) : Controller
 {
-    private readonly IAccountService _accountService;
-
-    public AccountController(IAccountService accountService)
-    {
-        _accountService = accountService;
-    }
-
     [HttpGet("register")]
     public IActionResult Register()
     {
@@ -29,7 +22,7 @@ public class AccountController : Controller
             return View(registerRequest);
         else
         {
-            IdentityResult result = await _accountService.RegisterAsync(registerRequest.Email, registerRequest.Password);
+            IdentityResult result = await accountService.RegisterAsync(registerRequest.Email, registerRequest.Password);
 
             if (result.Succeeded)
                 return RedirectToAction("Login", "Account");
@@ -58,7 +51,7 @@ public class AccountController : Controller
             return View(loginRequest);
         else
         {
-            var response = await _accountService.LoginAsync(loginRequest.Email, loginRequest.Password);
+            var response = await accountService.LoginAsync(loginRequest.Email, loginRequest.Password);
 
             if (response.Item1.Succeeded)
             {
@@ -78,7 +71,7 @@ public class AccountController : Controller
     [HttpPost("logoff")]
     public async Task<ActionResult> LogOff()
     {
-        await _accountService.LogOffAsync();
+        await accountService.LogOffAsync();
         return RedirectToAction("Index", "Home", new { area = "Site" });
     }
 

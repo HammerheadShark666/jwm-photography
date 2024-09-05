@@ -1,4 +1,4 @@
-﻿using PhotographySite.Data.Contexts;
+﻿using PhotographySite.Data.Context;
 using PhotographySite.Data.Repository;
 using PhotographySite.Data.Repository.Interfaces;
 using PhotographySite.Data.UnitOfWork.Interfaces;

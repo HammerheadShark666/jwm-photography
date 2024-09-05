@@ -1,14 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static PhotographySite.Helpers.Enums;
 
 namespace PhotographySite.Models;
 
 [Table("PHOTO_Photo")]
 public class Photo
 {
-    private PhotoOrientation orientation;
-
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }

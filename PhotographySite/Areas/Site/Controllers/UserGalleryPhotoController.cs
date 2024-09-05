@@ -9,22 +9,15 @@ namespace PhotographySite.Areas.Site.Controllers;
 [Authorize(Roles = "User, Admin")]
 [Area("site")]
 [Route("user/gallery-photos")]
-public class UserGalleryPhotoController : BaseController
+public class UserGalleryPhotoController(IUserGalleryPhotoService userGalleryPhotoService,
+                                  IUserService userService) : BaseController(userService)
 {
-    private IUserGalleryPhotoService _userGalleryPhotoService;
-
-    public UserGalleryPhotoController(IUserGalleryPhotoService userGalleryPhotoService,
-                                      IUserService userService) : base(userService)
-    {
-        _userGalleryPhotoService = userGalleryPhotoService;
-    }
-
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] UserGalleryPhotoRequest userGalleryPhotoRequest)
     {
         IsValidUser();
         userGalleryPhotoRequest.UserId = GetUserId();
-        return Ok(await _userGalleryPhotoService.AddPhotoToUserGalleryAsync(userGalleryPhotoRequest));
+        return Ok(await userGalleryPhotoService.AddPhotoToUserGalleryAsync(userGalleryPhotoRequest));
     }
 
     [HttpPost("move")]
@@ -32,7 +25,7 @@ public class UserGalleryPhotoController : BaseController
     {
         IsValidUser();
         userGalleryMovePhotoRequest.UserId = GetUserId();
-        return Ok(await _userGalleryPhotoService.MovePhotoInGalleryAsync(userGalleryMovePhotoRequest));
+        return Ok(await userGalleryPhotoService.MovePhotoInGalleryAsync(userGalleryMovePhotoRequest));
     }
 
     [HttpPost("remove")]
@@ -40,7 +33,7 @@ public class UserGalleryPhotoController : BaseController
     {
         IsValidUser();
         userGalleryRemoveRequest.UserId = GetUserId();
-        await _userGalleryPhotoService.RemovePhotoFromGalleryAsync(userGalleryRemoveRequest);
+        await userGalleryPhotoService.RemovePhotoFromGalleryAsync(userGalleryRemoveRequest);
         return Ok();
     }
 }

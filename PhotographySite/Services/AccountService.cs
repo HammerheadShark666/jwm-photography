@@ -5,30 +5,19 @@ using static PhotographySite.Helpers.Enums;
 
 namespace PhotographySite.Services;
 
-public class AccountService : IAccountService
+public class AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager) : IAccountService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private RoleManager<IdentityRole> _roleManager;
-
-    public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _roleManager = roleManager;
-    }
-
     public async Task<IdentityResult> RegisterAsync(string email, string password)
     {
         ApplicationUser user = new() { UserName = email, Email = email };
 
-        IdentityResult result = await _userManager.CreateAsync(user, password);
+        IdentityResult result = await userManager.CreateAsync(user, password);
         if (result.Succeeded)
         {
-            var defaultrole = _roleManager.FindByNameAsync("User").Result;
+            var defaultrole = roleManager.FindByNameAsync("User").Result;
             if (defaultrole != null)
             {
-                IdentityResult roleresult = await _userManager.AddToRoleAsync(user, defaultrole.Name);
+                await userManager.AddToRoleAsync(user, defaultrole.Name);
             }
         }
 
@@ -39,13 +28,13 @@ public class AccountService : IAccountService
     {
         Role role = Role.User;
 
-        SignInResult result = await _signInManager.PasswordSignInAsync(email, password, isPersistent: true, lockoutOnFailure: false);
+        SignInResult result = await signInManager.PasswordSignInAsync(email, password, isPersistent: true, lockoutOnFailure: false);
         if (result.Succeeded)
         {
-            var user = await _userManager.FindByNameAsync(email);
+            var user = await userManager.FindByNameAsync(email);
             if (user != null)
             {
-                List<string> roles = (List<string>)await _userManager.GetRolesAsync(user);
+                List<string> roles = (List<string>)await userManager.GetRolesAsync(user);
 
                 if (roles.Contains("Admin"))
                     role = Role.Admin;
@@ -57,6 +46,6 @@ public class AccountService : IAccountService
 
     public async Task LogOffAsync()
     {
-        await _signInManager.SignOutAsync();
+        await signInManager.SignOutAsync();
     }
 }

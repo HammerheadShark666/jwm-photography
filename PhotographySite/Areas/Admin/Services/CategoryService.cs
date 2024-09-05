@@ -5,19 +5,10 @@ using PhotographySite.Data.UnitOfWork.Interfaces;
 
 namespace PhotographySite.Areas.Admin.Services;
 
-public class CategoryService : ICategoryService
+public class CategoryService(IUnitOfWork unitOfWork, IMapper mapper) : ICategoryService
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-
-    public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
-
     public async Task<List<CategoryResponse>> GetCategoriesAsync()
     {
-        return _mapper.Map<List<CategoryResponse>>(await _unitOfWork.Categories.AllSortedAsync());
+        return mapper.Map<List<CategoryResponse>>(await unitOfWork.Categories.AllSortedAsync());
     }
 }

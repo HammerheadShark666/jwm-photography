@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
-using PhotographySite.Dto;
 using PhotographySite.Dto.Response;
 using System.Net;
 using System.Text;
@@ -14,8 +13,7 @@ public static class GlobalExceptionHandlerExtension
     //otherwise it will redirect to an error page
     public static void UseGlobalExceptionHandler(this IApplicationBuilder app,
                                                  ILogger logger,
-                                                 string errorPagePath,
-                                                 bool respondWithJsonErrorDetails = false)
+                                                 string errorPagePath)
     {
         app.UseExceptionHandler(appBuilder =>
         {
@@ -36,9 +34,9 @@ public static class GlobalExceptionHandlerExtension
 
                 BaseResponse baseResponse = new()
                 {
-                    Messages = new List<Message>  {
+                    Messages = [
                         new() { Severity = "error", Text = exception.Message}
-                    }
+                    ]
                 };
 
                 var json = JsonConvert.SerializeObject(baseResponse);

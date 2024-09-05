@@ -6,15 +6,8 @@ namespace PhotographySite.Areas.Site.Controllers;
 
 [Area("site")]
 [Route("")]
-public class HomeController : BaseController
+public class HomeController(IMontageService montageService, IUserService userService) : BaseController(userService)
 {
-    private IMontageService _montageService;
-
-    public HomeController(IMontageService montageService, IUserService userService) : base(userService)
-    {
-        _montageService = montageService;
-    }
-
     [HttpGet("")]
     public async Task<IActionResult> Index()
     {
@@ -23,6 +16,6 @@ public class HomeController : BaseController
         if (IsLoggedIn())
             userId = GetUserId();
 
-        return View(await _montageService.GetMontageAsync(userId));
+        return View(await montageService.GetMontageAsync(userId));
     }
 }

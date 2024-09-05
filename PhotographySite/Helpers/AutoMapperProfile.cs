@@ -24,14 +24,14 @@ public class AutoMapperProfile : AutoMapper.Profile
                 .ForMember(dest => dest.FileName, act => act.MapFrom(src => src.Photo.FileName))
                 .ForMember(dest => dest.Country, act => act.MapFrom(src => src.Photo.Country.Name))
                 .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Photo.Title))
-                .ForMember(dest => dest.IsFavourite, act => act.MapFrom(src => src.Photo.Favourites.Count > 0 ? true : false)).ReverseMap();
+                .ForMember(dest => dest.IsFavourite, act => act.MapFrom(src => src.Photo.Favourites.Count > 0)).ReverseMap();
 
         base.CreateMap<UserGalleryPhoto, UserGalleryPhotoResponse>()
                 .ForMember(dest => dest.PhotoId, act => act.MapFrom(src => src.PhotoId))
                 .ForMember(dest => dest.FileName, act => act.MapFrom(src => src.Photo.FileName))
                 .ForMember(dest => dest.Country, act => act.MapFrom(src => src.Photo.Country.Name))
                 .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Photo.Title))
-                .ForMember(dest => dest.IsFavourite, act => act.MapFrom(src => src.Photo.Favourites.Count > 0 ? true : false)).ReverseMap();
+                .ForMember(dest => dest.IsFavourite, act => act.MapFrom(src => src.Photo.Favourites.Count > 0)).ReverseMap();
 
         CreateMap<UserGalleryAddRequest, UserGallery>().ReverseMap();
         CreateMap<UserGalleryUpdateRequest, UserGallery>().ReverseMap();

@@ -6,23 +6,14 @@ using SwanSong.Service.Helpers.Exceptions;
 
 namespace PhotographySite.Areas.Site.Services;
 
-public class GalleryService : IGalleryService
+public class GalleryService(IUnitOfWork unitOfWork, IMapper mapper) : IGalleryService
 {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-
-    public GalleryService(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
-
     public async Task<GalleryResponse> GetGalleryAsync(long id)
     {
         if (!await GalleryExists(id))
             throw new GalleryNotFoundException("Gallary not found.");
 
-        return _mapper.Map<GalleryResponse>(await _unitOfWork.Galleries.GetFullGalleryAsync(id));
+        return mapper.Map<GalleryResponse>(await unitOfWork.Galleries.GetFullGalleryAsync(id));
     }
 
     public async Task<GalleryResponse> GetGalleryAsync(Guid userId, long id)
@@ -30,16 +21,16 @@ public class GalleryService : IGalleryService
         if (!await GalleryExists(id))
             throw new GalleryNotFoundException("Gallary not found.");
 
-        return _mapper.Map<GalleryResponse>(await _unitOfWork.Galleries.GetFullGalleryAsync(userId, id));
+        return mapper.Map<GalleryResponse>(await unitOfWork.Galleries.GetFullGalleryAsync(userId, id));
     }
 
     public async Task<GalleriesResponse> GetGalleriesAsync()
     {
-        var galleries = _mapper.Map<List<GalleryResponse>>(await _unitOfWork.Galleries.AllSortedAsync());
+        var galleries = mapper.Map<List<GalleryResponse>>(await unitOfWork.Galleries.AllSortedAsync());
 
         foreach (GalleryResponse gallery in galleries)
         {
-            var randomPhoto = (await _unitOfWork.GalleryPhotos.GetRandomGalleryPhotoAsync(gallery.Id));
+            var randomPhoto = (await unitOfWork.GalleryPhotos.GetRandomGalleryPhotoAsync(gallery.Id));
             if (randomPhoto != null)
                 gallery.RandomPhoto = randomPhoto.FileName;
         }
@@ -49,6 +40,6 @@ public class GalleryService : IGalleryService
 
     private async Task<bool> GalleryExists(long id)
     {
-        return await _unitOfWork.Galleries.ByIdAsync(id) != null;
+        return await unitOfWork.Galleries.ByIdAsync(id) != null;
     }
 }
