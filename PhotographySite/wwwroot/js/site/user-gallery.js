@@ -16,7 +16,7 @@ $(function () {
     initialiseDragAndDrop();   
     initialiseUserGallerySearchPhotosResultsPagination(1, false);
     history.pushState("", document.title, window.location.pathname);
-
+    fadeInImages($('#user-gallery-images > div > a > img'));
     galleryAlerts.empty();
 }); 
 

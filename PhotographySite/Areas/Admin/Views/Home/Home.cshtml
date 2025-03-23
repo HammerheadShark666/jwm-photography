@@ -14,7 +14,9 @@
         @foreach (var photo in Model.SelectGalleryPhotos)
         {
             <li>
-                <img data-photo-id='@photo.Id' data-title='@photo.Title' class='lightboxed latest-photo-thumbnail' rel='group1' src='@Model.AzureStoragePhotosContainerUrl@photo.FileName' />
+                <a data-lightbox="gallery" data-title='@photo.Title' href='@Model.AzureStoragePhotosContainerUrl@photo.FileName'>
+                    <img data-photo-id='@photo.Id' data-title='@photo.Title' class='lightboxed latest-photo-thumbnail' rel='group1' src='@Model.AzureStoragePhotosContainerUrl@photo.FileName' />
+                </a>
             </li>
         }
     </ul>

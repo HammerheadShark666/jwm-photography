@@ -14,12 +14,15 @@
             {         
                 <div id="image-list-container" class="column">
                     <ul class="image-list ">
-                        @foreach (var image in column)
+                        @foreach (var photo in column)
                         {
                             <li>
                                 <div class="home-image-container">
-                                    <img class="home-image site-image" id="@image.PhotoId" src="@Model.AzureStoragePhotosContainerUrl@image.Path" title="@image.Title" data-toggle="tooltip" data-html="true">
-                                    @if (image.IsFavourite)
+                                    <a data-lightbox="gallery" data-title='@photo.Title' href='@Model.AzureStoragePhotosContainerUrl@photo.Path'>
+                                        <img class="home-image site-image" id="@photo.PhotoId" src="@Model.AzureStoragePhotosContainerUrl@photo.Path" title="@photo.Title" data-toggle="tooltip" data-html="true" />
+                                    </a>
+
+                                    @if (photo.IsFavourite)
                                     {
                                         <img class="home-image-favourite" src="~/images/icons8-orange-heart-48.png" class="like-icon">
                                     }                                    

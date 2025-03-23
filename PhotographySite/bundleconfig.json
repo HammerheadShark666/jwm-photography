@@ -4,7 +4,7 @@
     "inputFiles": [
       "wwwroot/css/site/site.css",
       "wwwroot/lib/simplePagination/simplePagination.css",
-      "wwwroot/lib/lightboxed/lightboxed.css"
+      "wwwroot/lib/lightboxed/lightbox.css"
     ],
     "minify": {
       "enabled": true,
@@ -26,7 +26,7 @@
     "inputFiles": [
       "wwwroot/css/admin/admin-site.css",
       "wwwroot/lib/simplePagination/simplePagination.css",
-      "wwwroot/lib/lightboxed/lightboxed.css"
+      "wwwroot/lib/lightboxed/lightbox.css"
     ],
     "minify": {
       "enabled": true,
@@ -37,7 +37,7 @@
     "outputFileName": "wwwroot/js/min/site-home.min.js",
     "inputFiles": [
       "wwwroot/js/main.js",
-      "wwwroot/js/module/UserGallery.js",
+      "wwwroot/js/module/UserGallery.js", 
       "wwwroot/js/site/site.js",
       "wwwroot/js/site/home.js"
     ],
@@ -69,7 +69,6 @@
   {
     "outputFileName": "wwwroot/js/min/site-gallery.min.js",
     "inputFiles": [
-      "wwwroot/lib/lightboxed/lightboxed.js",
       "wwwroot/js/module/UserGallery.js",
       "wwwroot/js/main.js",
       "wwwroot/js/site/site.js",
@@ -85,7 +84,6 @@
   {
     "outputFileName": "wwwroot/js/min/site-gallery-logged-in.min.js",
     "inputFiles": [
-      "wwwroot/lib/lightboxed/lightboxed.js",
       "wwwroot/js/module/Photo.js",
       "wwwroot/js/module/UserGallery.js",
       "wwwroot/js/modal-message.js",
@@ -106,7 +104,6 @@
   {
     "outputFileName": "wwwroot/js/min/site-favourites-logged-in.min.js",
     "inputFiles": [
-      "wwwroot/lib/lightboxed/lightboxed.js",
       "wwwroot/js/module/Photo.js",
       "wwwroot/js/modal-message.js",
       "wwwroot/js/module/UserGallery.js",
@@ -146,7 +143,6 @@
     "outputFileName": "wwwroot/js/min/admin-home.min.js",
     "inputFiles": [
       "wwwroot/js/axiosClient.js",
-      "wwwroot/lib/lightboxed/lightboxed.js",
       "wwwroot/js/module/Gallery.js",
       "wwwroot/js/main.js",
       "wwwroot/js/admin/admin-site.js",
@@ -164,7 +160,6 @@
     "outputFileName": "wwwroot/js/min/admin-photo-import.min.js",
     "inputFiles": [
       "wwwroot/js/axiosClient.js",
-      "wwwroot/lib/lightboxed/lightboxed.js",
       "wwwroot/js/module/Gallery.js",
       "wwwroot/js/module/Photo.js",
       "wwwroot/js/modal-photo.js",
@@ -185,7 +180,6 @@
     "inputFiles": [
       "wwwroot/lib/simplePagination/simplePagination.js",
       "wwwroot/js/axiosClient.js",
-      "wwwroot/lib/lightboxed/lightboxed.js",
       "wwwroot/js/module/Gallery.js",
       "wwwroot/js/module/Photo.js",
       "wwwroot/js/module/LookUp.js",
