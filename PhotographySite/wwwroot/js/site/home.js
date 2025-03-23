@@ -1,5 +1,5 @@
 ﻿$(function () {      
 
-    fadeInImages($('#image-list-container > ul > li > div > img'));
-    fadeInImages($('.home-image-favourite')); 
+    fadeInImages($('#image-list-container > ul > li > div > a > img'));
+    fadeInImages($('.home-image-favourite'));      
 });

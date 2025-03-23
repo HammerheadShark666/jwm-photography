@@ -1,4 +1,4 @@
 ﻿$(document).ready(function () { 
 
-    fadeInImages($('#favourites-images > img'));
+    fadeInImages($('#favourites-images > a > img'));
 });

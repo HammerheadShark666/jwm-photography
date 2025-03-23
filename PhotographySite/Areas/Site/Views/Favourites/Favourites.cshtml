@@ -15,7 +15,9 @@
         { 
             foreach (var photo in Model.Favourites)
             {
-                <img id="@photo.PhotoId" class="lightboxed gallery-photo" rel="group1" src="@Model.AzureStoragePhotosContainerUrl@photo.FileName" data-caption="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
+                <a data-lightbox="gallery" data-title='@photo.Title - @photo.Country' href='@Model.AzureStoragePhotosContainerUrl@photo.FileName'>
+                    <img id="@photo.PhotoId" class="lightboxed gallery-photo" rel="group1" src="@Model.AzureStoragePhotosContainerUrl@photo.FileName" data-caption="@photo.Title - @photo.Country" data-toggle="tooltip" data-html="true">
+                </a>
             }
         }        
     }
